@@ -1,0 +1,24 @@
+# Arquivos de sistema operacional
+# Ignora arquivos de metadados do macOS e Windows.
+.DS_Store
+Thumbs.db
+
+# Dependências
+# A pasta node_modules pode ser muito grande e deve ser instalada em cada ambiente.
+/node_modules
+
+# Arquivos de log
+# Logs não devem ser versionados, pois variam entre ambientes.
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de ambiente
+# Contêm segredos e configurações locais. NUNCA devem ser versionados.
+.env
+.env.*
+
+# Diretórios de build e distribuição
+/dist
+/build

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ritwickdey.liveserver",
+    "ms-vscode.powershell",
+    "github.vscode-pull-request-github"
+  ]
+}
