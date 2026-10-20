@@ -16,9 +16,12 @@ yarn-error.log*
 
 # Arquivos de ambiente
 # Contêm segredos e configurações locais. NUNCA devem ser versionados.
+.env*.local
 .env
-.env.*
 
 # Diretórios de build e distribuição
 /dist
 /build
+
+# Diretórios Locais
+/local
