@@ -1,0 +1,51 @@
+name: 📝 Tarefa Técnica / Refatoração
+description: Crie uma tarefa de engenharia interna (refatoração, CI/CD, testes, dependências).
+title: "[TASK]: "
+labels: ["chore"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Utilize este formulário para tarefas de manutenção interna, melhorias de arquitetura, testes e atualização de tooling.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Qual é a tarefa a ser executada?
+      description: Uma descrição clara, técnica e objetiva da atividade.
+      placeholder: Configurar orçamentos de performance no lighthouserc.json para validar LCP < 2,5s no CI...
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Justificativa Técnica
+      description: Por que essa tarefa é necessária agora? (ex: segurança, redução de débito técnico, conformidade).
+      placeholder: Evitar regressões de acessibilidade e performance antes do deploy em produção.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Critérios de Aceitação / Definição de Concluído (DoD)
+      description: Liste as condições obrigatórias para que a tarefa seja dada como finalizada.
+      value: |
+        - [ ] Código implementado de acordo com as convenções do projeto
+        - [ ] Testes automatizados passando (`npm run test`)
+        - [ ] Tipagem TypeScript válida (`npm run typecheck`)
+        - [ ] Documentação relevante atualizada
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria Técnica
+      options:
+        - "CI/CD & Automação (GitHub Actions)"
+        - "Qualidade, Testes & Acessibilidade (Vitest / axe-core)"
+        - "Segurança & Governança (Zod / Headers / Env)"
+        - "Performance & Core Web Vitals"
+        - "Atualização de Dependências / Tooling"
+        - "Refatoração de Componentes"
+    validations:
+      required: true
+

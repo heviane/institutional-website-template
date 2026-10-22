@@ -1,0 +1,54 @@
+name: CI Quality Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gates:
+    name: Lint, Typecheck, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f package.json ]; then
+            npm install
+          else
+            echo "package.json ainda não inicializado. Pulando instalação."
+          fi
+
+      - name: Run ESLint
+        run: npm run lint --if-present
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck --if-present
+
+      - name: Run Tests (Vitest & axe-core)
+        run: npm test --if-present
+
+      - name: Build Next.js
+        run: npm run build --if-present
+        env:
+          NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+          RESEND_API_KEY: "mock_resend_key_for_ci"
+          CONTACT_EMAIL_FROM: "Contato <contato@empresa.com.br>"
+          CONTACT_EMAIL_TO: "contato@empresa.com.br"
+

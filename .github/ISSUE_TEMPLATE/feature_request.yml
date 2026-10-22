@@ -1,0 +1,51 @@
+name: ✨ Sugestão de Funcionalidade
+description: Proponha uma nova funcionalidade, componente ou melhoria para o template.
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideias e sugestões são muito bem-vindas! Compartilhe o contexto do seu caso de uso para avaliarmos a inclusão no roadmap do projeto.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema essa funcionalidade resolve?
+      description: Uma descrição clara da dor ou necessidade técnica/comercial encontrada.
+      placeholder: Ao construir sites para clientes do setor médico, sinto falta de...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Qual é a solução sugerida?
+      description: Explique como você imagina que o recurso deva funcionar na prática.
+      placeholder: Implementar um componente de FAQ expansível integrado ao singleton do Keystatic...
+    validations:
+      required: true
+  - type: dropdown
+    id: scope-phase
+    attributes:
+      label: Enquadramento de Escopo Sugerido
+      description: Onde essa funcionalidade se encaixa na matriz de escopo?
+      options:
+        - "Fase 2: Core & MVP do Template (Essencial para todo site)"
+        - "Fase 3: Expansões Pós-MVP / Sob Demanda (Específico por cliente)"
+        - "Governança / DX / Ferramental de Desenvolvimento"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas Consideradas
+      description: Alguma outra biblioteca, abordagem ou solução contorno já foi testada?
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto Adicional ou Referências Visuais
+      description: Links para exemplos no Figma, documentações ou screenshots de referência.
+    validations:
+      required: false
+

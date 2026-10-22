@@ -1,0 +1,40 @@
+name: 📖 Melhoria de Documentação
+description: Sugira correções, novos guias ou melhorias na documentação técnica.
+title: "[DOCS]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A documentação de alta qualidade é um dos pilares deste template. Agradecemos por apontar trechos desatualizados ou oportunidades de melhoria!
+  - type: input
+    id: doc-path
+    attributes:
+      label: Arquivo ou Guia Afetado
+      description: Informe o caminho relativo do documento (ex: `docs/06-brand-theming-guide.md` ou `README.md`).
+      placeholder: docs/07-client-onboarding-checklist.md
+    validations:
+      required: true
+  - type: textarea
+    id: current-issue
+    attributes:
+      label: Qual é o problema ou lacuna no texto atual?
+      description: Descreva o que está confuso, desatualizado, incorreto ou ausente.
+      placeholder: A seção sobre configuração do DNS do Resend não menciona o registro DMARC...
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Sugestão de Alteração ou Conteúdo Proposto
+      description: Se possível, forneça a redação sugerida ou exemplos de código a serem inseridos.
+    validations:
+      required: true
+  - type: checkboxes
+    id: pr-intent
+    attributes:
+      label: Contribuição
+      options:
+        - label: Gostaria de abrir um Pull Request para implementar essa melhoria.
+          required: false
+

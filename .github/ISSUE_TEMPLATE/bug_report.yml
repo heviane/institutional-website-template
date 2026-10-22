@@ -1,0 +1,78 @@
+name: 🐞 Relatório de Bug
+description: Relate um erro ou comportamento inesperado no template.
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por nos ajudar a melhorar o template! Por favor, preencha os campos abaixo com o máximo de detalhes possível para que possamos reproduzir e corrigir o problema rapidamente.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descreva o Bug
+      description: Uma explicação clara e objetiva do que deu errado.
+      placeholder: Ao submeter o formulário de contato na página /contato...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para Reproduzir
+      description: Passo a passo para recriar o comportamento.
+      placeholder: |
+        1. Executar `npm run dev`
+        2. Navegar até a rota '/contato'
+        3. Preencher os campos e submeter
+        4. Observar a exceção no console
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento Esperado
+      description: O que você esperava que acontecesse em condições normais.
+      placeholder: O formulário deveria validar o payload e disparar o e-mail via Resend.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Módulo ou Área Afetada
+      description: Selecione a camada do sistema relacionada à falha.
+      options:
+        - "Formulários / Server Actions / Resend"
+        - "Headless CMS / Keystatic / Schemas"
+        - "Estilização / Tailwind CSS v4 / Shadcn"
+        - "SEO / Metadados / Sitemap / Robots"
+        - "Segurança / Headers / Validação de Envs"
+        - "Qualidade / Testes / GitHub Actions CI"
+        - "Documentação / Setup"
+        - "Outro"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Informações de Ambiente
+      description: Versões de Node.js, Sistema Operacional e Navegador utilizados.
+      placeholder: Node.js 22 LTS, Windows 11, Google Chrome 126
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots-logs
+    attributes:
+      label: Logs do Terminal ou Screenshots
+      description: Cole mensagens de erro, stack traces ou arraste imagens demonstrando o erro.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Confirmações Prévias
+      options:
+        - label: Verifiquei se o problema já foi relatado em issues abertas.
+          required: true
+        - label: Testei localmente com `npm run lint` e `npm run build`.
+          required: false
+
