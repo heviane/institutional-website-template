@@ -4,24 +4,36 @@
 Thumbs.db
 
 # Dependências
-# A pasta node_modules pode ser muito grande e deve ser instalada em cada ambiente.
+# A pasta node_modules é instalada dinamicamente via npm install.
 /node_modules
+/.pnp
+.pnp.js
 
-# Arquivos de log
-# Logs não devem ser versionados, pois variam entre ambientes.
+# Arquivos de log e debug
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-# Arquivos de ambiente
-# Contêm segredos e configurações locais. NUNCA devem ser versionados.
+# Arquivos de ambiente e segredos
+# Contêm segredos e chaves locais. NUNCA devem ser versionados.
 .env*.local
 .env
+*.pem
 
-# Diretórios de build e distribuição
+# Diretórios de build, compilação e distribuição
 /dist
 /build
+/.next/
+/out
 
-# Diretórios Locais
-/local
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testes e cobertura de código
+coverage/

@@ -1,8 +1,12 @@
 {
   "recommendations": [
+    "EditorConfig.EditorConfig",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "ritwickdey.liveserver",
+    "bradlc.vscode-tailwindcss",
+    "formulahendry.auto-rename-tag",
+    "yoavbls.pretty-ts-errors",
+    "usernamehw.errorlens",
     "ms-vscode.powershell",
     "github.vscode-pull-request-github"
   ]
