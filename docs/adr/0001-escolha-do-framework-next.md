@@ -2,7 +2,7 @@
 
 * **Status:** Aceito
 * **Data:** 2026-10-20
-* **Decisores:** Engenharia de Software / Autor do Projetos
+* **Decisores:** Engenharia de Software / Autor do Projeto
 
 ---
 
@@ -19,7 +19,7 @@ Decidimos utilizar o **Next.js (App Router)** como a espinha dorsal da arquitetu
 ### Justificativas Principais:
 
 1. **Modelo Híbrido de Renderização:** Permite gerar páginas estáticas (SSG) para o site institucional base, mas mantém suporte a SSR/ISR para evoluções futuras.
-2. **Fronteira Cliente/Servidor Única:** Uso de Server Actions e Route Handlers para processar formulários (ex: Zod + Resend) sem a necessidade de manter um servidor backend separado.
+2. **Fronteira Cliente/Servidor Única:** Uso de Server Actions nativas (com fallback para Route Handlers se necessário) para processar formulários e integrações seguras (ex: Zod + Resend) sem a necessidade de manter um servidor backend separado.
 3. **Integração com ecossistema React:** Compatibilidade nativa com Tailwind CSS, Shadcn/ui e Keystatic CMS.
 4. **Hospedagem Zero-Config:** Integração imediata com CI/CD na infraestrutura Serverless/Edge da Vercel.
 
