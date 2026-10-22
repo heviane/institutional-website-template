@@ -1,71 +1,109 @@
-# EPR - Especificação de Projeto e Requisitos
+# 01 - Architecture Overview
 
 **Projeto:** Website Institucional (Template - Boilerplate)
-Este é o documento de Especificação/Planejamento Inicial para a construção de um template genérico de website institucional, projetado como ponto de partida reutilizável para projetos freelancer.
+Este é o documento de Especificação e Planejamento da Arquitetura para a construção de um template genérico de website institucional, projetado como ponto de partida reutilizável para projetos freelance e comerciais.
 
-> *Etapa de Engenharia de Requisitos e Decisões Arquiteturais!*
-> Planejamento e a especificação de requisitos (com os 4 pilares, as decisões de stack e a divisão das etapas estática e dinâmica).
-
-## Objetivos
-
-Criar um template modular, de fácil personalização e pronto para reaproveitamento, priorizando quatro pilares:
-
-1. **Alta performance (SEO e Core Web Vitals)**;
-2. **Rapidez no desenvolvimento e reaproveitamento de código**;
-3. **Custo zero ou reduzido de hospedagem/infraestrutura**;
-4. **Autonomia do cliente para gerenciar conteúdos**.
+> **Planejamento Estratégico e Ciclo de Vida do Projeto:**
+> O projeto é estruturado em três fases bem delimitadas:
+> * **Fase 1: Fundação, Setup e Governança (Concluído)** — Decisões arquiteturais (ADRs 0001 a 0011), governança de código, automação de CI/CD e documentação operacional completa.
+> * **Fase 2: Core & MVP do Template (Em Andamento)** — Implementação do site institucional completo, acessível, seguro e com gestão de conteúdo (Keystatic) e formulários transacionais (Resend + Turnstile).
+> * **Fase 3: Expansões Pós-MVP / Sob Demanda** — Módulos opcionais ativados conforme as necessidades específicas de cada cliente (i18n, dark mode dinâmico, área logada, sitemaps indexados).
 
 ---
 
-## Requisitos e Arquitetura do Sistema
+## 🎯 Objetivos e Pilares Arquiteturais
+
+Criar um template modular, de fácil personalização e pronto para reaproveitamento comercial, priorizando quatro pilares inegociáveis:
+
+1. **Alta performance (SEO e Core Web Vitals):** LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
+2. **Rapidez no desenvolvimento e reaproveitamento de código:** Onboarding de novo cliente em menos de 2 horas.
+3. **Custo $0 inicial de hospedagem e infraestrutura:** Utilização inteligente dos tiers gratuitos de Git, DNS e Serverless.
+4. **Autonomia do cliente para gerenciar conteúdos:** Painel visual amigável via Keystatic CMS sem atrito de Git.
+
+---
+
+## 🏗️ Requisitos e Camadas do Sistema
 
 ### 1. Framework e Rendering (Espinha Dorsal)
-* **Next.js (React / App Router):**
-  * **Fase 1 (Atual):** Foco em renderização estática (SSG/ISR) e páginas institucionais leves.
-  * **Fase 2 (Evolutiva):** Pronto para evoluir para áreas logadas, catálogos dinâmicos ou integrações de APIs complexas.
+
+* **Next.js 15 (React 19 / App Router):**
+  * **Fase 2 (Core & MVP do Template):** Foco em renderização estática ultra performática (SSG/ISR) para páginas institucionais com Server Actions nativas (`'use server'`).
+  * **Fase 3 (Expansões Pós-MVP / Sob Demanda):** Preparado para rotas autenticadas, catálogos dinâmicos e integrações de APIs externas complexas.
 
 ### 2. Estilização, Design System e Acessibilidade
-* **Tailwind CSS:** Engine de estilização via classes utilitárias para construir e customizar o layout com facilidade.
-* **Shadcn/ui & Radix UI:** Componentes de interface acessíveis (WCAG), flexíveis e desacoplados, cujos códigos ficam diretamente na pasta do projeto para fácil customização.
 
-### 3. SEO, Metadados e Performance
-* **Next.js Metadata API:** Gestão de metadados nativa para SEO, Open Graph e Twitter Cards.
-* **Geração Automática de Sitemap e Robots.txt:** Arquivos dinâmicos para otimização de indexação nos buscadores.
-* **Next/Image:** Otimização automática de formato, tamanho e carregamento preguiçoso (lazy loading) de imagens.
+* **Tailwind CSS v4:** Motor de estilização moderno configurado via diretiva `@theme` em CSS nativo (`src/app/globals.css`), dispensando arquivos de configuração JavaScript intermediários.
+* **Shadcn/ui & Radix UI:** Componentes de interface acessíveis (WCAG 2.1 AA), headless e desacoplados, cujos fontes ficam diretamente na base do código do projeto para fácil customização.
+
+### 3. SEO Técnico, Metadados e Performance
+
+* **Mínimo Essencial do MVP (Fase 2):**
+  * **Next.js Metadata API:** Configuração centralizada de metadados dinâmicos e estáticos (`title`, `description`, `canonical`, `keywords`) sincronizados com `src/config/site.ts`.
+  * **Open Graph e Twitter Cards:** Imagens sociais (`/public/og-image.jpg`) pré-configuradas para compartilhamento rico.
+  * **Sitemap XML (`src/app/sitemap.ts`):** Geração automática de `/sitemap.xml` cobrindo todas as rotas estáticas e os artigos publicados via Keystatic.
+  * **Robots TXT (`src/app/robots.ts`):** Regras de indexação para robôs de busca e apontamento do sitemap.
+  * **Schema.org JSON-LD (Essencial):** Injeção estruturada dos tipos `Organization` e `WebSite` no `<head>` do layout raiz para enriquecer snippets de busca do Google.
+  * **Next/Image:** Conversão automática para WebP/AVIF, dimensões explícitas para evitar CLS e lazy loading inteligente.
+* **Recursos Avançados Pós-MVP (Fase 3):**
+  * Schemas JSON-LD avançados (`LocalBusiness` multi-endereço, `Product`, `Event`, `Article` completo).
+  * Sitemaps segmentados e indexados (`sitemap-index.xml`) para catálogos com milhares de URLs.
+  * Suporte a SEO internacional (`hreflang` e i18n).
 
 ### 4. Gestão de Conteúdo (Headless CMS)
+
 * **Keystatic (Git-Based CMS):**
-  * Salva artigos de blog, depoimentos e conteúdos em arquivos Markdown/JSON diretamente no repositório GitHub.
-  * Mantém o custo de infraestrutura em $0 e oferece um painel de edição visual amigável para o cliente final.
+  * Armazena artigos de blog, serviços e dados institucionais em arquivos Markdown/JSON diretamente no repositório GitHub.
+  * Elimina custos recorrentes de banco de dados e oferece um painel de edição visual amigável (`/keystatic`) integrado ao Keystatic Cloud para editores do cliente final.
 
 ### 5. Formulários, Validação e Comunicação Transacional
-* **React Hook Form:** Gerenciamento performático do estado de formulários no cliente.
-* **Zod:** Validação estrita de schemas e tipos (compartilhado entre cliente e servidor).
-* **Resend API:** Disparo de e-mails transacionais (notificações de contato e orçamentos) via Serverless/Route Handlers.
+
+* **React Hook Form:** Gerenciamento performático do estado de formulários via referências não controladas no cliente.
+* **Zod:** Validação estrita de schemas e tipos, compartilhado entre o cliente e o servidor.
+* **Server Actions (`src/app/actions/contact.ts`):** Processamento seguro no servidor eliminando endpoints REST expostos.
+* **Defesa Anti-Spam em 3 Camadas (veja [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)):**
+  1. *Honeypot:* Campo oculto via CSS para descarte silencioso de bots simples.
+  2. *Cloudflare Turnstile:* Desafio invisível sem cookies de terceiros e sem fricção visual.
+  3. *Rate Limiting por IP:* Teto de 5 submissões/hora para blindar a cota de 100 e-mails/dia do Resend.
 
 ### 6. Interface, Animações e Ícones
-* **Lucide Icons:** Biblioteca de ícones leve e moderna.
-* **Framer Motion:** Microinterações, efeitos de scroll e transições suaves de tela.
+
+* **Lucide Icons:** Biblioteca de ícones vetorizados leve e moderna.
+* **Motion (`motion/react`):** Microinterações de scroll performáticas (via `LazyMotion`) e acessíveis (respeito estrito a `prefers-reduced-motion`).
 
 ### 7. Hospedagem, Automação (CI/CD) e Ambientes
-* **Vercel:** Hospedagem com deploy automático a cada `git push` no GitHub, SSL gratuito e URLs de preview (staging) para homologação com o cliente.
+
+* **Vercel / Cloudflare Pages:** Deploy automatizado a cada `git push` no GitHub, SSL gratuito e URLs de preview (staging) para homologação com o cliente.
+
+### 8. Governança, Privacidade e LGPD (Privacy by Design)
+
+* **Opt-in no Formulário:** Consentimento explícito com link para a Política de Privacidade, validado pelo Zod.
+* **Retenção Efêmera:** Arquitetura sem banco de dados; dados trafegam de forma criptografada para a caixa de e-mail corporativa do cliente.
+* **Plausible Analytics (Cookieless):** Métricas de tráfego sem cookies invasivos, dispensando banners de consentimento e preservando o Core Web Vitals.
+* **Páginas Legais Estáticas:** Rotas `/politica-de-privacidade` e `/termos-de-uso` sincronizadas dinamicamente com o `siteConfig`.
+
+### 9. Qualidade Contínua e Portões de Segurança (Quality Gates)
+
+* **GitHub Actions CI:** Esteira automatizada que valida Lint, Typecheck, Testes e Build em cada PR antes do merge.
+* **Dependabot:** Monitoramento semanal e atualização contínua de segurança para pacotes npm e GitHub Actions.
+* **Acessibilidade Profunda (axe-core):** Testes automatizados de conformidade WCAG 2.1 AA via `vitest-axe` nos componentes de interface.
+* **Lighthouse CI:** Orçamentos contínuos de performance (score >= 90) e acessibilidade (score >= 95).
 
 ---
 
-## 📊 Tabela de Requisitos e Escopo Ajustada
+## 📊 Matriz de Escopo: Core/MVP vs Expansões Pós-MVP
 
-Com essa reestruturação, a tabela do seu planejamento fica muito mais clara em relação ao que entra no **MVP do Template (Etapa 1)** e o que fica para **Expansões Futuras por Cliente (Etapa 2)**:
-
-| Camada | 1º Etapa (MVP do Template) | 2º Etapa (Expansões Sob Demanda) |
-| --- | --- | --- |
-| **Framework** | **Next.js** (App Router / SSG)
-| **Next.js** (SSR, Server Actions, Dynamic Routes)|
-| **Estilização** | Tailwind CSS + Shadcn/ui | idem + Temas customizados por cliente |
-| **SEO & Mídias** | Metadata API + Sitemap + OpenGraph | Otimizações regionais / Analytics avançado |
-| **Formulários** | React Hook Form + Zod | Formulários multi-etapas / Upload de arquivos |
-| **E-mails Transacionais** | Resend API (Notificação de contato) | Automação de marketing / E-mails de boas-vindas |
-| **Gestão de Conteúdo** | Keystatic (Markdown/Git-based) | CMS em Nuvem (Sanity.io/Strapi se o cliente exigir) |
-| **Hospedagem / CI/CD** | Vercel (Plano Hobby / Deploy via Git) | Vercel Pro ou Servidor Próprio (Docker/VPS) |
-| **Recursos Avançados** | Componentes Institucionais (Hero, Sobre, Serviços, FAQ, Contato) | Área de Membros, Login, Pagamentos (Stripe/Mercado Pago) |
+| Camada | Fase 2 (Core & MVP do Template) | Fase 3 (Expansões Pós-MVP / Sob Demanda) |
+| :--- | :--- | :--- |
+| **Framework** | **Next.js 15** (App Router / SSG / Server Actions) | **Next.js** (Rotas Dinâmicas, Autenticação, ISR Avançado) |
+| **Estilização** | Tailwind CSS v4 (`@theme`) + Shadcn/ui | Temas customizados por cliente com Dark Mode dinâmico |
+| **SEO & Metadados** | Metadata API + Sitemap + Robots + OG + Schema Organization | Sitemaps segmentados, Schema LocalBusiness multi-local, i18n |
+| **Formulários & Backend** | React Hook Form + Server Actions + Zod + Anti-Spam | Formulários multi-etapas / Upload de arquivos |
+| **E-mails Transacionais** | Resend API (Notificação comercial de contato) | Automação de marketing / E-mails transacionais de boas-vindas |
+| **Gestão de Conteúdo** | Keystatic (Markdown/JSON Git-based) | CMS em Nuvem (Sanity.io/Strapi se o cliente exigir) |
+| **Hospedagem / CI/CD** | Vercel (ou Cloudflare Pages com custo $0 comercial) | Infraestrutura dedicada multi-região / AWS |
+| **Privacidade & LGPD** | Consentimento Zod + Páginas Legais + Plausible | Cookie Banner (caso o cliente exija Google Analytics 4) |
+| **Qualidade & Automação** | GitHub Actions CI + Dependabot + Vitest + axe-core | Lighthouse CI automatizado / Testes E2E (Playwright) |
+| **Segurança & Defesa** | Zod Env Validation + Security Headers + SECURITY.md | WAF avançado / Rate Limiting distribuído via Upstash Redis |
+| **Componentes de UI** | Hero, Sobre, Serviços, FAQ, Depoimentos e Contato | Área de Membros, Catálogo de Produtos, Pagamentos (Stripe) |
 
 ---
