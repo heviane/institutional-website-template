@@ -260,7 +260,7 @@ export async function sendContactEmail(formData: ContactFormData & { honeypot?: 
   // 3. Disparo seguro via Resend API
   try {
     await resend.emails.send({
-      from: process.env.CONTACT_EMAIL_FROM!,
+      from: process.env.RESEND_FROM_EMAIL!,
       to: process.env.CONTACT_EMAIL_TO!,
       subject: `Novo contato: ${parsed.data.name}`,
       text: parsed.data.message,
@@ -338,7 +338,7 @@ Para que o formulário de contato funcione em produção enviando mensagens para
 
 3. **Configurar Variáveis de Ambiente de Produção (Vercel):**
    * `RESEND_API_KEY`: Chave de API gerada no Resend.
-   * `CONTACT_EMAIL_FROM`: Remetente com o domínio verificado (ex.: `"Contato <contato@empresa.com.br>"`). *(Sem o domínio verificado, a API restringe o envio apenas para `onboarding@resend.dev`)*.
+   * `RESEND_FROM_EMAIL`: Remetente com o domínio verificado (ex.: `"Contato <contato@empresa.com.br>"`). *(Sem o domínio verificado, a API restringe o envio apenas para `onboarding@resend.dev`)*.
    * `CONTACT_EMAIL_TO`: E-mail do cliente onde os contatos devem chegar.
 
 4. **Proteção Anti-Spam (Cota de 100 e-mails/dia):**

@@ -159,7 +159,6 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
     NEXT_PUBLIC_SITE_URL=https://www.cliente.com.br
     RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
     RESEND_FROM_EMAIL="Contato Cliente <contato@cliente.com.br>"
-    CONTACT_EMAIL_FROM="Contato Cliente <contato@cliente.com.br>"
     CONTACT_EMAIL_TO=comercial@cliente.com.br
     NEXT_PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAAxxxxxxxx
     TURNSTILE_SECRET_KEY=0x4AAAAAAxxxxxxxx

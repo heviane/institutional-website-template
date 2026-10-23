@@ -58,5 +58,5 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
           RESEND_API_KEY: "mock_resend_key_for_ci"
-          CONTACT_EMAIL_FROM: "Contato <contato@empresa.com.br>"
+          RESEND_FROM_EMAIL: "Contato <contato@empresa.com.br>"
           CONTACT_EMAIL_TO: "contato@empresa.com.br"

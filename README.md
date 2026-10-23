@@ -95,7 +95,6 @@ Crie um arquivo `.env.local` na raiz do projeto com base no arquivo `.env.exampl
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 RESEND_API_KEY=sua_chave_resend_aqui
 RESEND_FROM_EMAIL="Contato <contato@empresa.com.br>"
-CONTACT_EMAIL_FROM="Contato <contato@empresa.com.br>"
 CONTACT_EMAIL_TO=contato@empresa.com.br
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=seu_site_key_aqui
 TURNSTILE_SECRET_KEY=sua_secret_key_aqui
