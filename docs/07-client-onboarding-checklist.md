@@ -11,7 +11,7 @@ flowchart LR
     A["1. Repositório & Upstream"] --> B["2. Tema & Branding"]
     B --> C["3. Domínio & DNS"]
     C --> D["4. Resend & Anti-Spam"]
-    D --> E["5. Cloudflare Turnstile"]
+    D --> E["5. Turnstile & Upstash"]
     E --> F["6. Keystatic Cloud CMS"]
     F --> G["7. Revisão LGPD"]
     G --> H["8. Quality Gate & Entrega"]
@@ -153,7 +153,7 @@ Conforme [ADR 0003](adr/0003-estrategia-de-formularios.md), formulários institu
 
 ---
 
-## 🛡️ Etapa 5: Proteção Anti-Abuso (Cloudflare Turnstile)
+## 🛡️ Etapa 5: Proteção Anti-Abuso e Rate Limiting (Cloudflare Turnstile & Upstash Redis)
 
 - [ ] **5.1. Criar Widget no Cloudflare Dashboard:**
   - Acesse **Turnstile** no painel do Cloudflare (plano gratuito).
@@ -164,9 +164,15 @@ Conforme [ADR 0003](adr/0003-estrategia-de-formularios.md), formulários institu
     - `cliente.com.br`
     - `www.cliente.com.br`
     - `*.vercel.app`
-- [ ] **5.2. Obter Chaves:**
+- [ ] **5.2. Obter Chaves do Turnstile:**
   - Copiar **Site Key** (`0x4AAAAAA...`)
   - Copiar **Secret Key** (`0x4AAAAAA...`)
+- [ ] **5.3. Criar Banco Serverless no Upstash Redis (Rate Limiting de Produção):**
+  - Conforme [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md), acesse [console.upstash.com](https://console.upstash.com/) (sob titularidade da empresa contratante).
+  - Crie uma base de dados Redis Serverless no plano gratuito (região `sa-east-1` ou `us-east-1`).
+  - Em **Details** > **REST API**, copiar:
+    - `UPSTASH_REDIS_REST_URL` (`https://xxxx.upstash.io`)
+    - `UPSTASH_REDIS_REST_TOKEN` (`Axxx...`)
 
 ---
 
@@ -191,6 +197,8 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
     CONTACT_EMAIL_TO=comercial@cliente.com.br
     NEXT_PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAAxxxxxxxx
     TURNSTILE_SECRET_KEY=0x4AAAAAAxxxxxxxx
+    UPSTASH_REDIS_REST_URL=https://xxxx.upstash.io
+    UPSTASH_REDIS_REST_TOKEN=Axxxxxxxxxxxxxxxxxxxx
     NEXT_PUBLIC_KEYSTATIC_PROJECT=agencia/site-cliente
     ```
 

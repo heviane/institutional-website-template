@@ -103,7 +103,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 | **Hospedagem / CI/CD** | Vercel (Plataforma de referência do MVP, com titularidade do cliente) | Cloudflare Pages (via `@cloudflare/next-on-pages` / OpenNext) / AWS |
 | **Privacidade & LGPD** | Privacy by Design (Retenção Efêmera + Salvaguardas Zod + Plausible) | Cookie Banner (caso o cliente exija Google Analytics 4) |
 | **Qualidade & Automação** | GitHub Actions CI + Dependabot + Vitest + axe-core | Lighthouse CI automatizado / Testes E2E (Playwright) |
-| **Segurança & Defesa** | Zod Env Validation + Security Headers + SECURITY.md | WAF avançado / Rate Limiting distribuído via Upstash Redis |
+| **Segurança & Defesa** | Zod Env Validation + Security Headers + Rate Limiting por IP (Upstash Redis em produção / Map em dev) | WAF corporativo dedicado / Regras de IP Geo-blocking / Proteção avançada L7 |
 | **Componentes de UI** | Hero, Sobre, Serviços, FAQ, Depoimentos e Contato | Área de Membros, Catálogo de Produtos, Pagamentos (Stripe) |
 
 ---
