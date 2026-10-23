@@ -19,36 +19,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Check application bootstrap status
+        id: check-bootstrap
+        run: |
+          if [ ! -f package.json ]; then
+            echo "::warning title=Pipeline Provisório (Fase 1)::A aplicação Next.js ainda não foi inicializada (package.json inexistente). Os quality gates de código serão ativados estritamente na Fase 2 com npm ci, lint, typecheck, test e build."
+            echo "bootstrapped=false" >> $GITHUB_OUTPUT
+          else
+            echo "bootstrapped=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Set up Node.js
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
         uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: "npm"
 
-      - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          elif [ -f package.json ]; then
-            npm install
-          else
-            echo "package.json ainda não inicializado. Pulando instalação."
-          fi
+      - name: Install dependencies (Strict)
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
+        run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint --if-present
+      - name: Run ESLint (Strict Quality Gate)
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
+        run: npm run lint
 
-      - name: Run TypeScript typecheck
-        run: npm run typecheck --if-present
+      - name: Run TypeScript typecheck (Strict Quality Gate)
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
+        run: npm run typecheck
 
-      - name: Run Tests (Vitest & axe-core)
-        run: npm test --if-present
+      - name: Run Tests (Vitest & axe-core - Strict Quality Gate)
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
+        run: npm test
 
-      - name: Build Next.js
-        run: npm run build --if-present
+      - name: Build Next.js (Strict Quality Gate)
+        if: steps.check-bootstrap.outputs.bootstrapped == 'true'
+        run: npm run build
         env:
           NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
           RESEND_API_KEY: "mock_resend_key_for_ci"
           CONTACT_EMAIL_FROM: "Contato <contato@empresa.com.br>"
           CONTACT_EMAIL_TO: "contato@empresa.com.br"
-

@@ -24,7 +24,7 @@ Esta fase representa a entrega principal do template, garantindo um site institu
 * **2.1. Bootstrapping Técnico:**
   * [ ] Inicialização do Next.js (App Router + TypeScript + Tailwind)
   * [ ] Instalação e configuração do Shadcn/ui & Radix UI
-  * [ ] Configuração de alias (`@/*`) e padrões de linting
+  * [ ] Configuração de alias (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`) ativando o CI estrito
   * [ ] Validação estrita de variáveis de ambiente com Zod (`src/env.ts`)
   * [ ] Implementação de Security Headers HTTP no `next.config.ts`
 * **2.2. Arquitetura de Dados Globais:**
