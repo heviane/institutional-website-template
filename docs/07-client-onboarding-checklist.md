@@ -199,19 +199,19 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
 
 ---
 
-## ⚖️ Etapa 7: Conformidade Legal & Privacidade (LGPD)
+## ⚖️ Etapa 7: Revisão de Privacidade e Conformidade LGPD
 
 Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
 
-- [ ] **7.1. Identificar o Encarregado de Dados (DPO):**
-  - Obter o nome e e-mail do encarregado de dados do cliente (ex: `privacidade@cliente.com.br`).
+- [ ] **7.1. Identificar o Encarregado de Dados (DPO) ou Canal de Atendimento:**
+  - Obter o nome e e-mail de contato para privacidade da empresa do cliente (ex: `privacidade@cliente.com.br`).
 - [ ] **7.2. Customizar as Páginas Legais:**
-  - Atualizar os dados cadastrais da empresa em:
-    - `src/app/(legal)/politica-de-privacidade/page.tsx`
+  - Atualizar os dados cadastrais da empresa em `src/config/site.ts`, revisando as rotas:
+    - `src/app/(legal)/politica-de-privacidade/page.tsx` (descrevendo a telemetria analítica agregada e a retenção de dados)
     - `src/app/(legal)/termos-de-uso/page.tsx`
-- [ ] **7.3. Validar Consentimento no Formulário:**
-  - Testar envio de formulário com checkbox desmarcado (deve acusar erro de validação do Zod).
-  - Testar envio com checkbox marcado (deve enviar com sucesso).
+- [ ] **7.3. Alinhar Base Legal e Validação do Formulário:**
+  - Confirmar com o cliente se o formulário utiliza a base de *Procedimentos Preliminares Contratuais (Art. 7º, V)* com aviso informativo transparente ou se requer *Consentimento Expresso (Art. 7º, I)* com checkbox ativo no schema do Zod (ex.: para inclusão em newsletter/marketing).
+  - Caso utilize checkbox de consentimento, validar o teste com campo desmarcado (erro no Zod) e marcado (sucesso).
 
 ---
 

@@ -76,9 +76,9 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 ### 8. Governança, Privacidade e LGPD (Privacy by Design)
 
-* **Opt-in no Formulário:** Consentimento explícito com link para a Política de Privacidade, validado pelo Zod.
+* **Salvaguardas no Formulário:** Suporte nativo a consentimento explícito validado no Zod ou aviso transparente baseado em procedimentos pré-contratuais (Art. 7º, V).
 * **Retenção Efêmera:** Arquitetura sem banco de dados; dados trafegam de forma criptografada para a caixa de e-mail corporativa do cliente.
-* **Plausible Analytics (Cookieless):** Métricas de tráfego sem cookies invasivos, dispensando banners de consentimento e preservando o Core Web Vitals.
+* **Plausible Analytics (Cookieless):** Telemetria agregada sem cookies de rastreamento, eliminando banners de consentimento intrusivos e preservando Core Web Vitals, com transparência na Política de Privacidade.
 * **Páginas Legais Estáticas:** Rotas `/politica-de-privacidade` e `/termos-de-uso` sincronizadas dinamicamente com o `siteConfig`.
 
 ### 9. Qualidade Contínua e Portões de Segurança (Quality Gates)
@@ -101,7 +101,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 | **E-mails Transacionais** | Resend API (Notificação comercial de contato) | Automação de marketing / E-mails transacionais de boas-vindas |
 | **Gestão de Conteúdo** | Keystatic (Markdown/JSON Git-based) | CMS em Nuvem (Sanity.io/Strapi se o cliente exigir) |
 | **Hospedagem / CI/CD** | Vercel (Plataforma de referência do MVP, com titularidade do cliente) | Cloudflare Pages (via `@cloudflare/next-on-pages` / OpenNext) / AWS |
-| **Privacidade & LGPD** | Consentimento Zod + Páginas Legais + Plausible | Cookie Banner (caso o cliente exija Google Analytics 4) |
+| **Privacidade & LGPD** | Privacy by Design (Retenção Efêmera + Salvaguardas Zod + Plausible) | Cookie Banner (caso o cliente exija Google Analytics 4) |
 | **Qualidade & Automação** | GitHub Actions CI + Dependabot + Vitest + axe-core | Lighthouse CI automatizado / Testes E2E (Playwright) |
 | **Segurança & Defesa** | Zod Env Validation + Security Headers + SECURITY.md | WAF avançado / Rate Limiting distribuído via Upstash Redis |
 | **Componentes de UI** | Hero, Sobre, Serviços, FAQ, Depoimentos e Contato | Área de Membros, Catálogo de Produtos, Pagamentos (Stripe) |

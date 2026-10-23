@@ -23,7 +23,7 @@ Este repositório foi desenvolvido para servir como o **ponto de partida (*start
 2. 🛠️ **Produtividade & Reutilização:** Estrutura modular desacoplada onde a marca do cliente é configurada em menos de 2 horas.
 3. 💰 **Infraestrutura de Baixo Custo (Custo Otimizado):** Priorização de serviços gratuitos ou de baixo custo (Git, DNS e Serverless) compatíveis com a escala de sites institucionais, eliminando a obrigatoriedade de servidores dedicados ou bancos de dados caros.
 4. 📝 **Autonomia para o Cliente:** Gestão de conteúdo simplificada via Keystatic CMS sem que o cliente precise manipular Git ou código.
-5. 🔒 **Privacidade & Conformidade LGPD por Padrão:** Formulários com consentimento explícito no Zod, métricas sem cookies (Plausible) e páginas legais padronizadas.
+5. 🔒 **Privacidade & Governança LGPD por Design:** Arquitetura efêmera sem banco de dados, salvaguarda configurável de consentimento no Zod, telemetria agregada sem cookies (Plausible) e páginas legais padronizadas.
 
 ---
 
