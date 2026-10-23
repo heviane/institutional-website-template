@@ -41,16 +41,19 @@ flowchart TD
 ### Detalhamento das Camadas de Proteção:
 
 ### 1. Camada 1: Honeypot Oculto via CSS/Aria
+
 * Inclui um campo de formulário adicional chamado `website` ou `company_fax`.
 * O campo é completamente invisível para usuários humanos por meio de posicionamento absoluto fora da tela (`position: absolute; left: -9999px; opacity: 0; pointer-events: none;`), com `tabIndex={-1}`, `autoComplete="off"` e `aria-hidden="true"`.
 * *Spambots* ingênuos leem o DOM cru e preenchem todos os campos automaticamente. Se o campo contiver qualquer caractere no momento da submissão na Server Action, a requisição é descartada imediatamente, retornando uma resposta de sucesso simulada para enganar o robô e evitar novas tentativas em lote.
 
 ### 2. Camada 2: Cloudflare Turnstile (Modo Gerenciado / Invisível)
+
 * Solução moderna de validação de navegadores baseada em desafios criptográficos não interativos e biometria comportamental em tempo de execução, **sem utilizar cookies de rastreamento** e sem exigir que o usuário resolva quebra-cabeças visuais.
 * O widget gera um token efêmero (`cf-turnstile-response`) no frontend.
 * A Server Action valida esse token diretamente na API da Cloudflare (`https://challenges.cloudflare.com/turnstile/v0/siteverify`) com a chave secreta do cliente antes de acionar a Resend API.
 
 ### 3. Camada 3: Rate Limiting por IP (Janela Deslizante Configurável)
+
 * **Finalidade e Limites:** Aplica uma política configurável de moderação (padrão de até **5 requisições por hora por endereço IP**) para conter abusos repetitivos e cliques acidentais originados da mesma máquina/conexão.
 * **Importante (Alinhamento de Escopo):** O rate limiting por IP **não** é uma garantia contra ataques massivos distribuídos (botnets com centenas de IPs rotativos). A contenção real de robôs distribuídos é desempenhada pelas Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
 * **Estratégia de Armazenamento por Ambiente:**
@@ -62,12 +65,14 @@ flowchart TD
 ## 3. Consequências e Trade-offs (Consequences)
 
 ### Positivas (Benefícios):
+
 * **Blindagem Total da Cota do Resend:** Garante que o limite de 100 envios/dia fique 100% reservado para visitantes e clientes legítimos.
 * **Privacidade e Conformidade LGPD por Padrão:** O Cloudflare Turnstile não lê dados pessoais, não vende informações para anunciantes e não instala cookies de rastreamento entre domínios.
 * **Acessibilidade Inclusiva (WCAG 2.1 AA):** O fluxo é 100% transparente para usuários legítimos, sem quebra-cabeças visuais que barram usuários com deficiência.
 * **Impacto Mínimo em Performance:** O script do Turnstile carrega de forma assíncrona (`defer`) e adiciona menos de 20 KB gzipped, mantendo o LCP e INP dentro das metas do Core Web Vitals.
 
 ### Negativas (Riscos e Desvantagens Aceitas):
+
 * **Configuração Extra no Onboarding:** Exige criar um widget gratuito no Cloudflare Dashboard e adicionar as variáveis `NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY` para cada cliente.
 * **Dependência Externa de Validação:** Se a API de verificação do Turnstile sofrer indisponibilidade momentânea, envios legítimos podem ser rejeitados temporariamente.
 * **Armazenamento Centralizado para Rate Limit em Produção:** Devido à natureza efêmera e sem estado das funções Serverless, o rate limiting em produção não pode depender de memória local, exigindo credenciais de um banco Redis Serverless compartilhado (Upstash Redis) com expiração atômica.
