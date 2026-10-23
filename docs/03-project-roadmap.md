@@ -51,7 +51,7 @@ Esta fase representa a materialização do template em código, dividida entre a
 * [ ] **Validação de Ambiente & Segurança:**
   * [ ] Implementar validação estrita com Zod (`src/env.ts`), com segregação formal entre variáveis públicas (`clientEnvSchema`) e segredos de servidor (`serverEnvSchema`), distinguindo variáveis core de integrações condicionais.
   * [ ] Criar testes unitários no Vitest (`src/env.test.ts`) para validar o parser em cenários de build mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
-  * [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes.
+  * [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes com verificação estrita de lockfile determinístico.
   * [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
   * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
 * [ ] **Arquitetura de Dados & Layout Base:**

@@ -25,6 +25,7 @@ Decidimos implementar uma infraestrutura integrada de garantia da qualidade (*Co
 
 ### 2.1. Ferramental Base e Automação de Esteira (Configurado na Fase 1)
 * **Pipeline de CI (`.github/workflows/ci.yml`):** Estrutura automatizada acionada a cada `push` e `pull_request` na `main`, com portões estritos preparados para validar `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` assim que a aplicação for bootstrappada.
+* **Determinismo de Build e Validação Estrita de Lockfile:** O workflow valida obrigatoriamente a presença do `package-lock.json` junto ao `package.json`. A ausência do lockfile falha imediatamente o job de CI, assegurando que o `npm ci` instale exatamente as versões congeladas de dependências e garantindo a integridade do cache do `actions/setup-node`.
 * **Gestão de Segurança de Dependências (`.github/dependabot.yml`):** Monitoramento ativo com rotinas semanais para checar vulnerabilidades e atualizações do ecossistema `npm` e das ações do `github-actions`.
 
 ### 2.2. Suíte de Testes Automatizados no Código (Planejado para Implementação na Fase 2)

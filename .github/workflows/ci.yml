@@ -25,6 +25,9 @@ jobs:
           if [ ! -f package.json ]; then
             echo "::warning title=Pipeline Provisório (Fase 1)::A aplicação Next.js ainda não foi inicializada (package.json inexistente). Os quality gates de código serão ativados estritamente na Fase 2 com npm ci, lint, typecheck, test e build."
             echo "bootstrapped=false" >> $GITHUB_OUTPUT
+          elif [ ! -f package-lock.json ]; then
+            echo "::error title=Lockfile Ausente::O arquivo package.json foi encontrado, mas o package-lock.json não está versionado no repositório. O CI exige o lockfile para garantir builds determinísticos com npm ci e cache do setup-node. Execute 'npm install' localmente e comite o package-lock.json."
+            exit 1
           else
             echo "bootstrapped=true" >> $GITHUB_OUTPUT
           fi
