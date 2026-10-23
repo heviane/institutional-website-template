@@ -4,7 +4,7 @@
 * **Data:** 2026-10-20
 * **Decisores:** Engenharia de Software / Autor do Projeto
 
-> Define a infraestrutura de publicação e automação de deploys baseada na Vercel + GitHub Integration.
+> Define a infraestrutura de publicação e automação de deploys baseada na Vercel + GitHub Integration como plataforma de referência oficial do MVP.
 
 ---
 
@@ -24,11 +24,11 @@ A solução de infraestrutura precisa atender aos seguintes pilares:
 
 ## 2. Decisão (Decision)
 
-Decidimos utilizar a **Vercel** como a plataforma padrão de hospedagem, distribuição em Borda (*Edge CDN*) e automação de CI/CD para o projeto .
+Decidimos utilizar a **Vercel** como a plataforma de referência oficial de hospedagem, distribuição em Borda (*Edge CDN*) e automação de CI/CD para o MVP do projeto.
 
 ### Justificativas Principais:
 
-1. **Suporte Nativo ao Next.js:** Como desenvolvedores do Next.js, a Vercel oferece suporte imediato a todas as funcionalidades do App Router, Server Actions e otimização automática de imagens (`next/image`).
+1. **Suporte Nativo ao Next.js:** Como desenvolvedores e mantenedores do Next.js, a Vercel oferece suporte imediato e sem atrito a todas as funcionalidades do App Router, Server Actions e otimização automática de imagens (`next/image`) sem a necessidade de compiladores ou adaptadores adicionais de runtime.
 
 2. **Fluxo de CI/CD Zero-Config:** A conexão com o repositório GitHub dispara *builds* automáticos a cada `git push` no branch `main` e gera links de *Preview* para cada *Pull Request*.
 
@@ -56,10 +56,10 @@ Decidimos utilizar a **Vercel** como a plataforma padrão de hospedagem, distrib
 
 ## 4. Alternativas Consideradas
 
-* **Netlify / Cloudflare Pages:** Excelentes plataformas de JAMstack, mas descartadas como primeira opção devido ao suporte mais fluído e nativo da Vercel para as atualizações contínuas do ecossistema Next.js.
+* **Netlify:** Excelente plataforma de JAMstack, mas descartada como primeira opção devido ao suporte nativo mais ágil da Vercel para as atualizações contínuas do ecossistema Next.js.
 
 * **Hospedagem VPS / Servidor Linux próprio (DigitalOcean, AWS EC2):** Descartada por introduzir custos fixos e exigir gerenciamento manual de servidor, segurança, SSL e configurações de Nginx.
 
-* **Cloudflare Pages (Alternativa Gratuita Comercial):** Plataforma viável caso o cliente exija operação comercial sem mensalidades de infraestrutura de computação sem violar termos de serviço, já que o plano gratuito da Cloudflare não proíbe uso comercial. Requer adaptação do build via `@cloudflare/next-on-pages` / OpenNext.
+* **Cloudflare Pages (Alternativa para Expansão Pós-MVP):** Plataforma viável para clientes que exigem operação comercial sem custos de assento, já que o plano gratuito da Cloudflare permite uso comercial. Contudo, não é um substituto *plug-and-play* imediato: exige adaptação do build via runtime Edge/OpenNext (`@cloudflare/next-on-pages`), testes rigorosos de compatibilidade com Server Actions, APIs Node e loader customizado de imagens. Por isso, a Vercel é a única plataforma de referência do MVP, ficando a Cloudflare reservada para uma trilha de implantação documentada e validada separadamente.
 
 ---

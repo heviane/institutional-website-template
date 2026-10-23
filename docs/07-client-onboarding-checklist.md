@@ -27,12 +27,14 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
 | :--- | :--- | :--- | :--- | :--- |
 | **Registro de Domínio**<br/>*(Registro.br / GoDaddy)* | Pago pelo cliente | Não possui plano gratuito | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`) | **Cliente** (titularidade e dados cadastrais próprios) |
 | **Hospedagem & CDN (Vercel)** | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento) | **Cliente** (conta mantida no nome da empresa do cliente) |
-| **Hospedagem & CDN (Cloudflare Pages)** | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** |
+| **Hospedagem & CDN (Cloudflare Pages)**<br/>*(Alternativa Arquitetural)* | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** |
 | **E-mails Transacionais (Resend)** | Gratuito | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia** | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês) | **Cliente** |
 | **Proteção Anti-Spam (Cloudflare Turnstile)** | Gratuito | Ilimitado para a esmagadora maioria de sites institucionais | Planos enterprise com SLA dedicado | **Cliente** |
 | **Rate Limiting em Produção (Upstash Redis)** | Serverless Free | Até **10.000 comandos/dia** com 256 MB de memória | Ultrapassar 10.000 requisições/dia (modelo Pay-as-you-go centavos/100k) | **Cliente** |
 | **Gestão de Conteúdo (Keystatic Cloud)** | Gratuito | Até **3 editores** por projeto com commits automáticos | Necessidade de mais de 3 editores simultâneos | **Cliente** |
 | **Armazenamento de Mídia** | Repositório Git (Gratuito) | Até **1 GB** recomendado no GitHub sem lentidão de clone | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente** |
+
+> ℹ️ **Nota sobre Cloudflare Pages:** Embora o plano gratuito da Cloudflare permita uso comercial, rodar Next.js com App Router, Server Actions e Keystatic na Cloudflare exige adaptação de runtime (`@cloudflare/next-on-pages` ou OpenNext), limites de Edge isolates e loader específico para imagens. Para o MVP, a **Vercel é a plataforma de referência oficial**, e a implantação na Cloudflare é mantida como alternativa arquitetural a ser conduzida via guia técnico dedicado.
 
 > ⚠️ **Regra de Ouro da Governança (Titularidade do Cliente):**  
 > O desenvolvedor ou agência **nunca deve utilizar cartões de crédito pessoais** para cadastrar ou manter serviços de clientes. Todas as contas de produção (Vercel, Cloudflare, Resend, Upstash, Registro de Domínio) devem ser criadas ou transferidas diretamente para a titularidade da empresa contratante.
@@ -90,34 +92,29 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
 
 ---
 
-## 🌐 Etapa 3: Domínio, DNS & Hospedagem
+## 🌐 Etapa 3: Domínio, DNS & Hospedagem (Vercel)
 
-- [ ] **3.1. Escolha e Cadastro na Plataforma de Hospedagem:**
-  - **Opção A (Padrão Oficial - Recomendado): Vercel**
-    - Suporte nativo completo a Next.js 15 (App Router, SSG, Server Actions) sem necessidade de adaptadores adicionais.
-    - Conectar a conta GitHub, importar o repositório privado `site-cliente` e realizar o deploy inicial.
-  - **Opção B (Alternativa Gratuita Comercial): Cloudflare Pages**
-    - Conforme [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md), permite uso comercial no plano gratuito.
-    - *Atenção à compatibilidade:* Requer compilar com o adaptador `@cloudflare/next-on-pages` (OpenNext) para executar as Server Actions no runtime Edge da Cloudflare.
-- [ ] **3.2. Configurar Domínio Personalizado na Hospedagem:**
-  - Adicionar o domínio raiz (`cliente.com.br`) e o subdomínio (`www.cliente.com.br`) nas configurações do projeto.
-- [ ] **3.3. Configurar Apontamentos DNS conforme a Plataforma Escolhida:**
+> 💡 **Plataforma de Referência do MVP:** A Vercel é o ambiente de hospedagem padrão oficial para o MVP deste template, com suporte nativo total a Next.js 15 (App Router, Server Actions, SSG e `next/image`). Caso o cliente demande no futuro implantação na Cloudflare Pages via OpenNext, consulte o [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md).
 
-  **Se utilizar a Vercel (Apontamentos no Registro.br, Cloudflare ou GoDaddy):**
+- [ ] **3.1. Conectar Repositório na Vercel:**
+  - Acessar o painel da [Vercel](https://vercel.com/) com a conta da empresa do cliente (obedecendo à regra de titularidade).
+  - Clicar em **Add New...** > **Project** e importar o repositório privado `site-[nome-do-cliente]`.
+  - Framework Preset: **Next.js** (automático).
+  - Clicar em **Deploy** para gerar a URL de preview inicial.
+- [ ] **3.2. Configurar Domínio Personalizado na Vercel:**
+  - No projeto na Vercel, acessar **Settings** > **Domains**.
+  - Adicionar o domínio raiz (`cliente.com.br`) e o subdomínio canônico (`www.cliente.com.br`).
+  - Configurar o redirecionamento automático (ex.: redirecionar `cliente.com.br` para `www.cliente.com.br`).
+- [ ] **3.3. Configurar Apontamentos DNS (no Registro.br, Cloudflare DNS ou GoDaddy):**
+  - Inserir os registros apontando para a rede de borda da Vercel:
+
   | Tipo | Nome / Host | Valor / Destino | TTL |
   | :--- | :--- | :--- | :--- |
   | **A** | `@` (raiz) | `76.76.21.21` | 3600 (1h) |
   | **CNAME** | `www` | `cname.vercel-dns.com.` | 3600 (1h) |
 
-  **Se utilizar o Cloudflare Pages:**
-  * *Com zona DNS já gerenciada na Cloudflare:* O domínio é vinculado automaticamente com 1 clique (gerenciamento por proxy CNAME interno).
-  * *Com zona DNS externa (ex.: Registro.br sem migração de NS):*
-  | Tipo | Nome / Host | Valor / Destino | TTL |
-  | :--- | :--- | :--- | :--- |
-  | **CNAME** | `www` (ou `@` via ALIAS/ANAME) | `<nome-do-projeto>.pages.dev.` | 3600 (1h) |
-
 - [ ] **3.4. Validar Emissão de Certificado SSL/TLS:**
-  - Aguardar a propagação do DNS e verificar se o status do domínio exibe **Valid Configuration** e o cadeado HTTPS está ativo.
+  - Aguardar a propagação do DNS e verificar se o status do domínio na Vercel exibe **Valid Configuration** e o cadeado HTTPS está ativo no navegador.
 
 ---
 
@@ -181,8 +178,8 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
 - [ ] **6.2. Convidar o Usuário do Cliente:**
   - No painel do Keystatic Cloud, convidar o e-mail do cliente como **Editor**.
   - O cliente receberá um link seguro de acesso sem precisar entender Git.
-- [ ] **6.3. Configurar Variáveis de Ambiente no Host:**
-  - No painel da Vercel (ou Cloudflare Pages), em `Environment Variables`, adicionar:
+- [ ] **6.3. Configurar Variáveis de Ambiente na Vercel:**
+  - No painel da Vercel, em **Settings** > **Environment Variables**, adicionar para os ambientes *Production* e *Preview*:
 
     ```env
     NEXT_PUBLIC_SITE_URL=https://www.cliente.com.br

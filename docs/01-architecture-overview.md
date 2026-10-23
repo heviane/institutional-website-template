@@ -72,7 +72,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 ### 7. Hospedagem, Automação (CI/CD) e Ambientes
 
-* **Vercel / Cloudflare Pages:** Deploy automatizado a cada `git push` no GitHub, SSL gratuito e URLs de preview (staging) para homologação com o cliente.
+* **Vercel (Plataforma de Referência do MVP):** Deploy automatizado a cada `git push` no GitHub, SSL gratuito e URLs de preview (staging) para homologação com o cliente. (Cloudflare Pages é mantida como alternativa arquitetural separada via guia técnico dedicado).
 
 ### 8. Governança, Privacidade e LGPD (Privacy by Design)
 
@@ -100,7 +100,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 | **Formulários & Backend** | React Hook Form + Server Actions + Zod + Anti-Spam | Formulários multi-etapas / Upload de arquivos |
 | **E-mails Transacionais** | Resend API (Notificação comercial de contato) | Automação de marketing / E-mails transacionais de boas-vindas |
 | **Gestão de Conteúdo** | Keystatic (Markdown/JSON Git-based) | CMS em Nuvem (Sanity.io/Strapi se o cliente exigir) |
-| **Hospedagem / CI/CD** | Vercel (com titularidade do cliente) ou Cloudflare Pages (baixo custo comercial) | Infraestrutura dedicada multi-região / AWS |
+| **Hospedagem / CI/CD** | Vercel (Plataforma de referência do MVP, com titularidade do cliente) | Cloudflare Pages (via `@cloudflare/next-on-pages` / OpenNext) / AWS |
 | **Privacidade & LGPD** | Consentimento Zod + Páginas Legais + Plausible | Cookie Banner (caso o cliente exija Google Analytics 4) |
 | **Qualidade & Automação** | GitHub Actions CI + Dependabot + Vitest + axe-core | Lighthouse CI automatizado / Testes E2E (Playwright) |
 | **Segurança & Defesa** | Zod Env Validation + Security Headers + SECURITY.md | WAF avançado / Rate Limiting distribuído via Upstash Redis |
