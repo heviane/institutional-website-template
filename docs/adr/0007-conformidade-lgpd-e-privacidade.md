@@ -45,21 +45,24 @@ Decidimos adotar uma arquitetura fundamentada no princípio de **Privacidade por
 * Os dados pessoais enviados trafegam temporariamente pela rota de API / Server Action do Next.js e são encaminhados de forma criptografada diretamente à caixa postal corporativa do cliente através da API do Resend.
 * Essa abordagem atende tecnicamente aos princípios da **minimização** (Art. 6º, III), **segurança** (Art. 6º, VII) e **eliminação de dados** (Art. 16), reduzindo drasticamente a superfície de ataque contra vazamento de dados em repouso.
 
-### 2.3. Telemetria e Analytics *Privacy-First* (Ausência de Cookies de Rastreamento)
+### 2.3. Telemetria e Analytics Orientados à Privacidade (Propriedades Técnicas Verificadas)
 
-* Adotamos o **Plausible Analytics** (ou Umami) como a solução padrão recomendada de análise de tráfego agregada:
-  * Funciona **sem cookies (*cookieless*)** e não rastreia usuários entre diferentes websites (*cross-site tracking*).
-  * Não coleta endereços IP persistentes nem dados pessoais identificáveis (PII), gerando métricas anônimas e consolidadas.
-  * **Impacto em UX e Consentimento de Cookies:** Por não armazenar cookies persistentes no navegador do visitante nem gerar perfis para publicidade comportamental, dispensa tecnicamente os *Cookie Banners* (CMPs) invasivos que prejudicam Core Web Vitals (CLS/INP).
-  * **Dever Contínuo de Transparência (Art. 6º, VI da LGPD):** A ausência de cookies não elimina o dever de informar. É mandatório descrever de forma clara na [Política de Privacidade](/politica-de-privacidade) que o site utiliza serviços de telemetria estatística agregada sem identificação pessoal do visitante.
-* **Modo Alternativo (Google Analytics 4):** Caso o cliente exija expressamente o GA4 ou pixels de anúncio (Meta Pixel / Google Ads), a arquitetura orienta a ativação de um componente de Cookie Banner com bloqueio prévio de scripts antes do consentimento do usuário.
+* Adotamos o **Plausible Analytics** (ou Umami) como a solução padrão recomendada de análise de tráfego agregada, fundamentada nas seguintes propriedades técnicas:
+  * **Operação sem Cookies (*Cookieless*):** Não grava dados no armazenamento do navegador (`document.cookie`, `localStorage` ou `sessionStorage`) nem utiliza identificadores persistentes de dispositivo.
+  * **Anonimização e Métricas Agregadas:** Gera estatísticas agregadas calculando um hash temporário a partir do endereço IP, User-Agent e um *salt* rotativo diário, descartando o endereço IP bruto imediatamente após o processamento.
+  * **Isolamento de Domínio (*No Cross-Site Tracking*):** Não rastreia usuários entre diferentes websites nem cria perfis comportamentais para comercialização ou publicidade.
+  * **Impacto em Consentimento e UX:** Por não utilizar armazenamento local no terminal do usuário para fins de rastreamento de terceiros, a configuração padrão minimiza a necessidade de *Cookie Banners* (CMPs) intrusivos que degradam Core Web Vitals (CLS/INP).
+  * **Não Isenção Automática de Obrigações Legais:** A dispensa de mecanismos de consentimento ou banners informativos depende do enquadramento legal pelo DPO/assessoria jurídica do cliente e das diretrizes da autoridade competente (ANPD no Brasil, orientações setoriais ou regulamentos internacionais caso atenda visitantes estrangeiros). O template fornece salvaguardas técnicas, mas não substitui a governança jurídica.
+  * **Dever Mandatório de Transparência (Art. 6º, VI da LGPD):** A ausência de cookies não elimina o dever de informar. É obrigatório descrever na [Política de Privacidade](/politica-de-privacidade) os serviços técnicos efetivamente ativados e o tratamento de dados realizado.
+* **Modo Alternativo (Google Analytics 4 / Pixels de Mídia):** Caso o cliente decida utilizar o GA4 ou pixels de anúncio (Meta Pixel / Google Ads), a arquitetura orienta a ativação de um componente formal de Cookie Banner com bloqueio prévio de scripts antes do consentimento do usuário.
 
-### 2.4. Páginas Legais Automatizadas via `siteConfig`
+### 2.4. Páginas Legais Transparentes e Fidedignas aos Serviços Ativos
 
 * O template disponibiliza rotas estáticas pré-estruturadas:
   * `/politica-de-privacidade`
   * `/termos-de-uso`
-* O conteúdo dessas páginas consome dinamicamente os dados centralizados de governança definidos em `src/config/site.ts` (Razão Social, CNPJ, canal de atendimento do Encarregado de Dados/DPO, endereço e telefone), permitindo adaptação rápida e consistente para cada cliente.
+* O conteúdo dessas páginas consome dados centralizados de governança em `src/config/site.ts` (Razão Social, CNPJ, canal de atendimento do Encarregado de Dados/DPO, endereço e telefone).
+* **Fidelidade aos Serviços Ativos:** A Política de Privacidade deve refletir com exatidão os serviços efetivamente integrados ao projeto (ex.: detecção de automação e segurança via Cloudflare Turnstile, tráfego de e-mails via Resend, telemetria agregada via Plausible ou cookies via GA4), evitando cláusulas genéricas descoladas da arquitetura real do website.
 
 ---
 
@@ -76,6 +79,7 @@ Decidimos adotar uma arquitetura fundamentada no princípio de **Privacidade por
 
 * **Necessidade de Alinhamento Caso a Caso:** A definição da base legal (consentimento expresso vs procedimentos pré-contratuais) deve ser avaliada com o cliente e seu DPO, sem assumir uma fórmula jurídica única para todos os formulários.
 * **Métricas Agregadas no Analytics:** O Plausible entrega dados quantitativos consolidados de tráfego, sem identificação de visitantes individuais ou funis comportamentais avançados entre domínios (adequado para sites institucionais, mas exigindo transição para GA4 com Cookie Banner caso o cliente rode campanhas avançadas de retargeting).
+* **Não Substituição da Avaliação Jurídica:** Adoção de arquiteturas sem cookies ou telemetria anônima não dispensa o cliente de suas obrigações legais de transparência, devendo a Política de Privacidade ser periodicamente revisada para cobrir todos os serviços integrados.
 
 ---
 

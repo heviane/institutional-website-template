@@ -62,7 +62,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 * **Server Actions (`src/app/actions/contact.ts`):** Processamento tipado nativo no servidor tratado como fronteira pública não confiável, com validação obrigatória via Zod e sanitização de respostas de erro.
 * **Defesa Anti-Spam em 3 Camadas (veja [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)):**
   1. *Honeypot:* Campo oculto via CSS para descarte silencioso de bots simples.
-  2. *Cloudflare Turnstile:* Desafio invisível sem cookies de terceiros e sem fricção visual.
+  2. *Cloudflare Turnstile:* Desafio técnico de segurança sem cookies de rastreamento publicitário e sem fricção visual.
   3. *Rate Limiting por IP:* Teto configurável (ex: 5 submissões/hora) via Upstash Redis em produção (ou Map em dev) contra envios repetitivos da mesma máquina.
 
 ### 6. Interface, Animações e Ícones
@@ -78,8 +78,8 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 * **Salvaguardas no Formulário:** Suporte nativo a consentimento explícito validado no Zod ou aviso transparente baseado em procedimentos pré-contratuais (Art. 7º, V).
 * **Retenção Efêmera:** Arquitetura sem banco de dados; dados trafegam de forma criptografada para a caixa de e-mail corporativa do cliente.
-* **Plausible Analytics (Cookieless):** Telemetria agregada sem cookies de rastreamento, eliminando banners de consentimento intrusivos e preservando Core Web Vitals, com transparência na Política de Privacidade.
-* **Páginas Legais Estáticas:** Rotas `/politica-de-privacidade` e `/termos-de-uso` sincronizadas dinamicamente com o `siteConfig`.
+* **Plausible Analytics (Cookieless):** Telemetria agregada sem cookies persistentes de rastreamento, preservando Core Web Vitals sem banners invasivos na configuração padrão, condicionada à discriminação fiel dos serviços ativos na Política de Privacidade.
+* **Páginas Legais Estáticas:** Rotas `/politica-de-privacidade` e `/termos-de-uso` sincronizadas com o `siteConfig` e discriminando com exatidão os serviços técnicos ativados.
 
 ### 9. Qualidade Contínua e Portões de Segurança (Quality Gates)
 

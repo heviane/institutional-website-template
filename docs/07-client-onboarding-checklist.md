@@ -208,10 +208,14 @@ Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
 
 - [ ] **7.1. Identificar o Encarregado de Dados (DPO) ou Canal de Atendimento:**
   - Obter o nome e e-mail de contato para privacidade da empresa do cliente (ex: `privacidade@cliente.com.br`).
-- [ ] **7.2. Customizar as Páginas Legais:**
-  - Atualizar os dados cadastrais da empresa em `src/config/site.ts`, revisando as rotas:
-    - `src/app/(legal)/politica-de-privacidade/page.tsx` (descrevendo a telemetria analítica agregada e a retenção de dados)
-    - `src/app/(legal)/termos-de-uso/page.tsx`
+- [ ] **7.2. Customizar as Páginas Legais com os Serviços Efetivamente Ativos:**
+  - Atualizar os dados cadastrais da empresa em `src/config/site.ts`.
+  - Revisar `src/app/(legal)/politica-de-privacidade/page.tsx` para garantir correspondência exata com as ferramentas ativadas para o cliente:
+    - Se Cloudflare Turnstile estiver ativo: descrever a verificação técnica de ambiente e prevenção anti-abuso.
+    - Se Plausible estiver ativo: detalhar a telemetria agregada sem cookies e com hash rotativo diário.
+    - Se Google Analytics 4 / Pixels estiverem ativos: ativar o Cookie Banner e listar os cookies de terceiros.
+    - Descrever o fluxo de mensagens de contato via Resend (retenção efêmera e entrega à caixa postal corporativa).
+  - Revisar `src/app/(legal)/termos-de-uso/page.tsx`.
 - [ ] **7.3. Alinhar Base Legal e Validação do Formulário:**
   - Confirmar com o cliente se o formulário utiliza a base de *Procedimentos Preliminares Contratuais (Art. 7º, V)* com aviso informativo transparente ou se requer *Consentimento Expresso (Art. 7º, I)* com checkbox ativo no schema do Zod (ex.: para inclusão em newsletter/marketing).
   - Caso utilize checkbox de consentimento, validar o teste com campo desmarcado (erro no Zod) e marcado (sucesso).

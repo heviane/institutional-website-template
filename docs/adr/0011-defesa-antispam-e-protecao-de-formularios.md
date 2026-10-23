@@ -16,7 +16,7 @@ No contexto do `institutional-website-template`, a ausência de uma barreira ant
    Conforme definido no [ADR 0003](0003-estrategia-de-formularios.md), utilizamos a API do Resend no plano gratuito, que impõe um limite estrito de **100 e-mails por dia**. Um ataque automatizado de poucos minutos pode esgotar toda a cota diária do cliente, impedindo o recebimento de leads comerciais reais e causando prejuízo direto ao negócio.
 
 2. **Conflito com Privacidade e LGPD (Pilar de Governança):**
-   Mecanismos tradicionais como o Google reCAPTCHA v2 e v3 utilizam cookies de terceiros e coletam dados comportamentais do usuário para enriquecer perfis de publicidade da Google. Isso viola a premissa de *Privacy by Design* ([ADR 0007](0007-conformidade-lgpd-e-privacidade.md)) e forçaria a inclusão de banners intrusivos de consentimento de cookies na aplicação.
+   Mecanismos como o Google reCAPTCHA v2 e v3 utilizam cookies e identificadores de terceiros vinculados ao ecossistema de serviços da Google, gerando atrito de privacidade e compelindo a inserção de banners de consentimento de cookies para mitigar riscos regulatórios.
 
 3. **Acessibilidade e Desempenho (Core Web Vitals & WCAG 2.1 AA):**
    Desafios visuais complexos (identificar faixas de pedestre, semáforos ou caracteres distorcidos) quebram a acessibilidade para pessoas que usam leitores de tela ou possuem limitações motoras/cognitivas. Além disso, bibliotecas pesadas de CAPTCHA aumentam significativamente o tempo de bloqueio da thread principal (*Total Blocking Time* - TBT) e prejudicam o *Interaction to Next Paint* (INP).
@@ -48,7 +48,7 @@ flowchart TD
 
 ### 2. Camada 2: Cloudflare Turnstile (Modo Gerenciado / Invisível)
 
-* Solução moderna de validação de navegadores baseada em desafios criptográficos não interativos e biometria comportamental em tempo de execução, **sem utilizar cookies de rastreamento** e sem exigir que o usuário resolva quebra-cabeças visuais.
+* Solução de validação de clientes baseada em desafios criptográficos e verificação técnica de características do navegador em tempo de execução (sinais de ambiente e interação não invasiva), **sem gravação de cookies persistentes de rastreamento publicitário** e sem exigir que o usuário resolva quebra-cabeças visuais.
 * O widget gera um token efêmero (`cf-turnstile-response`) no frontend.
 * A Server Action valida esse token diretamente na API da Cloudflare (`https://challenges.cloudflare.com/turnstile/v0/siteverify`) com a chave secreta do cliente antes de acionar a Resend API.
 
@@ -63,6 +63,7 @@ flowchart TD
 ### 4. Monitoramento de Cota, Tratamento de Falhas e Procedimento de Contingência
 
 Mesmo com defesa em camadas, nenhuma barreira web garante proteção absoluta contra todo tipo de abuso distribuído ou picos atípicos de tráfego legítimo. Para mitigar riscos e evitar paradas operacionais silenciosas, adota-se um protocolo de contingência em três níveis:
+
 * **Alertas Proativos de Consumo:** Ativação de notificações automáticas no painel do Resend quando o consumo diário atingir 80% e 100% da cota.
 * **Tratamento Gracioso na Server Action:** Se a API do Resend retornar erro de limite excedido (`429 Too Many Requests` ou cota diária esgotada), a Server Action captura a exceção, mascara a falha interna e retorna uma resposta amigável instruindo o visitante a utilizar canais diretos alternativos (como WhatsApp corporativo ou e-mail de contato declarados em `src/config/site.ts`).
 * **Procedimento Operacional de Resposta:** Diante do esgotamento da cota, a empresa cliente possui duas alternativas claras documentadas na Matriz Financeira: aguardar a renovação automática da janela de 24 horas (00:00 UTC) sem custos adicionais, ou acionar o upgrade imediato para o plano Resend Pro ($20/mês) caso o volume decorra de alta demanda comercial legítima.
@@ -74,7 +75,7 @@ Mesmo com defesa em camadas, nenhuma barreira web garante proteção absoluta co
 ### Positivas (Benefícios):
 
 * **Redução Significativa de Abuso e Preservação da Cota:** Mitiga o esgotamento prematuro do limite diário do Resend (100 envios/dia) ao descartar bots simples via Honeypot, filtrar automações via Turnstile e conter envios repetitivos via Rate Limiting.
-* **Privacidade e Conformidade LGPD por Padrão:** O Cloudflare Turnstile não lê dados pessoais, não vende informações para anunciantes e não instala cookies de rastreamento entre domínios.
+* **Minimização de Dados e Finalidade Exclusiva de Segurança:** O Cloudflare Turnstile opera sem cookies de rastreamento publicitário entre domínios e não comercializa dados de visitantes para monetização de anúncios. Os metadados técnicos de requisição e sinais de desafio coletados destinam-se exclusivamente à avaliação de segurança e prevenção a fraudes (legítimo interesse / proteção contra abusos), devendo esse tratamento constar de forma transparente na Política de Privacidade.
 * **Acessibilidade Inclusiva (WCAG 2.1 AA):** O fluxo é 100% transparente para usuários legítimos, sem quebra-cabeças visuais que barram usuários com deficiência.
 * **Impacto Mínimo em Performance:** O script do Turnstile carrega de forma assíncrona (`defer`) e adiciona menos de 20 KB gzipped, mantendo o LCP e INP dentro das metas do Core Web Vitals.
 

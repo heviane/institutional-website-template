@@ -34,7 +34,7 @@ Este documento consolida a revisão técnica da **Fase 1 (Fundação Documental,
 
 * **Retenção Efêmera:** Mensagens de contato não são persistidas em bancos de dados relacionais; os dados trafegam de forma criptografada para a caixa postal corporativa do cliente, atendendo à minimização de dados.
 * **Bases Legais Flexíveis:** A documentação distingue a base de execução de procedimentos contratuais preliminares (Art. 7º, V) da necessidade de consentimento expresso (Art. 7º, I), disponibilizando o schema Zod como salvaguarda configurável.
-* **Telemetria sem Cookies:** O uso do Plausible Analytics elimina a necessidade de CMPs (*Cookie Banners*) intrusivos, mantendo o dever de informar na Política de Privacidade.
+* **Telemetria sem Cookies e Transparência:** O uso de telemetria agregada sem cookies (Plausible) opera sem identificadores persistentes no cliente, minimizando o atrito de CMPs invasivos na configuração padrão e exigindo que a Política de Privacidade discrimine com exatidão os serviços técnicos ativos.
 
 ### 2.5. Métricas Objetivas de Performance e Qualidade
 
