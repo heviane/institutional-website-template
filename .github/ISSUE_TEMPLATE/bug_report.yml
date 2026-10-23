@@ -75,4 +75,3 @@ body:
           required: true
         - label: Testei localmente com `npm run lint` e `npm run build`.
           required: false
-
