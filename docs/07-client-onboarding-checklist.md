@@ -1,6 +1,6 @@
 # 📋 Checklist Operacional de Onboarding de Cliente
 
-Este documento é o guia definitivo passo a passo para colocar no ar o site institucional de um novo cliente a partir deste template. O processo é estruturado para ser concluído em **menos de 2 horas**, garantindo alta segurança, conformidade legal (LGPD), excelente entregabilidade de e-mails (SPF, DKIM, DMARC) e infraestrutura de baixo custo com governança clara de limites e titularidade financeira.
+Este documento é o guia definitivo passo a passo para colocar no ar o site institucional de um novo cliente a partir deste template. O processo é estruturado com a meta projetada de ser concluído em **menos de 2 horas** (a ser aferida e calibrada formalmente na homologação do primeiro projeto piloto), garantindo alta segurança, conformidade legal (LGPD), excelente entregabilidade de e-mails (SPF, DKIM, DMARC) e infraestrutura de baixo custo com governança clara de limites e titularidade financeira.
 
 ---
 

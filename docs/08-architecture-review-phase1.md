@@ -38,14 +38,14 @@ Este documento consolida a revisão técnica da **Fase 1 (Fundação Documental,
 
 ### 2.5. Métricas Objetivas de Performance e Qualidade
 
-* **Core Web Vitals:** Metas estritas definidas para ambiente móvel: LCP < 2,5 s, INP < 200 ms e CLS < 0,1.
-* **Acessibilidade:** Conformidade WCAG 2.1 AA auditada via testes com `vitest-axe` nos primitivos Radix UI ([ADR 0004](adr/0004-design-system-e-estilizacao.md)).
+* **Core Web Vitals:** Metas estritas planejadas para ambiente móvel: LCP < 2,5 s, INP < 200 ms e CLS < 0,1.
+* **Acessibilidade:** Conformidade WCAG 2.1 AA a ser auditada via testes com `vitest-axe` nos primitivos Radix UI ([ADR 0004](adr/0004-design-system-e-estilizacao.md)).
 
 ---
 
 ## 3. Limitações e Riscos Técnicos Monitorados
 
-A revisão identificou **quatro pontos de atenção técnica** a serem monitorados durante a implementação:
+A revisão identificou **cinco pontos de atenção técnica** a serem monitorados durante a implementação:
 
 ### 3.1. Transição Planejamento vs. Código
 
@@ -66,6 +66,11 @@ A revisão identificou **quatro pontos de atenção técnica** a serem monitorad
 
 * **Cenário:** O comando `git merge --allow-unrelated-histories` em repositórios derivados via template pode acarretar conflitos por falta de ancestral comum (*merge-base*).
 * **Ação Preventiva:** Manter o protocolo sob validação empírica na Fase 2 do Roadmap, executando testes de derivação práticos para comparar merge direto, patches cirúrgicos e workflows de sincronização automatizada ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
+
+### 3.5. Validação Empírica de Metas Operacionais e Financeiras em Projeto Piloto
+
+* **Cenário:** Metas de tempo (onboarding em menos de 2 horas), pontuações do Google Lighthouse (scores ≥ 90/95) e previsibilidade de custos nas camadas gratuitas representam hipóteses técnicas e operacionais ainda não medidas em código real.
+* **Ação Preventiva:** Tratar tais parâmetros como metas planejadas a serem formalmente aferidas, registradas e calibradas a partir de um projeto piloto de teste ao final da Fase 2.
 
 ---
 

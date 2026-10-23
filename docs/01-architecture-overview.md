@@ -15,8 +15,8 @@ Este é o documento de Especificação e Planejamento da Arquitetura para a cons
 
 Criar um template modular, de fácil personalização e pronto para reaproveitamento comercial, priorizando quatro pilares inegociáveis:
 
-1. **Alta performance (SEO e Core Web Vitals):** LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
-2. **Rapidez no desenvolvimento e reaproveitamento de código:** Onboarding de novo cliente em menos de 2 horas.
+1. **Alta performance (SEO e Core Web Vitals):** Metas planejadas de LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
+2. **Rapidez no desenvolvimento e reaproveitamento de código:** Meta projetada de onboarding de novo cliente em menos de 2 horas (a ser validada e calibrada em projeto piloto).
 3. **Infraestrutura de baixo custo e sustentável:** Priorizar serviços gratuitos ou de baixo custo quando compatíveis com os requisitos técnicos, operacionais e comerciais de cada cliente, sem assumir promessas irrealistas de gratuidade perpétua.
 4. **Autonomia do cliente para gerenciar conteúdos:** Painel visual amigável via Keystatic CMS sem atrito de Git.
 

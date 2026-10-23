@@ -96,9 +96,9 @@ Funcionalidades opcionais que podem ser ativadas em projetos específicos de cli
 
 ---
 
-## 📌 Critérios de Sucesso Mensuráveis do MVP
+## 📌 Critérios de Sucesso Mensuráveis do MVP (Metas Planejadas)
 
-O template será considerado pronto para homologação e uso em produção comercial quando atingir rigorosamente as seguintes metas:
+As seguintes métricas foram estabelecidas como metas de referência para o MVP, devendo ser formalmente medidas e comprovadas em ambiente de teste/piloto antes do lançamento comercial:
 
 ### 1. Métricas de Performance e Core Web Vitals (Medição Mobile / Emulated 4G)
 
@@ -117,6 +117,6 @@ O template será considerado pronto para homologação e uso em produção comer
 
 ### 3. Eficiência Operacional & Custo de Infraestrutura
 
-* **Onboarding de Cliente:** Novo site institucional colocado no ar em menos de **2 horas** modificando exclusivamente `src/config/site.ts`, variáveis de `@theme` no `globals.css` e assets de `/public`.
-* **Previsibilidade e Baixo Custo:** Operação estruturada para iniciar em tiers gratuitos ou de baixo custo no tráfego institucional padrão (Vercel, Resend, Upstash, Keystatic Cloud), com matriz de governança de limites e titularidade financeira clara.
+* **Onboarding de Cliente (Meta Planejada):** Tempo de onboarding projetado em menos de **2 horas** modificando exclusivamente `src/config/site.ts`, variáveis de `@theme` no `globals.css` e assets de `/public`, a ser aferido em projeto piloto real.
+* **Previsibilidade e Baixo Custo:** Validação prática de operação dentro dos limites de planos gratuitos/baixo custo no tráfego institucional típico (Vercel, Resend, Upstash, Keystatic Cloud), com governança e gatilhos de upgrade confirmados.
 * **Comunicação Transacional Confiável:** Formulário de contato enviando e-mails via Resend com SPF, DKIM e DMARC validados (Score no [Mail-Tester](https://www.mail-tester.com/) `≥ 9/10`).
