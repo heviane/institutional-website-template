@@ -69,6 +69,10 @@ Para garantir governança, rastreabilidade e facilidade de *onboarding*, o proje
 
 ## 🚀 Como Usar Este Template
 
+> [!NOTE]
+> **Aviso de Transição Pré-Bootstrap (Fase 2):**  
+> Os comandos descritos a seguir (`npm install`, `npm run dev`) e referências a arquivos como `src/config/site.ts` representam o tutorial padrão planejado para a aplicação. Como o repositório concluiu a **Fase 1 (Fundação e Governança)** e aguarda o início da **Fase 2 (Bootstrap do Core)**, tais comandos tornar-se-ão executáveis a partir do primeiro commit de código (`package.json` e `src/`). Neste momento, você pode inspecionar e navegar por toda a especificação técnica em [`docs/`](docs/). Ao final do bootstrap, este guia de instalação será homologado de ponta a ponta em um clone limpo.
+
 ### 1. Criando um Novo Repositório a partir do Template
 
 Clique no botão **"Use this template"** no topo da página do GitHub para gerar uma cópia limpa deste projeto em sua conta pessoal ou na organização do seu cliente.
