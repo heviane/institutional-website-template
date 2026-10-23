@@ -50,10 +50,12 @@ flowchart TD
 * O widget gera um token efêmero (`cf-turnstile-response`) no frontend.
 * A Server Action valida esse token diretamente na API da Cloudflare (`https://challenges.cloudflare.com/turnstile/v0/siteverify`) com a chave secreta do cliente antes de acionar a Resend API.
 
-### 3. Camada 3: Rate Limiting por IP (Janela Deslizante)
-* Limita o número de submissões para no máximo **5 requisições por hora por endereço IP**.
-* Em instâncias de desenvolvimento e pequenos deploys, utiliza cache em memória (ou Edge Key-Value/Upstash Redis no plano gratuito para deploys multi-região distribuídos).
-* Garante que ataques coordenados distribuídos não consigam consumir a cota diária de 100 e-mails do Resend.
+### 3. Camada 3: Rate Limiting por IP (Janela Deslizante Configurável)
+* **Finalidade e Limites:** Aplica uma política configurável de moderação (padrão de até **5 requisições por hora por endereço IP**) para conter abusos repetitivos e cliques acidentais originados da mesma máquina/conexão.
+* **Importante (Alinhamento de Escopo):** O rate limiting por IP **não** é uma garantia contra ataques massivos distribuídos (botnets com centenas de IPs rotativos). A contenção real de robôs distribuídos é desempenhada pelas Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
+* **Estratégia de Armazenamento por Ambiente:**
+  * **Desenvolvimento Local (`npm run dev`):** Utiliza armazenamento volátil em memória (`Map` nativo com TTL) para garantir inicialização rápida e zero atrito sem exigir credenciais externas.
+  * **Produção Serverless / Edge:** Em ambientes como a Vercel, as instâncias de Server Actions são efêmeras, sem estado compartilhado e descartadas a qualquer momento. Um contador em memória RAM local não garante limite global entre diferentes instâncias serverless. Portanto, em produção, é mandatório utilizar armazenamento compartilhado com operações atômicas e expiração TTL via **Upstash Redis** (plano gratuito com até 10.000 requisições/dia, mantendo o pilar de custo $0) ou Vercel KV.
 
 ---
 
@@ -68,6 +70,8 @@ flowchart TD
 ### Negativas (Riscos e Desvantagens Aceitas):
 * **Configuração Extra no Onboarding:** Exige criar um widget gratuito no Cloudflare Dashboard e adicionar as variáveis `NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY` para cada cliente.
 * **Dependência Externa de Validação:** Se a API de verificação do Turnstile sofrer indisponibilidade momentânea, envios legítimos podem ser rejeitados temporariamente.
+* **Armazenamento Centralizado para Rate Limit em Produção:** Devido à natureza efêmera e sem estado das funções Serverless, o rate limiting em produção não pode depender de memória local, exigindo credenciais de um banco Redis Serverless compartilhado (Upstash Redis) com expiração atômica.
+* **Limitação contra Botnets Distribuídas:** O bloqueio por IP não protege contra ataques com IPs rotativos massivos; essa responsabilidade recai exclusivamente sobre as Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
 
 ---
 

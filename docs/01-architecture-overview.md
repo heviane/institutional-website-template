@@ -63,7 +63,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 * **Defesa Anti-Spam em 3 Camadas (veja [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)):**
   1. *Honeypot:* Campo oculto via CSS para descarte silencioso de bots simples.
   2. *Cloudflare Turnstile:* Desafio invisível sem cookies de terceiros e sem fricção visual.
-  3. *Rate Limiting por IP:* Teto de 5 submissões/hora para blindar a cota de 100 e-mails/dia do Resend.
+  3. *Rate Limiting por IP:* Teto configurável (ex: 5 submissões/hora) via Upstash Redis em produção (ou Map em dev) contra envios repetitivos da mesma máquina.
 
 ### 6. Interface, Animações e Ícones
 
