@@ -71,7 +71,7 @@ Para garantir governança, rastreabilidade e facilidade de *onboarding*, o proje
 
 ### 1. Criando um Novo Repositório a partir do Template
 
-Clique no botão **"Use this template"** no topo da página do GitHub para gerar uma cópia limpa deste projeto em sua conta pessoal ou na organização do seu cliente .
+Clique no botão **"Use this template"** no topo da página do GitHub para gerar uma cópia limpa deste projeto em sua conta pessoal ou na organização do seu cliente.
 
 ### 2. Instalação Local
 
@@ -79,7 +79,7 @@ Clone o novo repositório criado e instale as dependências:
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/heviane/institutional-website-template.git
+git clone https://github.com/seu-usuario/nome-do-projeto.git
 
 # Entrar na pasta do projeto
 cd nome-do-projeto
