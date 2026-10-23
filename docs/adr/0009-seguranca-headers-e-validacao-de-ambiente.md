@@ -27,7 +27,7 @@ Adotamos a validação estrita com **Zod** para todas as variáveis de ambiente 
 
 ### 2.2. Cabeçalhos HTTP de Segurança no `next.config.ts`
 Configuramos *Security Headers* obrigatórios aplicados a todas as rotas da aplicação:
-* **`Strict-Transport-Security` (HSTS):** Força conexões HTTPS durante 2 anos (`max-age=63072000; includeSubDomains; preload`).
+* **`Strict-Transport-Security` (HSTS Conservador em Produção):** Ativado exclusivamente em produção (`max-age=31536000`, 1 ano) para forçar HTTPS no site institucional. As diretivas `includeSubDomains` e `preload` são mantidas deliberadamente desativadas por padrão como medida preventiva para não quebrar subdomínios legados ou sistemas internos do cliente (como VPNs ou intranets) que possam não dispor de HTTPS.
 * **`X-Frame-Options: SAMEORIGIN`:** Protege contra ataques de *Clickjacking* mantendo compatibilidade com a renderização em iframe do painel administrativo do Keystatic (`/keystatic`).
 * **`X-Content-Type-Options: nosniff`:** Impede que o navegador tente inferir tipos MIME diferentes dos declarados pelos servidores.
 * **`Referrer-Policy: strict-origin-when-cross-origin`:** Garante que dados confidenciais na URL não vazem ao navegar para links externos.
@@ -49,6 +49,7 @@ Instituímos o arquivo `SECURITY.md` na raiz do repositório, definindo versões
 ### Negativas (Riscos e Desvantagens Aceitas):
 * **Rigor no Setup:** Desenvolvedores precisam obrigatoriamente preencher o `.env.local` antes de rodar o build local ou a esteira de CI/CD.
 * **Ajuste Fino de CSP se Houver Scripts Externos:** A inclusão de scripts de terceiros (como Google Ads ou pixels de conversão) pode exigir personalização pontual da Content Security Policy (CSP).
+* **HSTS Requer Avaliação Prévia para Subdomínios:** A elevação de HSTS para incluir `includeSubDomains` ou submissão ao `preload` nunca deve ser feita no nível de template genérico; ela requer auditoria específica de todos os subdomínios da infraestrutura de cada cliente.
 
 ---
 
