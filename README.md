@@ -109,23 +109,29 @@ npm run dev
 
 Acesse `http://localhost:3000` no seu navegador para ver a aplicação em execução.
 
-### 5. Sincronizando Atualizações Futuras do Template
+### 5. Atualizações e Manutenção do Template
 
-Como o botão *"Use this template"* gera um repositório com histórico desconectado, configure o template original como `upstream` no projeto do cliente para puxar melhorias contínuas e patches de segurança com facilidade:
+O template segue versionamento semântico ([SemVer](https://semver.org/)) formalizado via GitHub Releases. A arquitetura desacopla a zona de engenharia das customizações do cliente (`src/config/site.ts`, mídias em `/public` e conteúdo Markdown), reduzindo a probabilidade de conflitos durante atualizações.
 
-```bash
-# 1. Vincular o template original como remote (executar uma única vez no repositório do cliente):
-git remote add template https://github.com/heviane/institutional-website-template.git
-
-# 2. Buscar atualizações do template:
-git fetch template
-
-# 3. Mesclar as melhorias mais recentes (reconciliando históricos desconectados):
-git merge template/main --allow-unrelated-histories -m "chore: sincronizar com a versao mais recente do template"
-
-# Dica: Para aplicar apenas uma correção de segurança específica (hotfix):
-git cherry-pick <hash-do-commit>
-```
+> [!WARNING]
+> **Fluxo de Sincronização em Validação (Procedimento Experimental)**  
+> Repositórios criados a partir do botão *"Use this template"* possuem histórico Git desconectado do template original (*sem ancestral comum*). Conforme documentado no [ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md), a mesclagem direta de históricos (`--allow-unrelated-histories`) pode gerar falsos conflitos massivos e **não é recomendada como procedimento padrão até a conclusão dos testes na Fase 2**.
+>
+> **Fluxo Recomendado para Atualizações e Hotfixes:**
+> 1. Consulte o *Changelog* detalhado na [Release oficial](https://github.com/heviane/institutional-website-template/releases) do template.
+> 2. Para aplicar **correções pontuais de segurança (hotfixes)**, utilize cherry-pick ou patches cirúrgicos em uma branch de teste isolada:
+>    ```bash
+>    # 1. Vincular o template como remote secundário (apenas uma vez):
+>    git remote add template https://github.com/heviane/institutional-website-template.git
+>
+>    # 2. Buscar atualizações:
+>    git fetch template
+>
+>    # 3. Aplicar a correção específica em branch de teste:
+>    git checkout -b chore/patch-seguranca
+>    git cherry-pick <hash-do-commit>
+>    ```
+> 3. Um procedimento homologado de sincronização completa (via branch upstream ou automação) será definido empiricamente após validação em repositório derivado de testes.
 
 ---
 

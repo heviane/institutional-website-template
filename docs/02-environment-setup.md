@@ -375,39 +375,45 @@ Para que o formulário de contato funcione em produção enviando mensagens para
 
 ---
 
-### Fase 5: Manutenção Contínua e Sincronização com o Template (Upstream Sync)
+### Fase 5: Manutenção Contínua e Estratégia de Atualização (Upstream)
 
-Conforme estabelecido na ADR 0010, os projetos de clientes derivados deste template utilizam o modelo de vinculação remota para receber melhorias de código, patches de segurança e novas features sem sobrescrever os dados específicos do cliente:
+Conforme estabelecido na [ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md), os projetos de clientes derivados deste template utilizam versionamento SemVer e releases oficiais para receber melhorias de código e patches de segurança.
+
+> [!WARNING]
+> **Status do Procedimento de Mesclagem de Históricos:**  
+> Como o recurso *"Use this template"* gera um repositório com histórico desconectado do template original, a execução direta de `git merge template/main --allow-unrelated-histories` é classificada como **estratégia experimental**. Por ausência de ancestral comum (*merge-base*), o Git pode interpretar arquivos modificados como adições concorrentes (*both added*), gerando falsos conflitos massivos. A separação arquitetural (`siteConfig` e conteúdo desacoplados) mitiga mas não elimina esse risco por si só. Um procedimento de sincronização completo e seguro será formalmente homologado na Fase 2.
+
+#### Procedimento Recomendado no Momento:
 
 1. **Vincular o Template como Remote Secundário:**
-   No diretório do projeto do cliente:
+   No diretório do projeto do cliente (executar uma única vez):
    ```bash
    git remote add template https://github.com/heviane/institutional-website-template.git
    ```
 
-2. **Fluxo de Atualização Periódica:**
-   Quando uma nova versão estável for lançada no template:
+2. **Avaliação das Mudanças e Releases:**
+   Consultar o *Changelog* na release oficial antes de qualquer intervenção, identificando se a atualização contém correções críticas de segurança ou novos recursos desejados.
+
+3. **Aplicação de Hotfixes Críticos (Cherry-Pick em Branch Isolada):**
+   Para aplicar uma correção pontual ou atualização de pacote em segurança:
    ```bash
-   # Buscar as novidades e branches do template
+   # Buscar novidades do template
    git fetch template
 
-   # Mesclar as novidades reconciliando os históricos desconectados
-   git merge template/main --allow-unrelated-histories -m "chore: atualizar para versao mais recente do template"
+   # Criar branch de teste para isolar a atualização
+   git checkout -b chore/patch-seguranca
 
-   # Rodar os portões de qualidade para garantir integridade
+   # Aplicar cirurgicamente o commit desejado
+   git cherry-pick <hash-do-commit>
+
+   # Executar os portões de qualidade para garantir integridade
    npm run lint
    npm run typecheck
    npm test
-   ```
-
-3. **Aplicação de Hotfixes Críticos (Cherry-Pick):**
-   Caso deseje aplicar apenas uma correção pontual de segurança:
-   ```bash
-   git fetch template
-   git cherry-pick <hash-do-commit>
+   npm run build
    ```
 
 4. **Preservação de Dados do Cliente:**
-   A arquitetura desacoplada garante que o arquivo `src/config/site.ts`, as mídias em `/public/images/content/` e os artigos Markdown do Keystatic fiquem preservados durante a mesclagem de código.
+   A arquitetura desacoplada busca proteger `src/config/site.ts`, mídias em `/public/images/content/` e conteúdos do Keystatic contra substituições acidentais durante a manutenção.
 
 ---
