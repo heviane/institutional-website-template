@@ -221,58 +221,151 @@ export type SiteConfig = typeof siteConfig;
 
 2. **Vantagem Arquitetural:** Em novos projetos de clientes, basta atualizar este único arquivo de configuração para refletir dados globais no cabeçalho, rodapé, contatos, metadados e termos de privacidade.
 
-3. **Schema de Validação do Formulário com LGPD (`src/lib/schemas/contact.ts`):**
+3. **Schema de Validação do Formulário com LGPD e Limites de Payload (`src/lib/schemas/contact.ts`):**
 
-* Conforme definido na ADR 0007, o schema Zod valida os campos e o consentimento explícito de privacidade:
+* Conforme definido nas [ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md), o schema Zod valida tipos, restringe limites de caracteres contra sobrecarga (DoS) e inclui os campos de segurança:
 
 ```typescript
 import { z } from "zod";
 
 export const contactFormSchema = z.object({
-  name: z.string().min(2, "O nome deve conter pelo menos 2 caracteres."),
-  email: z.string().email("Insira um e-mail válido."),
-  phone: z.string().optional(),
-  message: z.string().min(10, "A mensagem deve conter pelo menos 10 caracteres."),
+  name: z.string().trim().min(2, "O nome deve conter pelo menos 2 caracteres.").max(100, "O nome excede 100 caracteres."),
+  email: z.string().trim().email("Insira um e-mail válido.").max(255, "E-mail muito longo."),
+  phone: z.string().trim().max(20, "Telefone inválido.").optional(),
+  message: z.string().trim().min(10, "A mensagem deve conter pelo menos 10 caracteres.").max(5000, "A mensagem excede o limite de 5.000 caracteres."),
   privacyConsent: z.literal(true, {
     errorMap: () => ({ message: "Você deve aceitar a Política de Privacidade para enviar." }),
   }),
+  // Camada 1: Campo Honeypot (deve estar vazio em envios legítimos)
+  honeypot: z.string().max(0, "Tentativa de automação detectada.").optional(),
+  // Camada 2: Token efêmero do Cloudflare Turnstile gerado no frontend
+  turnstileToken: z.string().min(1, "A verificação de segurança é obrigatória."),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 ```
 
-4. **Server Action com Defesa Anti-Spam (`src/app/actions/contact.ts`):**
-* Conforme definido na ADR 0003, processa a submissão via Server Action como fronteira pública não confiável, aplicando validação estrita de dados no servidor e defesa em camadas:
+4. **Server Action com Defesa em Camadas e Contingência (`src/app/actions/contact.ts`):**
+* Conforme definido no [ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md), a Server Action é tratada como fronteira pública não confiável (*untrusted boundary*), validando tipo e tamanho do payload, aplicando Honeypot, Rate Limiting por IP, verificação na API do Turnstile, envio via Resend e tratamento de contingência de cota com mascaramento de erros internos:
 
 ```typescript
 "use server";
 
-import { contactFormSchema, type ContactFormData } from "@/lib/schemas/contact";
+import { headers } from "next/headers";
+import { contactFormSchema } from "@/lib/schemas/contact";
 import { resend } from "@/lib/resend";
+import { serverEnv } from "@/env";
+import { siteConfig } from "@/config/site";
+import { checkRateLimit } from "@/lib/rate-limit"; // Upstash Redis em produção / Map com TTL em desenvolvimento
 
-export async function sendContactEmail(formData: ContactFormData & { honeypot?: string }) {
-  // 1. Defesa Honeypot: se robô preencheu o campo oculto, descarta silenciosamente
-  if (formData.honeypot) {
-    return { success: true };
+export type ActionResponse = {
+  success: boolean;
+  message?: string;
+  fieldErrors?: Record<string, string[]>;
+};
+
+// Verificação do token na API do Cloudflare Turnstile
+async function verifyTurnstileToken(token: string, remoteIp: string): Promise<boolean> {
+  // Bypass gracioso para desenvolvimento local ou CI caso a chave não esteja configurada
+  if (process.env.NODE_ENV !== "production" && !serverEnv.TURNSTILE_SECRET_KEY) {
+    return true;
   }
 
-  // 2. Validação estrita dos dados com Zod no servidor
-  const parsed = contactFormSchema.safeParse(formData);
-  if (!parsed.success) {
-    return { success: false, error: "Dados inválidos." };
-  }
-
-  // 3. Disparo seguro via Resend API
   try {
-    await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL!,
-      to: process.env.CONTACT_EMAIL_TO!,
-      subject: `Novo contato: ${parsed.data.name}`,
-      text: parsed.data.message,
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: serverEnv.TURNSTILE_SECRET_KEY ?? "",
+        response: token,
+        remoteip: remoteIp,
+      }),
     });
-    return { success: true };
+
+    const data = (await response.json()) as { success: boolean };
+    return data.success;
   } catch {
-    return { success: false, error: "Falha ao enviar e-mail. Tente novamente mais tarde." };
+    return false;
+  }
+}
+
+export async function sendContactEmail(rawInput: unknown): Promise<ActionResponse> {
+  // 1. Extração segura do IP do visitante para moderação e auditoria
+  const headerList = await headers();
+  const clientIp =
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headerList.get("cf-connecting-ip") ??
+    "127.0.0.1";
+
+  // 2. Proteção preliminar de tipo e tamanho da carga (fronteira pública)
+  if (!rawInput || typeof rawInput !== "object") {
+    return { success: false, message: "Payload de requisição inválido." };
+  }
+
+  // 3. Camada 1: Honeypot (descarte silencioso com resposta de sucesso simulada para despistar bots)
+  const inputRecord = rawInput as Record<string, unknown>;
+  if (inputRecord.honeypot && typeof inputRecord.honeypot === "string" && inputRecord.honeypot.length > 0) {
+    return { success: true, message: "Mensagem enviada com sucesso!" };
+  }
+
+  // 4. Camada 2: Rate Limiting por IP (padrão de até 5 requisições por hora)
+  const isRateLimitAllowed = await checkRateLimit(clientIp);
+  if (!isRateLimitAllowed) {
+    return {
+      success: false,
+      message: `Limite temporário de envios atingido. Para atendimento imediato, entre em contato via WhatsApp (${siteConfig.contact.phone}) ou e-mail corporativo (${siteConfig.contact.email}).`,
+    };
+  }
+
+  // 5. Validação rigorosa dos campos e limites via Zod
+  const parsed = contactFormSchema.safeParse(rawInput);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: "Por favor, preencha os campos obrigatórios corretamente.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name, email, phone, message, turnstileToken } = parsed.data;
+
+  // 6. Camada 3: Verificação do desafio Cloudflare Turnstile no servidor
+  const isTurnstileValid = await verifyTurnstileToken(turnstileToken, clientIp);
+  if (!isTurnstileValid) {
+    return {
+      success: false,
+      message: "Falha na validação de segurança anti-robô. Por favor, recarregue a página e tente novamente.",
+    };
+  }
+
+  // 7. Envio via Resend API com tratamento gracioso de falhas e contingência de cota
+  try {
+    const { error } = await resend.emails.send({
+      from: serverEnv.RESEND_FROM_EMAIL,
+      to: serverEnv.CONTACT_EMAIL_TO,
+      replyTo: email,
+      subject: `[Contato Site] Mensagem de ${name}`,
+      text: `Nome: ${name}\nE-mail: ${email}\nTelefone: ${phone ?? "Não informado"}\n\nMensagem:\n${message}`,
+    });
+
+    if (error) {
+      // Falha reportada pelo provedor (ex.: HTTP 429 ou cota diária excedida)
+      return {
+        success: false,
+        message: `Não foi possível encaminhar seu formulário no momento. Por favor, utilize nosso WhatsApp (${siteConfig.contact.phone}) ou e-mail direto (${siteConfig.contact.email}).`,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Mensagem recebida com sucesso! Retornaremos o seu contato em breve.",
+    };
+  } catch {
+    // Mascaramento de erros internos de runtime sem vazar credenciais ou rastreamento de pilha
+    return {
+      success: false,
+      message: `Ocorreu uma instabilidade no envio. Caso prefira, utilize nossos canais diretos: WhatsApp (${siteConfig.contact.phone}) ou e-mail (${siteConfig.contact.email}).`,
+    };
   }
 }
 ```
