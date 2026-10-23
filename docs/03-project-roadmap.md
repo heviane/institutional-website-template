@@ -51,7 +51,7 @@ Esta fase representa a materialização do template em código, dividida entre a
 * [ ] **Validação de Ambiente & Segurança:**
   * [ ] Implementar validação estrita com Zod (`src/env.ts`), com segregação formal entre variáveis públicas (`clientEnvSchema`) e segredos de servidor (`serverEnvSchema`), distinguindo variáveis core de integrações condicionais.
   * [ ] Criar testes unitários no Vitest (`src/env.test.ts`) para validar o parser em cenários de build mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
-  * [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes com verificação estrita de lockfile determinístico.
+  * [ ] Promover `.github/workflows/ci.yml` de provisório para definitivo no primeiro commit funcional, removendo a checagem condicional de bootstrap (`check-bootstrap`) para que a esteira execute todos os quality gates (`npm ci`, `lint`, `typecheck`, `test`, `build`) de forma 100% incondicional e bloqueante.
   * [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
   * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
 * [ ] **Arquitetura de Dados & Layout Base:**
@@ -72,13 +72,35 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
   * [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
 
-#### 2.2. Critérios de Homologação (Antes de Considerar o MVP Concluído):
+#### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído):
 
-* [ ] **Resiliência de Formulários:** Testar o formulário com entradas inválidas, falhas simuladas de rede/provedor externo e tentativas abusivas de envio (anti-spam / rate limiting).
-* [ ] **Usabilidade do CMS:** Validar o fluxo de edição, criação de post e publicação via Keystatic Cloud com um usuário com perfil não técnico.
-* [ ] **Auditoria de Qualidade e Acessibilidade:** Executar suíte de testes unitários (`vitest-axe`), validação estática e orçamentos do Lighthouse CI em versão publicada na Vercel (LCP < 2,5 s, INP < 200 ms, CLS < 0,1, Score de Acessibilidade ≥ 95).
-* [ ] **Validação Prática de Atualizações:** Testar o procedimento de propagação de atualizações em um repositório derivado real do template, avaliando conflitos de merge e patches cirúrgicos ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
-* [ ] **Homologação Ponta a Ponta:** Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
+* [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env.ts`):**
+  * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas `NEXT_PUBLIC_SITE_URL` e `RESEND_FROM_EMAIL`).
+  * [ ] Testar build com configuração completa de produção (todas as integrações ativas).
+  * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas.
+  * [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash em dev) não quebrem o build nem deixem o formulário em estado vulnerável.
+* [ ] **2. Compatibilidade Prática de Dependências & Lockfile:**
+  * [ ] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci`.
+  * [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
+* [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action):**
+  * [ ] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.
+  * [ ] Testar validação estrita de tamanho (rejeição de mensagens acima de 5.000 caracteres ou strings abusivas).
+  * [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido.
+  * [ ] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
+  * [ ] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
+  * [ ] Testar comportamento resiliente caso o serviço de Redis (Upstash) sofra indisponibilidade momentânea.
+* [ ] **4. Autonomia Real de Conteúdo e CMS (Requisito de Produto):**
+  * [ ] Validar o fluxo de ponta a ponta com um usuário de perfil não técnico no Keystatic Cloud: criação de post, edição de texto institucional e adição de imagem.
+  * [ ] Confirmar que o commit gerado pelo CMS disparou com sucesso o build automático de SSG no GitHub Actions / Vercel.
+* [ ] **5. Acessibilidade e Performance com Evidências Registradas:**
+  * [ ] Executar suíte automatizada com `vitest-axe` em todos os componentes de interface (zero violações críticas ou sérias de WCAG 2.1 AA).
+  * [ ] Executar auditoria do Lighthouse CI em páginas representativas, registrando condições de teste (emulação móvel e conexão 4G) e validando metas de LCP < 2,5 s, INP < 200 ms, CLS < 0,1 e Score ≥ 90/95.
+* [ ] **6. Governança de Privacidade e Fidelidade das Páginas Legais:**
+  * [ ] Inspecionar `/politica-de-privacidade` e `/termos-de-uso` para garantir que discriminam exatamente as integrações ativadas para o cliente (sem assumir conformidade automática sem revisão do DPO).
+* [ ] **7. Validação Prática de Atualizações do Template:**
+  * [ ] Testar procedimento de propagação de atualizações em repositório derivado real, avaliando conflitos e validando aplicação cirúrgica de patches ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
+* [ ] **8. Homologação Piloto Ponta a Ponta:**
+  * [ ] Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
 
 ---
 
