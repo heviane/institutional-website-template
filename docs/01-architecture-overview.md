@@ -59,7 +59,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 * **React Hook Form:** Gerenciamento performático do estado de formulários via referências não controladas no cliente.
 * **Zod:** Validação estrita de schemas e tipos, compartilhado entre o cliente e o servidor.
-* **Server Actions (`src/app/actions/contact.ts`):** Processamento seguro no servidor eliminando endpoints REST expostos.
+* **Server Actions (`src/app/actions/contact.ts`):** Processamento tipado nativo no servidor tratado como fronteira pública não confiável, com validação obrigatória via Zod e sanitização de respostas de erro.
 * **Defesa Anti-Spam em 3 Camadas (veja [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)):**
   1. *Honeypot:* Campo oculto via CSS para descarte silencioso de bots simples.
   2. *Cloudflare Turnstile:* Desafio invisível sem cookies de terceiros e sem fricção visual.

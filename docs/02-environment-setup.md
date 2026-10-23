@@ -237,7 +237,7 @@ export type ContactFormData = z.infer<typeof contactFormSchema>;
 ```
 
 4. **Server Action com Defesa Anti-Spam (`src/app/actions/contact.ts`):**
-* Conforme definido na ADR 0003, processa a submissão via Server Action sem expor rotas REST públicas:
+* Conforme definido na ADR 0003, processa a submissão via Server Action como fronteira pública não confiável, aplicando validação estrita de dados no servidor e defesa em camadas:
 
 ```typescript
 "use server";
