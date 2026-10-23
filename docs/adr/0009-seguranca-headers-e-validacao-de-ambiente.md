@@ -43,14 +43,15 @@ Instituímos o arquivo `SECURITY.md` na raiz do repositório, definindo versões
 
 ## 3. Consequências e Trade-offs (Consequences)
 
-### Positivas (Benefícios):
-* **Classificação de Segurança A+:** Garante pontuação máxima em auditorias como *Mozilla Observatory* e *SecurityHeaders.com*.
-* **Zero Falhas Silenciosas em Produção:** Impede que sites subam para a Vercel com credenciais esquecidas ou malformatadas.
-* **Proteção Nativa de Dados dos Clientes:** Minimiza superfícies de ataque em conformidade com as diretrizes de segurança da LGPD (Art. 6º, VII).
+### Positivas (Benefícios Esperados):
+* **Alinhamento com Melhores Práticas de Segurança HTTP:** Estruturação de cabeçalhos com o objetivo de alcançar notas de excelência (como A ou A+) em analisadores reconhecidos (*Mozilla Observatory*, *SecurityHeaders.com*), a serem formalmente auditados no primeiro deploy do MVP.
+* **Prevenção Ativa de Falhas de Configuração no Build:** A validação estrita com Zod impede compilações com variáveis essenciais ausentes ou malformatadas, reduzindo drasticamente falhas silenciosas de integração em tempo de execução.
+* **Proteção em Camadas dos Dados dos Clientes:** Minimiza superfícies de ataque contra clickjacking, MIME sniffing e injeções básicas, em conformidade com as diretrizes de segurança da LGPD (Art. 6º, VII).
 
 ### Negativas (Riscos e Desvantagens Aceitas):
+* **Não Imunidade a Falhas Operacionais de Runtime:** A validação de ambiente no build assegura que as variáveis foram fornecidas no formato esperado, mas não atesta a validade dinâmica das credenciais (ex.: chave de API revogada pelo provedor externo) nem previne falhas lógicas de execução.
+* **Necessidade de Auditoria Pontual por Cliente:** A presença de cabeçalhos padrão não assegura nota estática invariável; a inserção de scripts externos específicos do cliente (pixels de mídia, widgets de chat) pode demandar ajustes finos na Content Security Policy (CSP).
 * **Rigor no Setup:** Desenvolvedores precisam obrigatoriamente preencher o `.env.local` antes de rodar o build local ou a esteira de CI/CD.
-* **Ajuste Fino de CSP se Houver Scripts Externos:** A inclusão de scripts de terceiros (como Google Ads ou pixels de conversão) pode exigir personalização pontual da Content Security Policy (CSP).
 * **HSTS Requer Avaliação Prévia para Subdomínios:** A elevação de HSTS para incluir `includeSubDomains` ou submissão ao `preload` nunca deve ser feita no nível de template genérico; ela requer auditoria específica de todos os subdomínios da infraestrutura de cada cliente.
 
 ---
