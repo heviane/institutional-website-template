@@ -13,7 +13,7 @@ Para o `institutional-website-template`, necessitávamos de uma solução de ges
 A solução precisava respeitar os quatro pilares fundamentais do projeto:
 
 1. **Alta Performance:** O carregamento do conteúdo não pode impactar o SEO nem os índices de Core Web Vitals do Google .
-2. **Custo $0 de Infraestrutura:** Eliminar a necessidade de bancos de dados gerenciados pagos (PostgreSQL, MySQL, MongoDB) ou assinaturas de SaaS dispendiosas para sites pequenos e médios .
+2. **Infraestrutura de Baixo Custo / Custo Otimizado:** Eliminar a necessidade mandatória de bancos de dados gerenciados pagos (PostgreSQL, MySQL, MongoDB) ou assinaturas de SaaS dispendiosas para sites pequenos e médios, priorizando tiers gratuitos e eficientes .
 3. **Segurança de Tipos (Type-Safety):** Integração fluida com o TypeScript e o ecossistema Next.js (App Router) .
 4. **Independência de Código:** Desacoplar os dados do layout para que o cliente atualize o site sem risco de quebrar componentes visuais .
 
@@ -36,7 +36,7 @@ Decidimos adotar o **Keystatic** como a ferramenta padrão de gestão de conteú
 
 ### Positivas (Benefícios):
 
-* **Custo de Infraestrutura $0 Inicial:** Por salvar o conteúdo diretamente no Git e gerar compilação estática (SSG/ISR), elimina custos recorrentes de bancos de dados gerenciados ou licenças de CMS pagos enquanto o projeto permanecer dentro das cotas dos planos gratuitos do GitHub e da hospedagem.
+* **Custo de Infraestrutura Otimizado:** Por salvar o conteúdo diretamente no Git e gerar compilação estática (SSG/ISR), elimina custos recorrentes de bancos de dados gerenciados ou licenças de CMS pagos enquanto o projeto permanecer dentro das cotas dos planos gratuitos do GitHub e da hospedagem.
 * **Versionamento e Backup Automático:** Todo o histórico de edições do cliente fica registrado no histórico de *commits* do Git, facilitando reversões de conteúdo (*rollbacks*) .
 * **Performance Extrema:** Não existem requisições de API em tempo de execução para servidores terceiros de CMS durante o carregamento de páginas estáticas .
 

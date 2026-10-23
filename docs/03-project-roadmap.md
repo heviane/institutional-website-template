@@ -92,7 +92,7 @@ O template será considerado pronto para homologação e uso em produção comer
 ### 3. Eficiência Operacional & Custo de Infraestrutura
 
 * **Onboarding de Cliente:** Novo site institucional colocado no ar em menos de **2 horas** modificando exclusivamente `src/config/site.ts`, variáveis de `@theme` no `globals.css` e assets de `/public`.
-* **Custo de Infraestrutura:** **$0/mês** para o tráfego institucional padrão do cliente utilizando os tiers gratuitos de Git, DNS e Serverless.
+* **Previsibilidade e Baixo Custo:** Operação estruturada para iniciar em tiers gratuitos ou de baixo custo no tráfego institucional padrão (Vercel/Cloudflare, Resend, Upstash, Keystatic Cloud), com matriz de governança de limites e titularidade financeira clara.
 * **Comunicação Transacional Confiável:** Formulário de contato enviando e-mails via Resend com SPF, DKIM e DMARC validados (Score no [Mail-Tester](https://www.mail-tester.com/) `≥ 9/10`).
 
 ---

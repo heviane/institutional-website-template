@@ -18,7 +18,7 @@ Ao mesmo tempo, abordagens ingênuas de privacidade costumam introduzir *Cookie 
 
 1. Prejudicam os índices de **Core Web Vitals** (em especial CLS por deslocamento de layout e LCP/INP pelo bloqueio de threads com scripts de terceiros);
 2. Elevam a taxa de rejeição (*bounce rate*) logo no primeiro acesso do visitante;
-3. Armazenam dados de forma desnecessária em bancos de dados pagos ou vulneráveis, violando o princípio da **minimização de dados** (Art. 6º, III da LGPD) e o pilar de **custo $0** do template.
+3. Armazenam dados de forma desnecessária em bancos de dados pagos ou vulneráveis, violando o princípio da **minimização de dados** (Art. 6º, III da LGPD) e o pilar de **baixo custo** do template.
 
 ---
 
@@ -68,7 +68,7 @@ Decidimos adotar uma arquitetura fundamentada no princípio de **Privacidade por
 * **Blindagem Jurídica para o Cliente:** O site do cliente já entra em produção com conformidade às exigências da ANPD e da legislação brasileira.
 * **Diferencial Comercial de Venda:** Apresentar um website "LGPD-Ready por padrão" eleva o valor percebido e a autoridade técnica do desenvolvedor freelancer perante empresas.
 * **Máxima Performance e UX Limpa:** O uso de analytics sem cookies mantém a navegação rápida e sem pop-ups invasivos logo no carregamento da página inicial.
-* **Alinhamento com o Custo $0:** A ausência de banco de dados e o uso de soluções efêmeras eliminam despesas fixas com armazenamento seguro de dados de leads.
+* **Alinhamento com o Baixo Custo:** A ausência de banco de dados e o uso de soluções efêmeras eliminam despesas fixas de bancos de dados gerenciados para armazenamento seguro de dados de leads.
 
 ### Negativas (Riscos e Desvantagens Aceitas):
 

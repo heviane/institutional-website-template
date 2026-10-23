@@ -12,7 +12,7 @@ Formulários institucionais de contato ("Fale Conosco", solicitação de orçame
 
 No contexto do `institutional-website-template`, a ausência de uma barreira anti-spam eficiente acarreta três problemas críticos:
 
-1. **Esgotamento Imediato da Cota Gratuita (Pilar de Custo $0):**
+1. **Esgotamento Imediato da Cota Gratuita (Pilar de Baixo Custo / Eficiência Financeira):**
    Conforme definido no [ADR 0003](0003-estrategia-de-formularios.md), utilizamos a API do Resend no plano gratuito, que impõe um limite estrito de **100 e-mails por dia**. Um ataque automatizado de poucos minutos pode esgotar toda a cota diária do cliente, impedindo o recebimento de leads comerciais reais e causando prejuízo direto ao negócio.
 
 2. **Conflito com Privacidade e LGPD (Pilar de Governança):**
@@ -58,7 +58,7 @@ flowchart TD
 * **Importante (Alinhamento de Escopo):** O rate limiting por IP **não** é uma garantia contra ataques massivos distribuídos (botnets com centenas de IPs rotativos). A contenção real de robôs distribuídos é desempenhada pelas Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
 * **Estratégia de Armazenamento por Ambiente:**
   * **Desenvolvimento Local (`npm run dev`):** Utiliza armazenamento volátil em memória (`Map` nativo com TTL) para garantir inicialização rápida e zero atrito sem exigir credenciais externas.
-  * **Produção Serverless / Edge:** Em ambientes como a Vercel, as instâncias de Server Actions são efêmeras, sem estado compartilhado e descartadas a qualquer momento. Um contador em memória RAM local não garante limite global entre diferentes instâncias serverless. Portanto, em produção, é mandatório utilizar armazenamento compartilhado com operações atômicas e expiração TTL via **Upstash Redis** (plano gratuito com até 10.000 requisições/dia, mantendo o pilar de custo $0) ou Vercel KV.
+  * **Produção Serverless / Edge:** Em ambientes como a Vercel, as instâncias de Server Actions são efêmeras, sem estado compartilhado e descartadas a qualquer momento. Um contador em memória RAM local não garante limite global entre diferentes instâncias serverless. Portanto, em produção, é mandatório utilizar armazenamento compartilhado com operações atômicas e expiração TTL via **Upstash Redis** (plano gratuito com até 10.000 requisições/dia, alinhado ao pilar de baixo custo) ou Vercel KV.
 
 ---
 

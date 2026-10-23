@@ -16,7 +16,7 @@ A solução de infraestrutura precisa atender aos seguintes pilares:
 
 1. **Integração e Entrega Contínuas (CI/CD):** Compilação e deploy automáticos sincronizados com o repositório do GitHub e com o Keystatic CMS.
 
-2. **Custo $0 de Operação:** Viabilidade financeira para manter múltiplos sites institucionais pequenos e médios sem custos mensais fixos de infraestrutura.
+2. **Infraestrutura de Baixo Custo / Custo Otimizado:** Viabilidade financeira para manter múltiplos sites institucionais pequenos e médios priorizando custos reduzidos e ausência de despesas fixas para a agência/desenvolvedor.
 
 3. **Ambiente de Homologação (*Preview Deployments*):** Capacidade de gerar links temporários para apresentar alterações ao cliente antes de publicar no domínio principal.
 
@@ -50,7 +50,7 @@ Decidimos utilizar a **Vercel** como a plataforma padrão de hospedagem, distrib
 
 * **Vendor Lock-in Sutil:** Migrar a infraestrutura do Next.js da Vercel para um servidor VPS tradicional/Docker no futuro exigirá a reconfiguração manual de rotas de cache, servidores Node.js em execução e otimização de mídias.
 
-* **Conformidade de Licença e Custos da Vercel (Hobby vs. Pro):** O plano gratuito (Hobby) da Vercel restringe estritamente o uso a fins pessoais e não comerciais. Para projetos corporativos/comerciais de clientes pagantes, a política de conformidade exige o plano Pro ($20/mês por assento). A estratégia adotada é a transferência de titularidade: o cliente mantém a conta e assume o faturamento direto, preservando o custo $0 para o desenvolvedor.
+* **Conformidade de Licença e Custos da Vercel (Hobby vs. Pro):** O plano gratuito (Hobby) da Vercel restringe estritamente o uso a fins pessoais e não comerciais. Para projetos corporativos/comerciais de clientes pagantes, a política de conformidade exige o plano Pro ($20/mês por assento). A estratégia adotada é a transferência mandatória de titularidade: o cliente mantém a conta e assume o faturamento direto com seus próprios dados de cobrança, preservando a agência/desenvolvedor de custos de terceiros.
 
 ---
 
@@ -60,6 +60,6 @@ Decidimos utilizar a **Vercel** como a plataforma padrão de hospedagem, distrib
 
 * **Hospedagem VPS / Servidor Linux próprio (DigitalOcean, AWS EC2):** Descartada por introduzir custos fixos e exigir gerenciamento manual de servidor, segurança, SSL e configurações de Nginx.
 
-* **Cloudflare Pages (Alternativa para Custo $0 Comercial):** Plataforma viável caso o cliente exija ausência total de mensalidades ($0/mês) sem violar políticas comerciais, já que a Cloudflare permite uso comercial em seu plano gratuito. Requer adaptação do build via runtime de Edge/OpenNext.
+* **Cloudflare Pages (Alternativa Gratuita Comercial):** Plataforma viável caso o cliente exija operação comercial sem mensalidades de infraestrutura de computação sem violar termos de serviço, já que o plano gratuito da Cloudflare não proíbe uso comercial. Requer adaptação do build via `@cloudflare/next-on-pages` / OpenNext.
 
 ---

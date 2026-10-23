@@ -30,7 +30,7 @@ Adotamos o **Keystatic Cloud (Plano Gratuito)** como a rota padrão de autentica
 
 * **Acesso por E-mail:** Os editores do cliente são convidados por e-mail e fazem login por *magic link* ou autenticação simplificada, sem qualquer necessidade de criar conta no GitHub.
 * **Isolamento de Código:** Os clientes não precisam de permissões de escrita diretas no repositório. O serviço gerenciado do Keystatic Cloud interage com a API do GitHub e assina os *commits* de conteúdo automaticamente.
-* **Custo $0/mês:** O plano gratuito do Keystatic Cloud atende equipes de até 3 usuários por projeto, cobrindo integralmente as demandas de sites institucionais pequenos e médios.
+* **Camada Gratuita (Até 3 Editores):** O plano gratuito do Keystatic Cloud atende equipes de até 3 usuários por projeto sem mensalidade, cobrindo integralmente as demandas habituais de sites institucionais pequenos e médios.
 
 > **Fallback Desacoplado:** Caso o cliente prefira independência total de serviços de terceiros, o template mantém suporte total à configuração de um **GitHub App próprio** (`storage: { kind: 'github' }`), onde o desenvolvedor gerencia as credenciais manualmente.
 
@@ -56,7 +56,7 @@ Adotamos uma abordagem proporcional ao volume de conteúdo do projeto:
 * **Experiência Amigável para o Cliente:** Elimina o atrito de onboarding do GitHub; o cliente edita o site como se fosse um CMS tradicional de mercado.
 * **Segurança e Governança:** O código-fonte, branches protegidos e configurações de CI/CD ficam isolados de modificações acidentais pelo cliente.
 * **Preservação da Saúde do Repositório Git:** Evita que o `.git` acumule gigabytes de binários obsoletos, mantendo *clones* e *deploys* rápidos.
-* **Preservação do Pilar de Custo $0:** O Keystatic Cloud é gratuito para até 3 editores, e a estratégia de mídia utiliza tiers gratuitos de CDNs.
+* **Preservação do Pilar de Baixo Custo:** O Keystatic Cloud é gratuito para até 3 editores, e a estratégia de mídia prioriza tiers gratuitos de CDNs e serviços de armazenamento.
 
 ### Negativas (Riscos e Desvantagens Aceitas):
 

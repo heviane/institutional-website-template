@@ -53,7 +53,7 @@ Parâmetros de aceitação via **Lighthouse CI** (`lighthouserc.json`) a serem e
 
 ### Positivas (Benefícios):
 * **Blindagem do Branch Principal:** Impossibilita o merge de código com erros de tipagem, lint ou build quebrado.
-* **Preservação dos 5 Pilares:** Garante continuamente Alta Performance (Lighthouse), Custo $0 (sem infraestrutura paga), Acessibilidade Real (axe-core) e LGPD (testes no Zod).
+* **Preservação dos 5 Pilares:** Garante continuamente Alta Performance (Lighthouse), Infraestrutura de Baixo Custo (sem serviços desnecessários), Acessibilidade Real (axe-core) e LGPD (testes no Zod).
 * **Segurança e Manutenção Automatizada:** Atualizações de patches e correções de segurança chegam via PRs prontos do Dependabot.
 
 ### Negativas (Riscos e Desvantagens Aceitas):

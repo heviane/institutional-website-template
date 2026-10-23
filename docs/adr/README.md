@@ -9,10 +9,10 @@ Este diretório centraliza os **Architectural Decision Records (ADRs)** do `inst
 | ID | Título | Status | Data | Decisão Principal |
 | :---: | :--- | :---: | :---: | :--- |
 | **0001** | [Escolha do Framework Base - Next.js](0001-escolha-do-framework-next.md) | `Aceito` | 2026-10-20 | Adotar Next.js 15 (App Router) como base unificada para SSG/ISR e Server Actions nativas. |
-| **0002** | [Escolha da Camada de Gestão de Conteúdo - Keystatic](0002-escolha-do-cms-keystatic.md) | `Aceito` | 2026-10-20 | Utilizar Keystatic como CMS Git-based gravando Markdown/JSON no repositório com custo inicial de $0. |
+| **0002** | [Escolha da Camada de Gestão de Conteúdo - Keystatic](0002-escolha-do-cms-keystatic.md) | `Aceito` | 2026-10-20 | Utilizar Keystatic como CMS Git-based gravando Markdown/JSON no repositório sem necessidade de banco gerenciado. |
 | **0003** | [Estratégia de Formulários e Comunicação Transacional](0003-estrategia-de-formularios.md) | `Aceito` | 2026-10-20 | Empregar React Hook Form + Zod compartilhado + Server Actions e entrega transacional via Resend API. |
 | **0004** | [Design System, Estilização e Acessibilidade](0004-design-system-e-estilizacao.md) | `Aceito` | 2026-10-21 | Adotar Tailwind CSS v4 (`@theme`) e Shadcn/ui com primitivos Radix UI compatíveis com WCAG 2.1 AA. |
-| **0005** | [Estratégia de Hospedagem, Infraestrutura e CI/CD](0005-estrategia-de-hospedagem-e-cicd.md) | `Aceito` | 2026-10-21 | Priorizar Vercel para deploys Serverless/Edge ágeis, com caminho documentado para Cloudflare Pages ($0 comercial). |
+| **0005** | [Estratégia de Hospedagem, Infraestrutura e CI/CD](0005-estrategia-de-hospedagem-e-cicd.md) | `Aceito` | 2026-10-21 | Priorizar Vercel para deploys Serverless/Edge ágeis, com caminho documentado para Cloudflare Pages (tier gratuito comercial). |
 | **0006** | [Autenticação do CMS em Produção e Gestão de Mídia](0006-autenticacao-cms-e-gestao-de-midia.md) | `Aceito` | 2026-10-21 | Integrar Keystatic Cloud via GitHub App para editores não técnicos e estabelecer diretrizes contra inchaço do Git. |
 | **0007** | [Conformidade com a LGPD e Privacidade por Design](0007-conformidade-lgpd-e-privacidade.md) | `Aceito` | 2026-10-22 | Implementar retenção zero no banco, opt-in obrigatório no Zod, analytics sem cookies (Plausible) e páginas legais. |
 | **0008** | [Qualidade Automatizada, Testes e Acessibilidade Contínua](0008-qualidade-automatizada-e-testes.md) | `Aceito` | 2026-10-22 | Estabelecer pipeline GitHub Actions CI (lint, typecheck, Vitest, vitest-axe, Lighthouse CI e Dependabot semanal). |

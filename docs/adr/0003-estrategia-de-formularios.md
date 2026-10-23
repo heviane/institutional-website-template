@@ -43,7 +43,7 @@ Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.j
 * **Performance Extrema no Frontend:** Minimiza o uso de memória e CPU do navegador do usuário por evitar `useState` em cada campo de entrada .
 * **Validação Unificada e Tipagem Estrita:** O mesmo *schema* do Zod valida o formulário no navegador (para feedback imediato de UX) e revalida obrigatoriamente na Server Action do Next.js (garantia de integridade no servidor), eliminando duplicidade de código de validação.
 * **Layouts de E-mail com React:** Integração nativa com `@react-email/components`, permitindo construir os templates de e-mail utilizando componentes React estilizados em vez de strings HTML antigas.
-* **Custo $0:** A API do Resend oferece até 3.000 e-mails/mês (com teto de 100 envios/dia) no plano gratuito, cobrindo com folga as necessidades de sites institucionais pequenos e médios.
+* **Custo de Mensageria Otimizado:** A API do Resend oferece até 3.000 e-mails/mês (com teto de 100 envios/dia) no plano gratuito, cobrindo com folga as necessidades de sites institucionais pequenos e médios sem custos iniciais recorrentes de disparo.
 
 ### Negativas (Riscos e Desvantagens Aceitas):
 

@@ -21,7 +21,7 @@ Este repositório foi desenvolvido para servir como o **ponto de partida (*start
 
 1. ⚡ **Alta Performance (SEO & Core Web Vitals):** Páginas estáticas com metas de LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
 2. 🛠️ **Produtividade & Reutilização:** Estrutura modular desacoplada onde a marca do cliente é configurada em menos de 2 horas.
-3. 💰 **Meta de Custo Reduzido ($0 inicial):** Maximização consciente dos planos gratuitos de Git, DNS e Serverless, dispensando servidores dedicados para sites institucionais padrão.
+3. 💰 **Infraestrutura de Baixo Custo (Custo Otimizado):** Priorização de serviços gratuitos ou de baixo custo (Git, DNS e Serverless) compatíveis com a escala de sites institucionais, eliminando a obrigatoriedade de servidores dedicados ou bancos de dados caros.
 4. 📝 **Autonomia para o Cliente:** Gestão de conteúdo simplificada via Keystatic CMS sem que o cliente precise manipular Git ou código.
 5. 🔒 **Privacidade & Conformidade LGPD por Padrão:** Formulários com consentimento explícito no Zod, métricas sem cookies (Plausible) e páginas legais padronizadas.
 

@@ -17,7 +17,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 1. **Alta performance (SEO e Core Web Vitals):** LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
 2. **Rapidez no desenvolvimento e reaproveitamento de código:** Onboarding de novo cliente em menos de 2 horas.
-3. **Custo $0 inicial de hospedagem e infraestrutura:** Utilização inteligente dos tiers gratuitos de Git, DNS e Serverless.
+3. **Infraestrutura de baixo custo e sustentável:** Priorizar serviços gratuitos ou de baixo custo quando compatíveis com os requisitos técnicos, operacionais e comerciais de cada cliente, sem assumir promessas irrealistas de gratuidade perpétua.
 4. **Autonomia do cliente para gerenciar conteúdos:** Painel visual amigável via Keystatic CMS sem atrito de Git.
 
 ---
@@ -100,7 +100,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 | **Formulários & Backend** | React Hook Form + Server Actions + Zod + Anti-Spam | Formulários multi-etapas / Upload de arquivos |
 | **E-mails Transacionais** | Resend API (Notificação comercial de contato) | Automação de marketing / E-mails transacionais de boas-vindas |
 | **Gestão de Conteúdo** | Keystatic (Markdown/JSON Git-based) | CMS em Nuvem (Sanity.io/Strapi se o cliente exigir) |
-| **Hospedagem / CI/CD** | Vercel (ou Cloudflare Pages com custo $0 comercial) | Infraestrutura dedicada multi-região / AWS |
+| **Hospedagem / CI/CD** | Vercel (com titularidade do cliente) ou Cloudflare Pages (baixo custo comercial) | Infraestrutura dedicada multi-região / AWS |
 | **Privacidade & LGPD** | Consentimento Zod + Páginas Legais + Plausible | Cookie Banner (caso o cliente exija Google Analytics 4) |
 | **Qualidade & Automação** | GitHub Actions CI + Dependabot + Vitest + axe-core | Lighthouse CI automatizado / Testes E2E (Playwright) |
 | **Segurança & Defesa** | Zod Env Validation + Security Headers + SECURITY.md | WAF avançado / Rate Limiting distribuído via Upstash Redis |

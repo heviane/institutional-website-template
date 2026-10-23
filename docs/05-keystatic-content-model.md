@@ -1,6 +1,6 @@
 # 05 - Modelo de Conteúdo do Keystatic (Content Modeling)
 
-Este documento descreve a arquitetura de dados e modelagem de conteúdo gerenciada pelo **Keystatic CMS** no `institutional-website-template`. O Keystatic é um CMS baseado em Git (*Git-based CMS*) que armazena os conteúdos diretamente no repositório em arquivos Markdown (Markdoc) e JSON, garantindo **Custo $0**, portabilidade total e tempo de carregamento estático ultrarrápido (SSG/ISR).
+Este documento descreve a arquitetura de dados e modelagem de conteúdo gerenciada pelo **Keystatic CMS** no `institutional-website-template`. O Keystatic é um CMS baseado em Git (*Git-based CMS*) que armazena os conteúdos diretamente no repositório em arquivos Markdown (Markdoc) e JSON, garantindo **custo de infraestrutura otimizado** (sem necessidade de banco de dados gerenciado dedicado), portabilidade total e tempo de carregamento estático ultrarrápido (SSG/ISR).
 
 ---
 

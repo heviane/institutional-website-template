@@ -1,6 +1,6 @@
 # 📋 Checklist Operacional de Onboarding de Cliente
 
-Este documento é o guia definitivo passo a passo para colocar no ar o site institucional de um novo cliente a partir deste template. O processo é estruturado para ser concluído em **menos de 2 horas**, garantindo máxima segurança, conformidade legal (LGPD), entregabilidade de e-mails de 100% e custo fixo de **$0/mês**.
+Este documento é o guia definitivo passo a passo para colocar no ar o site institucional de um novo cliente a partir deste template. O processo é estruturado para ser concluído em **menos de 2 horas**, garantindo alta segurança, conformidade legal (LGPD), excelente entregabilidade de e-mails (SPF, DKIM, DMARC) e infraestrutura de baixo custo com governança clara de limites e titularidade financeira.
 
 ---
 
@@ -16,6 +16,26 @@ flowchart LR
     F --> G["7. Revisão LGPD"]
     G --> H["8. Quality Gate & Entrega"]
 ```
+
+---
+
+## 💰 Matriz de Custos, Limites Gratuitos e Responsabilidade Financeira
+
+Para assegurar uma relação transparente e sem surpresas entre a agência/desenvolvedor e o cliente final, a tabela abaixo mapeia cada serviço utilizado pelo template, seus limites no plano gratuito, gatilhos de upgrade e a respectiva responsabilidade de pagamento:
+
+| Recurso / Serviço | Plano Base Inicial | Limite Gratuito Incluído | Gatilho para Plano Pago | Responsável Financeiro |
+| :--- | :--- | :--- | :--- | :--- |
+| **Registro de Domínio**<br/>*(Registro.br / GoDaddy)* | Pago pelo cliente | Não possui plano gratuito | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`) | **Cliente** (titularidade e dados cadastrais próprios) |
+| **Hospedagem & CDN (Vercel)** | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento) | **Cliente** (conta mantida no nome da empresa do cliente) |
+| **Hospedagem & CDN (Cloudflare Pages)** | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** |
+| **E-mails Transacionais (Resend)** | Gratuito | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia** | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês) | **Cliente** |
+| **Proteção Anti-Spam (Cloudflare Turnstile)** | Gratuito | Ilimitado para a esmagadora maioria de sites institucionais | Planos enterprise com SLA dedicado | **Cliente** |
+| **Rate Limiting em Produção (Upstash Redis)** | Serverless Free | Até **10.000 comandos/dia** com 256 MB de memória | Ultrapassar 10.000 requisições/dia (modelo Pay-as-you-go centavos/100k) | **Cliente** |
+| **Gestão de Conteúdo (Keystatic Cloud)** | Gratuito | Até **3 editores** por projeto com commits automáticos | Necessidade de mais de 3 editores simultâneos | **Cliente** |
+| **Armazenamento de Mídia** | Repositório Git (Gratuito) | Até **1 GB** recomendado no GitHub sem lentidão de clone | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente** |
+
+> ⚠️ **Regra de Ouro da Governança (Titularidade do Cliente):**  
+> O desenvolvedor ou agência **nunca deve utilizar cartões de crédito pessoais** para cadastrar ou manter serviços de clientes. Todas as contas de produção (Vercel, Cloudflare, Resend, Upstash, Registro de Domínio) devem ser criadas ou transferidas diretamente para a titularidade da empresa contratante.
 
 ---
 
@@ -76,7 +96,7 @@ flowchart LR
   - **Opção A (Padrão Oficial - Recomendado): Vercel**
     - Suporte nativo completo a Next.js 15 (App Router, SSG, Server Actions) sem necessidade de adaptadores adicionais.
     - Conectar a conta GitHub, importar o repositório privado `site-cliente` e realizar o deploy inicial.
-  - **Opção B (Alternativa de Custo $0 Comercial): Cloudflare Pages**
+  - **Opção B (Alternativa Gratuita Comercial): Cloudflare Pages**
     - Conforme [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md), permite uso comercial no plano gratuito.
     - *Atenção à compatibilidade:* Requer compilar com o adaptador `@cloudflare/next-on-pages` (OpenNext) para executar as Server Actions no runtime Edge da Cloudflare.
 - [ ] **3.2. Configurar Domínio Personalizado na Hospedagem:**
