@@ -19,7 +19,7 @@ body:
     id: rationale
     attributes:
       label: Justificativa Técnica
-      description: Por que essa tarefa é necessária agora? (ex: segurança, redução de débito técnico, conformidade).
+      description: "Por que essa tarefa é necessária agora? (ex: segurança, redução de débito técnico, conformidade)."
       placeholder: Evitar regressões de acessibilidade e performance antes do deploy em produção.
     validations:
       required: true
