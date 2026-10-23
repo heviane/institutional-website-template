@@ -51,6 +51,7 @@ Para garantir governança, rastreabilidade e facilidade de *onboarding*, o proje
 * 📦 **[Modelo de Conteúdo do Keystatic](docs/05-keystatic-content-model.md):** Especificação de coleções, singletons, schema de blog/serviços e Reader API.
 * 🎨 **[Guia de Tema por Marca](docs/06-brand-theming-guide.md):** Passo a passo de 10 minutos para trocar cores, tipografia e assets por cliente com Tailwind v4.
 * 📋 **[Checklist de Onboarding de Cliente](docs/07-client-onboarding-checklist.md):** Checklist operacional completo de 8 etapas do repositório ao deploy, DNS, Resend e entrega.
+* 🔍 **[Revisão Arquitetural da Fase 1](docs/08-architecture-review-phase1.md):** Relatório técnico de auditoria, limites operacionais e validação de requisitos da fundação documental.
 * 📌 **[Registros de Decisão Arquitetural (ADRs)](docs/adr/README.md):**
   * [ADR 0001: Escolha do Framework Base - Next.js](docs/adr/0001-escolha-do-framework-next.md)
   * [ADR 0002: Escolha da Camada de Gestão de Conteúdo - Keystatic](docs/adr/0002-escolha-do-cms-keystatic.md)

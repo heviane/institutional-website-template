@@ -37,3 +37,7 @@ next-env.d.ts
 
 # Testes e cobertura de código
 coverage/
+
+# Rascunhos de estudo e notas locais de trabalho
+docs/drafts/
+local/
