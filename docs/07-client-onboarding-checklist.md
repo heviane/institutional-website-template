@@ -94,7 +94,7 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
 
 ## 🌐 Etapa 3: Domínio, DNS & Hospedagem (Vercel)
 
-> 💡 **Plataforma de Referência do MVP:** A Vercel é o ambiente de hospedagem padrão oficial para o MVP deste template, com suporte nativo total a Next.js 15 (App Router, Server Actions, SSG e `next/image`). Caso o cliente demande no futuro implantação na Cloudflare Pages via OpenNext, consulte o [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md).
+> 💡 **Plataforma de Referência do MVP:** A Vercel é o ambiente de hospedagem padrão oficial para o MVP deste template, com suporte nativo total a Next.js 16 (App Router, Server Actions, SSG e `next/image`). Caso o cliente demande no futuro implantação na Cloudflare Pages via OpenNext, consulte o [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md).
 
 - [ ] **3.1. Conectar Repositório na Vercel:**
   - Acessar o painel da [Vercel](https://vercel.com/) com a conta da empresa do cliente (obedecendo à regra de titularidade).

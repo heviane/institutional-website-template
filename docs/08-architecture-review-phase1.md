@@ -18,7 +18,7 @@ Este documento consolida a revisão técnica da **Fase 1 (Fundação Documental,
 ### 2.1. Governança e Rastreabilidade Técnica (ADRs 0001 a 0011)
 
 * **Registro Formal:** A adoção de 11 ADRs com índice centralizado em [docs/adr/README.md](adr/README.md) formaliza as motivações, alternativas consideradas e trade-offs assumidos pela arquitetura.
-* **Redução de Ambiguidade:** A documentação elimina decisões tácitas, garantindo que qualquer desenvolvedor compreenda a escolha do Next.js 15 ([ADR 0001](adr/0001-escolha-do-framework-next.md)), do Keystatic CMS ([ADR 0002](adr/0002-escolha-do-cms-keystatic.md)) e da infraestrutura de CI/CD ([ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md)).
+* **Redução de Ambiguidade:** A documentação elimina decisões tácitas, garantindo que qualquer desenvolvedor compreenda a escolha do Next.js 16 ([ADR 0001](adr/0001-escolha-do-framework-next.md)), do Keystatic CMS ([ADR 0002](adr/0002-escolha-do-cms-keystatic.md)) e da infraestrutura de CI/CD ([ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md)).
 
 ### 2.2. Viabilidade e Sustentabilidade de Custos
 
@@ -50,7 +50,7 @@ A revisão identificou **quatro pontos de atenção técnica** a serem monitorad
 ### 3.1. Transição Planejamento vs. Código
 
 * **Cenário:** O projeto concluiu a fase documental, estando com o bootstrapping de código pendente.
-* **Ação Preventiva:** A inicialização do Next.js 15, Tailwind v4 e React 19 deve seguir estritamente as dependências compatíveis com Node.js 22 LTS, ativando imediatamente a validação de ambiente com Zod (`src/env.ts`).
+* **Ação Preventiva:** A inicialização do Next.js 16, Tailwind v4 e React 19 deve seguir estritamente as dependências compatíveis com Node.js 24 LTS, ativando imediatamente a validação de ambiente com Zod (`src/env.ts`).
 
 ### 3.2. Testabilidade e Isolamento de Serviços Externos
 
@@ -75,7 +75,7 @@ A execução do código da Fase 2 deve seguir a seguinte ordem de dependências 
 
 ```mermaid
 flowchart TD
-    A["1. Bootstrap Next.js 15 + TypeScript + Tailwind v4"] --> B["2. Validação Estrita de Envs (src/env.ts com Zod)"]
+    A["1. Bootstrap Next.js 16 + TypeScript + Tailwind v4"] --> B["2. Validação Estrita de Envs (src/env.ts com Zod)"]
     B --> C["3. Setup de Qualidade (ESLint + Vitest + axe-core)"]
     C --> D["4. Configuração do Design System (globals.css + Shadcn)"]
     D --> E["5. Abstração de Dados Globais (src/config/site.ts)"]

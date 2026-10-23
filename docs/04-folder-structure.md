@@ -48,7 +48,7 @@ institutional-website-template/
 │   │   │   │   └── page.tsx         # Página estática de Política de Privacidade
 │   │   │   └── termos-de-uso/
 │   │   │       └── page.tsx         # Página estática de Termos de Uso
-│   │   ├── actions/                 # Server Actions nativas do Next.js 15
+│   │   ├── actions/                 # Server Actions nativas do Next.js 16 (App Router)
 │   │   │   └── contact.ts           # Server Action de envio do formulário de contato
 │   │   ├── api/                     # Rotas de API HTTP (se necessário)
 │   │   │   └── keystatic/           # Endpoint interno do Keystatic App Router

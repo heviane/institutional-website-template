@@ -26,7 +26,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 ### 1. Framework e Rendering (Espinha Dorsal)
 
-* **Next.js 15 (React 19 / App Router):**
+* **Next.js 16 (React 19 / App Router - Active LTS):**
   * **Fase 2 (Core & MVP do Template):** Foco em renderização estática ultra performática (SSG/ISR) para páginas institucionais com Server Actions nativas (`'use server'`).
   * **Fase 3 (Expansões Pós-MVP / Sob Demanda):** Preparado para rotas autenticadas, catálogos dinâmicos e integrações de APIs externas complexas.
 
@@ -94,7 +94,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 | Camada | Fase 2 (Core & MVP do Template) | Fase 3 (Expansões Pós-MVP / Sob Demanda) |
 | :--- | :--- | :--- |
-| **Framework** | **Next.js 15** (App Router / SSG / Server Actions) | **Next.js** (Rotas Dinâmicas, Autenticação, ISR Avançado) |
+| **Framework** | **Next.js 16** (App Router / SSG / Server Actions - Active LTS) | **Next.js** (Rotas Dinâmicas, Autenticação, ISR Avançado) |
 | **Estilização** | Tailwind CSS v4 (`@theme`) + Shadcn/ui | Temas customizados por cliente com Dark Mode dinâmico |
 | **SEO & Metadados** | Metadata API + Sitemap + Robots + OG + Schema Organization | Sitemaps segmentados, Schema LocalBusiness multi-local, i18n |
 | **Formulários & Backend** | React Hook Form + Server Actions + Zod + Anti-Spam | Formulários multi-etapas / Upload de arquivos |

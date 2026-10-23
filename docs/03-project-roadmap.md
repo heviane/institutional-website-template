@@ -44,40 +44,40 @@ Esta fase representa a materialização do template em código, dividida entre a
 
 #### 2.1. Checklist de Execução Técnica (Durante o Bootstrap):
 
-- [ ] **Inicialização do Projeto & Dependências:**
-  - [ ] Inicializar Next.js 15 (App Router), TypeScript e Tailwind CSS v4 com versões registradas e compatíveis com Node.js 22 LTS.
-  - [ ] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis.
-  - [ ] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
-- [ ] **Validação de Ambiente & Segurança:**
-  - [ ] Implementar validação estrita com Zod (`src/env.ts`), com separação clara entre variáveis públicas (`client`) e segredos de servidor (`server`).
-  - [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes.
-  - [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
-  - [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
-- [ ] **Arquitetura de Dados & Layout Base:**
-  - [ ] Implementar abstração centralizada de dados do cliente (`src/config/site.ts`).
-  - [ ] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme`).
-  - [ ] Construir layout raiz (`src/app/layout.tsx`) com metadados dinâmicos e componentes acessíveis (`Header`, `Hero`, `Footer`).
-- [ ] **Formulários Transacionais & Anti-Spam:**
-  - [ ] Criar schema de validação com Zod (`src/lib/validations/contact.ts`) com salvaguarda configurável de privacidade.
-  - [ ] Implementar componente de formulário com React Hook Form.
-  - [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
-  - [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
-- [ ] **Gestão de Conteúdo (Headless CMS):**
-  - [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
-  - [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
-  - [ ] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
-- [ ] **SEO Técnico Essencial:**
-  - [ ] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
-  - [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
-  - [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
+* [ ] **Inicialização do Projeto & Dependências:**
+  * [ ] Inicializar Next.js 16 (App Router - Active LTS), TypeScript e Tailwind CSS v4 com versões registradas e compatíveis com Node.js 24 LTS.
+  * [ ] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis.
+  * [ ] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
+* [ ] **Validação de Ambiente & Segurança:**
+  * [ ] Implementar validação estrita com Zod (`src/env.ts`), com separação clara entre variáveis públicas (`client`) e segredos de servidor (`server`).
+  * [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes.
+  * [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
+  * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
+* [ ] **Arquitetura de Dados & Layout Base:**
+  * [ ] Implementar abstração centralizada de dados do cliente (`src/config/site.ts`).
+  * [ ] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme`).
+  * [ ] Construir layout raiz (`src/app/layout.tsx`) com metadados dinâmicos e componentes acessíveis (`Header`, `Hero`, `Footer`).
+* [ ] **Formulários Transacionais & Anti-Spam:**
+  * [ ] Criar schema de validação com Zod (`src/lib/validations/contact.ts`) com salvaguarda configurável de privacidade.
+  * [ ] Implementar componente de formulário com React Hook Form.
+  * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
+  * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
+* [ ] **Gestão de Conteúdo (Headless CMS):**
+  * [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
+  * [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
+  * [ ] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
+* [ ] **SEO Técnico Essencial:**
+  * [ ] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
+  * [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
+  * [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
 
 #### 2.2. Critérios de Homologação (Antes de Considerar o MVP Concluído):
 
-- [ ] **Resiliência de Formulários:** Testar o formulário com entradas inválidas, falhas simuladas de rede/provedor externo e tentativas abusivas de envio (anti-spam / rate limiting).
-- [ ] **Usabilidade do CMS:** Validar o fluxo de edição, criação de post e publicação via Keystatic Cloud com um usuário com perfil não técnico.
-- [ ] **Auditoria de Qualidade e Acessibilidade:** Executar suíte de testes unitários (`vitest-axe`), validação estática e orçamentos do Lighthouse CI em versão publicada na Vercel (LCP < 2,5 s, INP < 200 ms, CLS < 0,1, Score de Acessibilidade ≥ 95).
-- [ ] **Validação Prática de Atualizações:** Testar o procedimento de propagação de atualizações em um repositório derivado real do template, avaliando conflitos de merge e patches cirúrgicos ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
-- [ ] **Homologação Ponta a Ponta:** Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
+* [ ] **Resiliência de Formulários:** Testar o formulário com entradas inválidas, falhas simuladas de rede/provedor externo e tentativas abusivas de envio (anti-spam / rate limiting).
+* [ ] **Usabilidade do CMS:** Validar o fluxo de edição, criação de post e publicação via Keystatic Cloud com um usuário com perfil não técnico.
+* [ ] **Auditoria de Qualidade e Acessibilidade:** Executar suíte de testes unitários (`vitest-axe`), validação estática e orçamentos do Lighthouse CI em versão publicada na Vercel (LCP < 2,5 s, INP < 200 ms, CLS < 0,1, Score de Acessibilidade ≥ 95).
+* [ ] **Validação Prática de Atualizações:** Testar o procedimento de propagação de atualizações em um repositório derivado real do template, avaliando conflitos de merge e patches cirúrgicos ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
+* [ ] **Homologação Ponta a Ponta:** Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
 
 ---
 

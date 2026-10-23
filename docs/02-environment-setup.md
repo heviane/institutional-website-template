@@ -14,7 +14,7 @@ Após a conclusão do planejamento conceitual, o primeiro passo é erguer a infr
 
 ### Pré-requisitos de Ambiente
 
-* **Node.js:** Versão `>= 20.x` ou `>= 22.x` (LTS recomendada). O repositório inclui o arquivo [`.nvmrc`](.nvmrc) para sincronizar a versão do Node via `nvm use`.
+* **Node.js:** Versão `24.x` (Active LTS padrão oficial) ou `>= 22.x` (Maintenance LTS mínimo suportado). O Node.js 20 alcançou o fim de vida útil (EOL) e não é suportado. O repositório inclui o arquivo [`.nvmrc`](.nvmrc) para sincronizar a versão do Node via `nvm use`.
 * **Gerenciador de Pacotes:** `npm` (padrão) ou `pnpm`.
 * **Git:** Para controle de versão e CI/CD.
 
@@ -25,8 +25,8 @@ Após a conclusão do planejamento conceitual, o primeiro passo é erguer a infr
 Execute o criador oficial do Next.js (o ponto `.` final indica a instalação no diretório atual):
 
 ```bash
-npx create-next-app@15 .
-# ou: npx create-next-app@latest .
+npx create-next-app@latest .
+# Instala o Next.js 16 (Active LTS oficial) na raiz do repositório
 ```
 
 Durante o assistente interativo, selecione as seguintes opções:
@@ -115,7 +115,7 @@ Com as dependências e o repositório base criados, o foco passa a ser o design 
 
 1. **Scripts de Auditoria e Governança (`package.json`):**
 
-* No Next.js 15+ com ESLint 9 (Flat Config via `eslint.config.mjs`), a auditoria de código migrou para o ESLint CLI direto. Configure os scripts essenciais no `package.json`:
+* No Next.js 16 com ESLint 9 (Flat Config via `eslint.config.mjs`), a auditoria de código migrou para o ESLint CLI direto. Configure os scripts essenciais no `package.json`:
 
 ```json
 "scripts": {

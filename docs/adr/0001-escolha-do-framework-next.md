@@ -14,7 +14,7 @@ Necessitávamos definir a estrutura fundamental e o modelo de renderização par
 
 ## 2. Decisão (Decision)
 
-Decidimos utilizar o **Next.js (App Router)** como a espinha dorsal da arquitetura frontend e backend leve do projeto.
+Decidimos utilizar o **Next.js 16 (App Router - Active LTS)** como a espinha dorsal da arquitetura frontend e backend leve do projeto.
 
 ### Justificativas Principais:
 

@@ -22,7 +22,7 @@ Para atender aos requisitos da arquitetura do `institutional-website-template`, 
 
 ## 2. Decisão (Decision)
 
-Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.js 15) + Resend API**, blindada por uma arquitetura de proteção anti-spam em camadas (Honeypot + Cloudflare Turnstile + Rate Limiting).
+Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.js 16) + Resend API**, blindada por uma arquitetura de proteção anti-spam em camadas (Honeypot + Cloudflare Turnstile + Rate Limiting).
 
 ### Estrutura do Trio Tecnológico:
 
