@@ -5,7 +5,7 @@ Este é o documento de Especificação e Planejamento da Arquitetura para a cons
 
 > **Planejamento Estratégico e Ciclo de Vida do Projeto:**
 > O projeto é estruturado em três fases bem delimitadas:
-> * **Fase 1: Fundação, Setup e Governança (Concluído)** — Decisões arquiteturais (ADRs 0001 a 0011), governança de código, automação de CI/CD e documentação operacional completa.
+> * **Fase 1: Fundação Documental e de Governança (Concluído)** — Decisões arquiteturais (ADRs 0001 a 0011), governança de código, automação de CI/CD e documentação operacional completa.
 > * **Fase 2: Core & MVP do Template (Em Andamento)** — Implementação do site institucional completo, acessível, seguro e com gestão de conteúdo (Keystatic) e formulários transacionais (Resend + Turnstile).
 > * **Fase 3: Expansões Pós-MVP / Sob Demanda** — Módulos opcionais ativados conforme as necessidades específicas de cada cliente (i18n, dark mode dinâmico, área logada, sitemaps indexados).
 

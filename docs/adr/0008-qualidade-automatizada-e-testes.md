@@ -21,40 +21,31 @@ A abordagem inicial de delegar a validação exclusivamente ao deploy automátic
 
 ## 2. Decisão (Decision)
 
-Decidimos implementar uma infraestrutura integrada de garantia da qualidade (*Continuous Quality Assurance*) em cinco camadas complementares:
+Decidimos implementar uma infraestrutura integrada de garantia da qualidade (*Continuous Quality Assurance*) dividida em duas etapas de maturação: ferramentas base de esteira (Fase 1) e validações no código (Fase 2):
 
-### 2.1. Portão de Integração Contínua (GitHub Actions CI)
-Criamos um pipeline obrigatório em `.github/workflows/ci.yml` acionado a cada `push` e `pull_request` direcionado ao branch `main`:
-* **`npm ci`:** Instalação limpa e determinística de dependências.
-* **`npm run lint`:** Auditoria de sintaxe, boas práticas do Next.js e regras de acessibilidade básica (`eslint-plugin-jsx-a11y`).
-* **`npm run typecheck`:** Validação estrita do compilador TypeScript (`tsc --noEmit`).
-* **`npm test`:** Execução da suíte de testes unitários e de acessibilidade.
-* **`npm run build`:** Validação completa do build de produção e SSR/SSG.
+### 2.1. Ferramental Base e Automação de Esteira (Configurado na Fase 1)
+* **Pipeline de CI (`.github/workflows/ci.yml`):** Estrutura automatizada acionada a cada `push` e `pull_request` na `main`, com portões estritos preparados para validar `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` assim que a aplicação for bootstrappada.
+* **Gestão de Segurança de Dependências (`.github/dependabot.yml`):** Monitoramento ativo com rotinas semanais para checar vulnerabilidades e atualizações do ecossistema `npm` e das ações do `github-actions`.
 
-### 2.2. Testes Unitários e de Componentes (Vitest + Testing Library)
-Adotamos o **Vitest** como o executor padrão de testes em substituição ao Jest:
+### 2.2. Suíte de Testes Automatizados no Código (Planejado para Implementação na Fase 2)
+Adotamos o **Vitest** como o executor padrão de testes em substituição ao Jest para ativação assim que o código Next.js for criado:
 * **Justificativa:** Integração nativa com ESM e TypeScript, execução instantânea e compatibilidade com a API do Jest.
-* **Escopo Estratégico de Testes do Template:**
-  1. **Integridade de Schemas (Zod):** Testar validações de e-mail, telefone e consentimento obrigatório da LGPD.
-  2. **Configuração Global (`siteConfig`):** Testar se os campos mandatórios (nome, contatos, CNPJ, DPO) estão presentes e válidos.
-  3. **Renderização de Componentes Shared:** Testar a montagem e renderização sem erros dos componentes estruturais (`Header`, `Footer`, `Hero`).
+* **Escopo Estratégico de Testes:**
+  1. **Integridade de Schemas (Zod):** Validações de e-mail, telefone e consentimento obrigatório da LGPD.
+  2. **Configuração Global (`siteConfig`):** Testes unitários garantindo que os campos mandatórios (nome, contatos, CNPJ, DPO) estão presentes e válidos.
+  3. **Renderização de Componentes:** Testar montagem sem erros dos componentes estruturais (`Header`, `Footer`, `Hero`).
 
-### 2.3. Acessibilidade Contínua com `axe-core`
+### 2.3. Acessibilidade Contínua com `axe-core` (Planejado para a Fase 2)
 Para assegurar a conformidade real com o padrão **WCAG 2.1 Nível AA**:
-* **Varredura Estática:** O `eslint-plugin-jsx-a11y` valida atributos estáticos durante a escrita do código.
-* **Varredura Dinâmica em Testes:** Integramos o **`vitest-axe`** para validar a árvore de acessibilidade do DOM gerada pelos componentes do Shadcn/ui (verificando contraste, atributos ARIA dinâmicos e estrutura de cabeçalhos).
+* **Varredura Estática:** `eslint-plugin-jsx-a11y` validando atributos estáticos no build/lint.
+* **Varredura Dinâmica em Testes:** Integração do **`vitest-axe`** para auditar a árvore de acessibilidade do DOM gerada pelos componentes do Shadcn/ui (contraste, atributos ARIA e hierarquia de títulos).
 
-### 2.4. Orçamentos de Performance (Lighthouse CI)
-Configuramos parâmetros de aceitação com **Lighthouse CI** (`lighthouserc.json`) para prevenir degradação de Core Web Vitals:
+### 2.4. Orçamentos de Performance com Lighthouse CI (Planejado para o MVP na Fase 2)
+Parâmetros de aceitação via **Lighthouse CI** (`lighthouserc.json`) a serem executados na pipeline após o bootstrap do build para prevenir regressões de Core Web Vitals:
 * **Performance:** Score mínimo de **90**
 * **Acessibilidade:** Score mínimo de **95**
-* **Melhores Práticas:** Score mínimo de **90**
-* **SEO:** Score mínimo de **95**
-
-### 2.5. Gestão de Segurança de Dependências (Dependabot)
-Configuração do `.github/dependabot.yml` com rotina semanal às segundas-feiras para:
-* Dependências do ecossistema `npm` (`package.json`).
-* Versões das ações do `github-actions` (`.github/workflows`).
+* **Melhores Práticas:** Score mínimo de **95**
+* **SEO:** Score de **100**
 
 ---
 

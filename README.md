@@ -11,19 +11,19 @@
 
 > [!WARNING]
 > **Projeto em Desenvolvimento Ativo (WIP — Work in Progress)**  
-> Este template está em fase de construção do MVP (Fase 2). A estrutura de pastas, componentes e integrações estão sendo implementados ativamente. Acompanhe o progresso detalhado e as próximas etapas no [Roadmap do Projeto](docs/03-project-roadmap.md).
+> Este template possui sua fundação arquitetural e de governança concluída (Fase 1), e encontra-se em fase de implementação ativa do Core & MVP (Fase 2). Os recursos descritos abaixo representam a arquitetura planejada e em construção. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
 
 ---
 
 ## 🎯 Sobre o Projeto
 
-Este repositório foi desenvolvido para servir como o **ponto de partida (*starter kit*) reutilizável** em projetos de desenvolvimento web. Ele foi projetado para eliminar tarefas repetitivas de setup inicial, oferecendo uma arquitetura pronta para produção, auditada e guiada por cinco pilares estratégicos:
+Este repositório foi desenvolvido para servir como o **ponto de partida (*starter kit*) reutilizável** em projetos de desenvolvimento web freelance e de agência. Ele foi projetado para eliminar tarefas repetitivas de setup inicial, oferecendo uma arquitetura planejada para alta estabilidade, auditada tecnicamente e guiada por cinco pilares estratégicos:
 
-1. ⚡ **Alta Performance (SEO & Core Web Vitals):** Páginas estáticas ultra-rápidas otimizadas para motores de busca.
-2. 🛠️ **Produtividade & Reutilização:** Estrutura desacoplada onde os dados do cliente são configurados de forma centralizada.
-3. 💰 **Custo Zero de Infraestrutura ($0/mês):** Sem dependência de bancos de dados pagos ou servidores dedicados para sites pequenos e médios.
-4. 📝 **Autonomia para o Cliente:** Gestão de conteúdo simplificada sem que o cliente precise manipular código.
-5. 🔒 **Privacidade & Conformidade LGPD por Padrão:** Formulários com consentimento explícito, métricas sem cookies e termos legais automatizados.
+1. ⚡ **Alta Performance (SEO & Core Web Vitals):** Páginas estáticas com metas de LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
+2. 🛠️ **Produtividade & Reutilização:** Estrutura modular desacoplada onde a marca do cliente é configurada em menos de 2 horas.
+3. 💰 **Meta de Custo Reduzido ($0 inicial):** Maximização consciente dos planos gratuitos de Git, DNS e Serverless, dispensando servidores dedicados para sites institucionais padrão.
+4. 📝 **Autonomia para o Cliente:** Gestão de conteúdo simplificada via Keystatic CMS sem que o cliente precise manipular Git ou código.
+5. 🔒 **Privacidade & Conformidade LGPD por Padrão:** Formulários com consentimento explícito no Zod, métricas sem cookies (Plausible) e páginas legais padronizadas.
 
 ---
 
@@ -78,7 +78,7 @@ Clone o novo repositório criado e instale as dependências:
 
 ```bash
 # Clonar o repositório
-git clone [https://github.com/heviane/institutional-website-template.git](https://github.com/heviane/institutional-website-template.git)
+git clone https://github.com/heviane/institutional-website-template.git
 
 # Entrar na pasta do projeto
 cd nome-do-projeto

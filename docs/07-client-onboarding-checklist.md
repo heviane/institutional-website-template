@@ -72,20 +72,29 @@ flowchart LR
 
 ## 🌐 Etapa 3: Domínio, DNS & Hospedagem
 
-- [ ] **3.1. Cadastrar Projeto na Hospedagem (Vercel ou Cloudflare Pages):**
-  - Conectar a conta GitHub à Vercel (ou Cloudflare Pages).
-  - Importar o repositório privado `site-cliente`.
-  - Framework Preset: **Next.js**.
-  - Pular variáveis de ambiente neste momento inicial e realizar o primeiro deploy.
+- [ ] **3.1. Escolha e Cadastro na Plataforma de Hospedagem:**
+  - **Opção A (Padrão Oficial - Recomendado): Vercel**
+    - Suporte nativo completo a Next.js 15 (App Router, SSG, Server Actions) sem necessidade de adaptadores adicionais.
+    - Conectar a conta GitHub, importar o repositório privado `site-cliente` e realizar o deploy inicial.
+  - **Opção B (Alternativa de Custo $0 Comercial): Cloudflare Pages**
+    - Conforme [ADR 0005](adr/0005-estrategia-de-hospedagem-e-cicd.md), permite uso comercial no plano gratuito.
+    - *Atenção à compatibilidade:* Requer compilar com o adaptador `@cloudflare/next-on-pages` (OpenNext) para executar as Server Actions no runtime Edge da Cloudflare.
 - [ ] **3.2. Configurar Domínio Personalizado na Hospedagem:**
-  - Acesse `Project Settings` > `Domains`.
-  - Adicione o domínio raiz (`cliente.com.br`) e o subdomínio (`www.cliente.com.br`).
-- [ ] **3.3. Configurar Apontamentos no Provedor DNS do Cliente (ex: Registro.br, Cloudflare):**
+  - Adicionar o domínio raiz (`cliente.com.br`) e o subdomínio (`www.cliente.com.br`) nas configurações do projeto.
+- [ ] **3.3. Configurar Apontamentos DNS conforme a Plataforma Escolhida:**
 
+  **Se utilizar a Vercel (Apontamentos no Registro.br, Cloudflare ou GoDaddy):**
   | Tipo | Nome / Host | Valor / Destino | TTL |
   | :--- | :--- | :--- | :--- |
-  | **A** | `@` (raiz) | `76.76.21.21` (ou IP da Cloudflare/Vercel) | 3600 (1h) |
+  | **A** | `@` (raiz) | `76.76.21.21` | 3600 (1h) |
   | **CNAME** | `www` | `cname.vercel-dns.com.` | 3600 (1h) |
+
+  **Se utilizar o Cloudflare Pages:**
+  * *Com zona DNS já gerenciada na Cloudflare:* O domínio é vinculado automaticamente com 1 clique (gerenciamento por proxy CNAME interno).
+  * *Com zona DNS externa (ex.: Registro.br sem migração de NS):*
+  | Tipo | Nome / Host | Valor / Destino | TTL |
+  | :--- | :--- | :--- | :--- |
+  | **CNAME** | `www` (ou `@` via ALIAS/ANAME) | `<nome-do-projeto>.pages.dev.` | 3600 (1h) |
 
 - [ ] **3.4. Validar Emissão de Certificado SSL/TLS:**
   - Aguardar a propagação do DNS e verificar se o status do domínio exibe **Valid Configuration** e o cadeado HTTPS está ativo.

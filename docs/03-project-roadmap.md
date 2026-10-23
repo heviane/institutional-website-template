@@ -6,7 +6,7 @@ Este documento define o planejamento estratégico e a ordem de execução para o
 
 ## 🎯 Fases de Desenvolvimento
 
-### 🟢 Fase 1: Fundação, Setup e Governança (Concluído)
+### 🟢 Fase 1: Fundação Documental e de Governança (Concluído)
 
 * [x] Definição de requisitos e arquitetura de alto nível (`01-architecture-overview.md`)
 * [x] Criação de Registros de Decisão Arquitetural — ADRs 0001 a 0011 e índice geral (`docs/adr/README.md`)

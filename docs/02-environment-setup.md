@@ -195,24 +195,24 @@ Para reutilizar este template em novos clientes, é fundamental desacoplar as in
 
 ```typescript
 export const siteConfig = {
-  name: "Empresa Genérica",
-  description: "Website institucional genérico e de alta performance.",
-  url: "[https://github.com/heviane](https://github.com/heviane)",
-  ogImage: "https://empresa.com.br/og.jpg",
+  name: "Empresa Exemplo",
+  description: "Website institucional moderno, acessível e de alta performance.",
+  url: "https://www.empresaexemplo.com.br",
+  ogImage: "https://www.empresaexemplo.com.br/og.jpg",
   legal: {
-    companyName: "Empresa Genérica Ltda",
+    companyName: "Empresa Exemplo Ltda",
     cnpj: "00.000.000/0001-00",
-    dpoEmail: "privacidade@empresa.com.br",
+    dpoEmail: "privacidade@empresaexemplo.com.br",
   },
   contact: {
-    email: "heviane@gmail.com",
-    phone: "(51) 99999-9999",
-    whatsapp: "5551999999999",
-    address: "Porto Alegre, RS",
+    email: "contato@empresaexemplo.com.br",
+    phone: "(11) 99999-9999",
+    whatsapp: "5511999999999",
+    address: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
   },
   social: {
-    instagram: "[https://www.instagram.com/hevianebc/](https://www.instagram.com/hevianebc/)",
-    linkedin: "[https://www.linkedin.com/in/hevianebastos/](https://www.linkedin.com/in/hevianebastos/)",
+    instagram: "https://instagram.com/empresaexemplo",
+    linkedin: "https://linkedin.com/company/empresaexemplo",
   },
 };
 
