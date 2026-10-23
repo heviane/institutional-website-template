@@ -2,16 +2,16 @@
 
 > Template/Boilerplate genérico, modular e de alta performance para a criação e implantação rápida de websites institucionais e corporativos.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Shadcn/ui](https://img.shields.io/badge/Shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui)](https://ui.shadcn.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-orange?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
+[![Status](https://img.shields.io/badge/Status-Fase_1_Concluída-brightgreen?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
 
-> [!WARNING]
-> **Projeto em Desenvolvimento Ativo (WIP — Work in Progress)**  
-> Este template possui sua fundação arquitetural e de governança concluída (Fase 1), e encontra-se em fase de implementação ativa do Core & MVP (Fase 2). Os recursos descritos abaixo representam a arquitetura planejada e em construção. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
+> [!NOTE]
+> **Status do Projeto: Fase 1 Concluída; Fase 2 Aguardando Início da Implementação**  
+> Este template possui sua fundação arquitetural e de governança concluída (Fase 1). A implementação prática do Core & MVP em código (Fase 2) aguarda o início do bootstrap (`package.json` e `src/`). Os recursos descritos nesta documentação representam a arquitetura planejada e pronta para execução. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
 
 ---
 

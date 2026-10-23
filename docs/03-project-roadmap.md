@@ -8,13 +8,13 @@ Este documento define o planejamento estratégico, a ordem de execução e os cr
 
 ```mermaid
 flowchart LR
-    A["🟢 Fase 1<br/>Fundação & Governança<br/>(Concluído)"] --> B["🟡 Fase 2<br/>Core & MVP em Código<br/>(Próximo Passo)"]
+    A["🟢 Fase 1<br/>Fundação & Governança<br/>(Concluída)"] --> B["🟡 Fase 2<br/>Core & MVP em Código<br/>(Aguardando Início)"]
     B --> C["🔵 Fase 3<br/>Evolução Pós-MVP<br/>(Sob Demanda)"]
 ```
 
 ---
 
-### 🟢 Fase 1: Fundação Documental, Governança e Alinhamento Pré-Bootstrap (Concluído)
+### 🟢 Fase 1: Fundação Documental, Governança e Alinhamento Pré-Bootstrap (Concluída)
 
 Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formais e salvaguardas técnicas antes da escrita do código-fonte:
 
@@ -38,7 +38,7 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Próximo Passo / Em Planejamento)
+### 🟡 Fase 2: Implementação do Core & MVP (Aguardando Início da Implementação)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
