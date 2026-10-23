@@ -20,10 +20,12 @@ Além disso, um problema operacional clássico em deploys serverless no Next.js 
 
 Decidimos implementar uma arquitetura de segurança preventiva composta por três mecanismos:
 
-### 2.1. Validação de Variáveis de Ambiente no Build (`src/env.ts`)
-Adotamos a validação estrita com **Zod** para todas as variáveis de ambiente em tempo de compilação (*fail-fast build pattern*):
-* **Comportamento:** O módulo `src/env.ts` valida as variáveis do servidor e do cliente (`process.env`) no momento da execução do `next build`.
-* **Benefício:** Se qualquer variável obrigatória (como `RESEND_API_KEY` ou `RESEND_FROM_EMAIL`) estiver ausente ou malformatada, **o build é abortado imediatamente no CI/CD**, exibindo um relatório explícito dos campos com erro e impedindo a publicação de versões quebradas.
+### 2.1. Validação Segregada de Variáveis de Ambiente no Build (`src/env.ts`)
+Adotamos a validação estrita com **Zod** para todas as variáveis de ambiente em tempo de compilação (*fail-fast build pattern*), estruturada em escopos segregados:
+* **Segregação de Escopos (Server vs. Client):** Separação formal entre `serverEnvSchema` (segredos que nunca chegam ao navegador, como `RESEND_API_KEY` e `TURNSTILE_SECRET_KEY`) e `clientEnvSchema` (variáveis públicas com prefixo obrigatório `NEXT_PUBLIC_`). Essa blindagem impede vazamento acidental de chaves de API em componentes de interface (`'use client'`).
+* **Diferenciação entre Core e Opcionais por Feature:** Variáveis essenciais para renderização e formulários são obrigatórias no build. Já credenciais de serviços de borda com fallbacks locais (Cloudflare Turnstile, Upstash Redis e Keystatic Cloud) são tratadas como opcionais em desenvolvimento/CI e validadas conforme o ambiente (`NODE_ENV === "production"`).
+* **Benefício:** Se qualquer variável mandatória estiver ausente ou malformatada, **o build é abortado imediatamente no CI/CD**, exibindo um relatório explícito dos campos com erro e impedindo a publicação de versões quebradas.
+* **Testabilidade Automatizada:** Inclusão de suíte de testes no Vitest (`src/env.test.ts`) validando o comportamento do parser sob configurações mínimas, setups completos de produção e entradas inválidas.
 
 ### 2.2. Cabeçalhos HTTP de Segurança no `next.config.ts`
 Configuramos *Security Headers* obrigatórios aplicados a todas as rotas da aplicação:

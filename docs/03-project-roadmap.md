@@ -49,7 +49,8 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis.
   * [ ] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
 * [ ] **Validação de Ambiente & Segurança:**
-  * [ ] Implementar validação estrita com Zod (`src/env.ts`), com separação clara entre variáveis públicas (`client`) e segredos de servidor (`server`).
+  * [ ] Implementar validação estrita com Zod (`src/env.ts`), com segregação formal entre variáveis públicas (`clientEnvSchema`) e segredos de servidor (`serverEnvSchema`), distinguindo variáveis core de integrações condicionais.
+  * [ ] Criar testes unitários no Vitest (`src/env.test.ts`) para validar o parser em cenários de build mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
   * [ ] Atualizar `.github/workflows/ci.yml`, removendo a flag `--if-present` e transformando lint, typecheck, testes e build em quality gates bloqueantes.
   * [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
   * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).

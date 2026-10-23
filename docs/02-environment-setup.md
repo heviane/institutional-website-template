@@ -277,27 +277,51 @@ export async function sendContactEmail(formData: ContactFormData & { honeypot?: 
 }
 ```
 
-5. **Validação de Variáveis de Ambiente no Build (`src/env.ts`):**
-* Conforme definido na ADR 0009, valida rigorosamente todas as variáveis de ambiente durante o `next build` para impedir falhas silenciosas em produção:
+5. **Validação Segregada de Variáveis de Ambiente no Build (`src/env.ts`):**
+* Conforme definido na ADR 0009, valida rigorosamente todas as variáveis de ambiente durante o `next build` com segregação explícita entre escopos de servidor e cliente:
 
 ```typescript
 import { z } from "zod";
 
-export const envSchema = z.object({
+// 1. Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
+export const serverEnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
+
+  // Comunicação Transacional (Core do Formulário)
   RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY é obrigatória."),
   RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
   CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+
+  // Proteção Anti-Spam (Opcional em dev / validado quando Turnstile estiver ativo em produção)
   TURNSTILE_SECRET_KEY: z.string().optional(),
+
+  // Rate Limiting Distribuído (Upstash Redis para Serverless / opcional em dev com fallback para Map)
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+
+  // Keystatic CMS (Segredos necessários caso utilize GitHub App próprio em vez de Keystatic Cloud)
   KEYSTATIC_SECRET: z.string().optional(),
   KEYSTATIC_GITHUB_CLIENT_ID: z.string().optional(),
   KEYSTATIC_GITHUB_CLIENT_SECRET: z.string().optional(),
 });
 
+// 2. Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
+export const clientEnvSchema = z.object({
+  NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+  NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
+});
+
+// 3. Schema Unificado com Validação Fail-Fast
+export const envSchema = serverEnvSchema.merge(clientEnvSchema);
+
 export const env = envSchema.parse(process.env);
 ```
+
+> 🛡️ **Garantias Técnicas de Segurança:**
+> 1. **Prevenção de Vazamentos:** Segredos definidos em `serverEnvSchema` não podem ser importados em componentes com `'use client'`, garantindo que chaves de API nunca cheguem ao bundle JavaScript público.
+> 2. **Diferenciação Core vs. Opcionais:** As variáveis do formulário (`RESEND_*`) e URL base (`NEXT_PUBLIC_SITE_URL`) são mandatárias para o build, enquanto credenciais de integrações de borda (Turnstile, Upstash, Keystatic Cloud) admitem fallbacks graciosos para desenvolvimento local e pipelines de CI.
+> 3. **Testabilidade Automatizada:** A validação é coberta por testes no Vitest (`src/env.test.ts`), confirmando o comportamento em cenários de setup mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
 
 ---
 
