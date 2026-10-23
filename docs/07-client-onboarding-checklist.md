@@ -147,6 +147,9 @@ Conforme [ADR 0003](adr/0003-estrategia-de-formularios.md), formulários institu
   - Copiar o valor `re_xxxxxxxxxxxx`.
 - [ ] **4.5. Teste de Entregabilidade:**
   - Enviar um e-mail de teste para o [Mail-Tester](https://www.mail-tester.com/) e garantir nota mínima de **9/10**.
+- [ ] **4.6. Configurar Alertas de Cota e Canais de Contingência:**
+  - No painel do Resend, acessar **Settings** > **Alerts** e configurar notificações por e-mail quando o consumo diário atingir 80% e 100% (conforme [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)).
+  - Confirmar que canais alternativos diretos (WhatsApp comercial e e-mail direto) estão cadastrados em `src/config/site.ts` para servir de fallback ao visitante caso a cota do formulário seja atingida.
 
 ---
 
