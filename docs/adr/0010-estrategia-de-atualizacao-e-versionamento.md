@@ -4,7 +4,7 @@
 * **Data:** 2026-10-22
 * **Decisores:** Engenharia de Software / Autor do Projeto
 
-> Define a política de versionamento semântico (SemVer) do repositório template e estabelece o procedimento operacional de propagação de melhorias, correções de segurança e novas funcionalidades para sites de clientes já implantados.
+> Define a política de versionamento semântico (SemVer) do repositório template e estabelece o protocolo de experimentação e validação técnica para propagação de melhorias e correções para sites de clientes já implantados.
 
 ---
 
@@ -20,7 +20,7 @@ Quando o template recebe atualizações críticas (como correções de seguranç
 
 ## 2. Decisão (Decision)
 
-Decidimos adotar uma estratégia de manutenção e evolução em três frentes:
+Decidimos estruturar a política de evolução do template sob os seguintes pilares:
 
 ### 2.1. Versionamento Semântico e GitHub Releases
 O template segue a especificação estrita do **SemVer (Semantic Versioning - `MAJOR.MINOR.PATCH`)**:
@@ -30,32 +30,26 @@ O template segue a especificação estrita do **SemVer (Semantic Versioning - `M
 
 > Toda nova versão é formalizada como uma **GitHub Release** contendo um *Changelog* explícito com notas de atualização e diretrizes para aplicação em sites legados.
 
-### 2.2. Fluxo Git de Sincronização via *Upstream Remote*
-Para repositórios de clientes derivados do template, adotamos o fluxo padrão de vinculação remota:
+### 2.2. Protocolo de Sincronização via *Upstream Remote* (Hipótese Técnica sob Validação)
+Para repositórios derivados via *"Use this template"*, o histórico de commits original é descartado pelo GitHub, criando um repositório com um único commit inicial órfão (*sem ancestral comum / merge-base com o template*).
 
-1. **Vincular o Template Original:**
-   ```bash
-   git remote add template https://github.com/heviane/institutional-website-template.git
-   ```
-2. **Buscar Novidades do Template:**
-   ```bash
-   git fetch template
-   ```
-3. **Mesclagem Controlada de Históricos Desconectados:**
-   ```bash
-   git merge template/main --allow-unrelated-histories -m "chore: sincronizar com a versao X do template"
-   ```
-   *(A flag `--allow-unrelated-histories` instrui o Git a reconciliar a raiz do template com a raiz do cliente de forma determinística).*
-
-### 2.3. Aplicação Cirúrgica de Hotfixes (*Cherry-Pick*)
-Para atualizações críticas de segurança ou correções isoladas onde o desenvolvedor não deseja mesclar todas as novidades recentes do template, utiliza-se a técnica de *cherry-pick*:
+A proposta inicial de vincular o repositório original como upstream:
 ```bash
+git remote add template https://github.com/heviane/institutional-website-template.git
 git fetch template
-git cherry-pick <hash-do-commit-de-correcao>
+git merge template/main --allow-unrelated-histories -m "chore: sincronizar com a versao X do template"
 ```
 
+> ⚠️ **Alerta Técnico de Riscos:** O comando `--allow-unrelated-histories` apenas desativa a trava de segurança do Git que impede merge entre históricos desconectados. Como não existe um ancestral comum, o Git pode interpretar arquivos modificados em ambos os lados como adições concorrentes (*both added*), gerando falsos conflitos massivos. Por essa razão, **este comando não deve ser adotado como procedimento padrão definitivo sem prévia validação em repositório derivado real**.
+
+### 2.3. Estratégias Alternativas sob Avaliação
+Para minimizar a superfície de conflito na entrega de melhorias para clientes:
+1. **Patches Cirúrgicos (`git format-patch` / `git apply`):** Para hotfixes e correções pontuais de segurança (como atualizações de pacotes ou ajustes de Server Action), extrair e aplicar apenas o diff do commit em questão, sem forçar o merge de todo o histórico.
+2. **Branch Upstream Dedicada:** Manter no repositório do cliente uma branch isolada (ex.: `template-upstream`) que rastreia diretamente as releases do template, permitindo testar e mesclar mudanças em um Pull Request com revisão manual controlada.
+3. **Automação via GitHub Actions (ex.: Template Sync):** Empregar workflows automatizados de sincronização que abrem PRs periódicos contendo apenas os deltas de engenharia.
+
 ### 2.4. Arquitetura de Baixo Conflito (*Separation of Concerns*)
-A estrutura do projeto foi intencionalmente desenhada para minimizar conflitos de merge durante sincronizações:
+A estrutura do projeto foi intencionalmente desenhada para minimizar conflitos independentemente do método de propagação adotado:
 * **Zona Imune do Cliente (Preservada):**
   * `src/config/site.ts` (dados da empresa, cores de marca, contatos, CNPJ e DPO).
   * `public/images/content/` (mídias dos clientes).
@@ -65,18 +59,26 @@ A estrutura do projeto foi intencionalmente desenhada para minimizar conflitos d
   * `src/components/ui/` e `src/components/shared/` (componentes estruturais).
   * `src/env.ts`, `package.json` e `.github/workflows/` (regras e automações).
 
+### 2.5. Roteiro Obrigatório de Validação Prática (Fase 2 do Roadmap)
+Antes de homologar um método de sincronização como procedimento operacional padrão:
+1. Criar um repositório de testes utilizando a função *"Use this template"*;
+2. Simular customizações de um cliente real (marca em `siteConfig`, páginas adicionais, CSS customizado e posts no Keystatic);
+3. Simular uma atualização no template (ex.: patch de dependência e melhoria em componente);
+4. Executar os métodos de propagação (merge direto, cherry-pick/patch e branch upstream), medindo o volume de conflitos e a complexidade de resolução;
+5. Documentar o procedimento homologado com o menor índice de atrito operacional.
+
 ---
 
 ## 3. Consequências e Trade-offs (Consequences)
 
 ### Positivas (Benefícios):
-* **Sustentabilidade de Longo Prazo:** Permite oferecer contratos de suporte contínuo para clientes com custo operacional quase nulo.
-* **Segurança Centralizada:** Uma vulnerabilidade corrigida no template pode ser propagada em minutos para dezenas de clientes com comandos Git simples.
-* **Rastreabilidade e Governança:** O desenvolvedor mantém controle total sobre o que entra em cada cliente através do histórico de Pull Requests.
+* **Rastreabilidade e Governança:** O versionamento SemVer e as GitHub Releases dão clareza sobre o impacto de cada atualização.
+* **Segurança Centralizada:** Uma vulnerabilidade corrigida no template pode ser propagada de forma controlada para clientes ativos.
+* **Preservação de Dados de Clientes:** A separação arquitetural isola os dados de conteúdo e identidade do core de código.
 
 ### Negativas (Riscos e Desvantagens Aceitas):
-* **Necessidade de Resolução Manual de Conflitos Pontuais:** Caso o desenvolvedor tenha alterado o código-fonte de componentes base no projeto do cliente, o merge do upstream exigirá revisão manual de conflitos (*merge conflicts*).
-* **Disciplina de Versionamento:** Exige que todas as mudanças no template sejam testadas antes de serem mergeadas na branch `main`.
+* **Risco de Conflitos em Históricos Desconectados:** O merge direto com `--allow-unrelated-histories` requer validação empírica prévia para evitar interrupções operacionais graves em repositórios de clientes.
+* **Necessidade de Disciplina de Manutenção:** Exige homologar e testar os procedimentos de atualização antes de orientar os clientes finais ou equipes de suporte.
 
 ---
 
@@ -84,5 +86,5 @@ A estrutura do projeto foi intencionalmente desenhada para minimizar conflitos d
 
 * **Forks do Repositório Template:** Descartado por poluir a conta do desenvolvedor com forks dependentes e não permitir transformar o repositório em um modelo público limpo para clientes.
 * **Cópia Manual de Arquivos:** Descartado por ser sujeito a erros humanos graves, perda de arquivos e inviável para múltiplos projetos.
-* **Template Sync Automatizado por Bots (Actions Template Sync):** Mantido como opção avançada para repositórios corporativos maiores, priorizando o controle manual com Git para projetos freelancer padrão.
+* **Template Sync Automatizado por Bots (Actions Template Sync):** Mantido como opção sob avaliação para repositórios corporativos maiores, priorizando o controle manual com Git para projetos freelancer padrão.
 

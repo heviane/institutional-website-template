@@ -17,7 +17,7 @@ Este diretório centraliza os **Architectural Decision Records (ADRs)** do `inst
 | **0007** | [Conformidade com a LGPD e Privacidade por Design](0007-conformidade-lgpd-e-privacidade.md) | `Aceito` | 2026-10-22 | Implementar retenção zero no banco, salvaguarda de opt-in no Zod, telemetria sem cookies (Plausible) e páginas legais. |
 | **0008** | [Qualidade Automatizada, Testes e Acessibilidade Contínua](0008-qualidade-automatizada-e-testes.md) | `Aceito` | 2026-10-22 | Estabelecer pipeline GitHub Actions CI (lint, typecheck, Vitest, vitest-axe, Lighthouse CI e Dependabot semanal). |
 | **0009** | [Política de Segurança, Headers HTTP e Validação de Ambiente](0009-seguranca-headers-e-validacao-de-ambiente.md) | `Aceito` | 2026-10-22 | Garantir validação estrita de envs com Zod no build (`src/env.ts`), Security Headers HTTP e política de segurança (`SECURITY.md`). |
-| **0010** | [Estratégia de Versionamento do Template e Propagação de Atualizações](0010-estrategia-de-atualizacao-e-versionamento.md) | `Aceito` | 2026-10-22 | Definir fluxo de sincronização entre o template original e repositórios de clientes via `remote upstream` e `cherry-pick`. |
+| **0010** | [Estratégia de Versionamento do Template e Propagação de Atualizações](0010-estrategia-de-atualizacao-e-versionamento.md) | `Aceito` | 2026-10-22 | Estabelecer SemVer/Releases e estruturar validação prática de fluxos de propagação com baixo índice de conflito. |
 | **0011** | [Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](0011-defesa-antispam-e-protecao-de-formularios.md) | `Aceito` | 2026-10-22 | Implementar defesa em 3 camadas: Honeypot oculto, Cloudflare Turnstile sem cookies e Rate Limiting por IP para proteger a cota do Resend. |
 
 ---

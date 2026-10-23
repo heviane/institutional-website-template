@@ -56,6 +56,11 @@ Esta fase representa a entrega principal do template, garantindo um site institu
   * [ ] Configuração do Vitest + Testing Library + `vitest-axe`
   * [ ] Criação dos testes de integridade de schemas Zod e `siteConfig`
   * [ ] Configuração dos orçamentos de performance do Lighthouse CI (`lighthouserc.json`)
+* **2.8. Validação do Fluxo de Atualização de Templates (ADR 0010):**
+  * [ ] Criação de repositório de teste derivado via template ("Use this template")
+  * [ ] Simulação de customizações do cliente (`siteConfig`, layout e conteúdo)
+  * [ ] Teste prático de propagação de releases e hotfixes do template original
+  * [ ] Avaliação comparativa de atrito (merge direto vs. patch seletivo vs. template-sync) e homologação do procedimento definitivo
 
 ### 🔵 Fase 3: Evolução e Recursos Avançados (Pós-MVP / Sob Demanda)
 
