@@ -9,6 +9,7 @@
 1. **A Especificação Precede o Código:** Todas as decisões de arquitetura, governança, segurança, modelo de dados e qualidade já foram deliberadas e formalizadas no diretório [`docs/`](docs/).
 2. **Proibição de Suposições / "Vibe Coding":** Nunca invente soluções, padrões de projeto, bibliotecas adicionais ou nomes de variáveis a partir de intuições genéricas. Consulte sempre a especificação canônica correspondente antes de gerar ou refatorar qualquer arquivo.
 3. **Tratamento dos ADRs como Leis do Sistema:** As decisões registradas nos Architectural Decision Records ([`docs/adr/`](docs/adr/)) têm força mandatória. Nenhuma IA tem autorização para violar um ADR aprovado sem solicitação explícita e justificada do desenvolvedor.
+4. **Protocolo "Stop-and-Ask" para Casos Ambíguos:** Se houver conflito, divergência ou lacuna técnica entre uma instrução do desenvolvedor e as especificações em [`docs/`](docs/) (ou entre diferentes documentos), a IA **DEVE** pausar a geração de código e solicitar esclarecimentos objetivos antes de prosseguir, sendo terminantemente proibido assumir premissas ou padrões arbitrários por conta própria.
 
 ---
 
@@ -85,4 +86,5 @@ Ao implementar qualquer funcionalidade na Fase 2:
    npm run build       # Build de produção do Next.js 16 compilando de forma determinística
    ```
 
-3. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.
+3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de lint, falhas de tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).
+4. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.
