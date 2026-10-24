@@ -8,7 +8,7 @@ Este documento define o planejamento estratégico, a ordem de execução e os cr
 
 ```mermaid
 flowchart LR
-    A["🟢 Fase 1<br/>Fundação & Governança<br/>(Concluída)"] --> B["🟡 Fase 2<br/>Core & MVP em Código<br/>(Aguardando Início)"]
+    A["🟢 Fase 1<br/>Fundação & Governança<br/>(Concluída)"] --> B["🟡 Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)"]
     B --> C["🔵 Fase 3<br/>Evolução Pós-MVP<br/>(Sob Demanda)"]
 ```
 
@@ -38,21 +38,19 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Aguardando Início da Implementação)
+### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Feature 001 Concluída)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
-#### 2.1. Checklist de Execução Técnica (Durante o Bootstrap):
+#### 2.1. Checklist de Execução Técnica:
 
-* [ ] **Inicialização do Projeto & Dependências:**
-  * [ ] Inicializar Next.js 16 (App Router - Active LTS), TypeScript e Tailwind CSS v4 com versões registradas e compatíveis com Node.js 24 LTS.
-  * [ ] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis.
-  * [ ] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
-* [ ] **Validação de Ambiente & Segurança:**
-  * [ ] Implementar validação estrita com Zod (`src/env.ts`), com segregação formal entre variáveis públicas (`clientEnvSchema`) e segredos de servidor (`serverEnvSchema`), distinguindo variáveis core de integrações condicionais.
-  * [ ] Criar testes unitários no Vitest (`src/env.test.ts`) para validar o parser em cenários de build mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
-  * [ ] Promover `.github/workflows/ci.yml` de provisório para definitivo no primeiro commit funcional, removendo a checagem condicional de bootstrap (`check-bootstrap`) para que a esteira execute todos os quality gates (`npm ci`, `lint`, `typecheck`, `test`, `build`) de forma 100% incondicional e bloqueante.
-  * [ ] Implementar Security Headers HTTP conservadores no `next.config.ts`.
+* [ ] **Inicialização do Projeto & Dependências (Feature 001 Concluída):**
+  * [x] Inicializar Next.js 16 (App Router - Active LTS), TypeScript e Tailwind CSS v4 com versões registradas e compatíveis com Node.js 24 LTS.
+  * [x] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
+  * [x] Promover `.github/workflows/ci.yml` de provisório para definitivo no primeiro commit funcional, removendo a checagem condicional de bootstrap (`check-bootstrap`) para que a esteira execute todos os quality gates (`npm ci`, `lint`, `typecheck`, `test`, `build`) de forma 100% incondicional e bloqueante.
+  * [x] Implementar Security Headers HTTP conservadores no `next.config.ts`.
+  * [x] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme`).
+  * [ ] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis (Feature 002).
   * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
 * [ ] **Arquitetura de Dados & Layout Base:**
   * [ ] Implementar abstração centralizada de dados do cliente (`src/config/site.ts`).
@@ -80,7 +78,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas.
   * [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash em dev) não quebrem o build nem deixem o formulário em estado vulnerável.
 * [ ] **2. Compatibilidade Prática de Dependências & Lockfile:**
-  * [ ] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci`.
+  * [x] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci` (Feature 001 Concluída).
   * [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
 * [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action):**
   * [ ] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.

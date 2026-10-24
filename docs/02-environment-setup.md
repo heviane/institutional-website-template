@@ -144,54 +144,9 @@ npm install -D prettier prettier-plugin-tailwindcss
 * *Acessos limpos:* `@/components/...`, `@/config/...`, `@/lib/...`, `@/types/...`.
 
 4. **Configurar Cabeçalhos de Segurança HTTP (`next.config.ts`):**
-* Conforme definido na ADR 0009, aplica cabeçalhos HTTP rígidos em todas as rotas para blindar o site contra ataques web:
-
-```typescript
-import type { NextConfig } from "next";
-
-const isProd = process.env.NODE_ENV === "production";
-
-// Content Security Policy em modo Report-Only:
-// Permite auditar e identificar violações de segurança no console/relatórios sem bloquear
-// preventivamente integrações dinâmicas (Turnstile, fontes do Google, analytics e CDNs de mídia).
-const cspHeader = `
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' blob: data: https:;
-  font-src 'self' data:;
-  frame-src 'self' https://challenges.cloudflare.com;
-  connect-src 'self' https://challenges.cloudflare.com;
-`
-  .replace(/\s{2,}/g, " ")
-  .trim();
-
-const securityHeaders = [
-  { key: "X-DNS-Prefetch-Control", value: "on" },
-  // HSTS conservador ativo apenas em produção (sem includeSubDomains/preload para não afetar outros subdomínios do cliente)
-  ...(isProd
-    ? [{ key: "Strict-Transport-Security", value: "max-age=31536000" }]
-    : []),
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-  { key: "Content-Security-Policy-Report-Only", value: cspHeader },
-];
-
-const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-    ];
-  },
-};
-
-export default nextConfig;
-```
+* Conforme formalizado na [ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md) e implementado no arquivo canônico [`next.config.ts`](../next.config.ts), o template aplica cabeçalhos HTTP defensivos em todas as rotas da aplicação para blindar o site contra ataques web (*Clickjacking*, *MIME sniffing*, injeções) e monitorar scripts via `Content-Security-Policy-Report-Only` (liberando Cloudflare Turnstile, mídias e conexões seguras).
+* Em produção, ativa `Strict-Transport-Security` (HSTS) conservador com `max-age=31536000` (1 ano), deliberadamente sem `includeSubDomains` para não impactar a infraestrutura legada de subdomínios do cliente.
+* O código executável, tipado e testado reside diretamente em [`next.config.ts`](../next.config.ts).
 
 ---
 

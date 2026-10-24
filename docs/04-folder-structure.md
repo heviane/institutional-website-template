@@ -49,6 +49,9 @@ institutional-website-template/
 │   ├── og.jpg                       # Imagem padrão de compartilhamento (Open Graph 1200x630)
 │   └── robots.txt                   # Instruções básicas para indexadores
 │
+├── specs/                           # Especificações executáveis de funcionalidades (SDD)
+│   └── 001-project-bootstrap/       # Artefatos da Feature 001 (spec.md, plan.md, tasks.md)
+│
 ├── src/                             # Código-fonte principal da aplicação
 │   ├── app/                         # Rotas e layouts (Next.js App Router)
 │   │   ├── (legal)/                 # Grupo de rotas legais
@@ -100,6 +103,10 @@ institutional-website-template/
 │   │
 │   └── env.ts                       # Validação de variáveis de ambiente no build via Zod
 │
+├── tests/                           # Suíte de testes automatizados (Vitest + axe-core)
+│   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
+│   └── utils.test.ts                # Testes unitários de funções utilitárias (cn)
+│
 ├── .editorconfig                    # Padronização de indentação e quebras de linha
 ├── .env.example                     # Modelo documentado de variáveis de ambiente
 ├── .gitattributes                   # Normalização canônica de quebras de linha (LF)
@@ -116,6 +123,8 @@ institutional-website-template/
 ├── lighthouserc.json                # Metas e orçamentos de performance do Lighthouse CI
 ├── next.config.ts                   # Configurações do Next.js e Security Headers
 ├── package.json                     # Metadados e dependências do projeto
+├── package-lock.json                # Versionamento determinístico de dependências (npm ci)
+├── postcss.config.mjs               # Plugin do Tailwind CSS v4 para processamento de estilos
 ├── README.md                        # Apresentação do projeto e guia de uso
 ├── SECURITY.md                      # Política de segurança e reporte responsável
 ├── tsconfig.json                    # Configurações do TypeScript e path aliases (@/*)

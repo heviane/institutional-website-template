@@ -7,11 +7,11 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Shadcn/ui](https://img.shields.io/badge/Shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui)](https://ui.shadcn.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Fase_1_Concluída-brightgreen?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
+[![Status](https://img.shields.io/badge/Status-Fase_2_Em_Andamento-yellow?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
 
 > [!NOTE]
-> **Status do Projeto: Fase 1 Concluída; Fase 2 Aguardando Início da Implementação**  
-> Este template possui sua fundação arquitetural e de governança concluída (Fase 1). A implementação prática do Core & MVP em código (Fase 2) aguarda o início do bootstrap (`package.json` e `src/`). Os recursos descritos nesta documentação representam a arquitetura planejada e pronta para execução. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
+> **Status do Projeto: Fase 2 (Core & MVP) em Andamento — Feature 001 Concluída**  
+> Este template concluiu a fundação documental (Fase 1) e iniciou a materialização em código da Fase 2. A **Feature 001 (Project Bootstrap & Quality Gates)** está entregue com Next.js 16, TypeScript, Tailwind CSS v4, Vitest e Quality Gates 100% verdes no CI. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
 
 ---
 
@@ -69,9 +69,9 @@ Para garantir governança, rastreabilidade e facilidade de *onboarding*, o proje
 
 ## 🚀 Como Usar Este Template
 
-> [!NOTE]
-> **Aviso de Transição Pré-Bootstrap (Fase 2):**  
-> Os comandos descritos a seguir (`npm install`, `npm run dev`) e referências a arquivos como `src/config/site.ts` representam o tutorial padrão planejado para a aplicação. Como o repositório concluiu a **Fase 1 (Fundação e Governança)** e aguarda o início da **Fase 2 (Bootstrap do Core)**, tais comandos tornar-se-ão executáveis a partir do primeiro commit de código (`package.json` e `src/`). Neste momento, você pode inspecionar e navegar por toda a especificação técnica em [`docs/`](docs/). Ao final do bootstrap, este guia de instalação será homologado de ponta a ponta em um clone limpo.
+> [!TIP]
+> **Ambiente Operacional e Reprodutível:**  
+> A aplicação está inicializada na raiz do repositório com Next.js 16, React 19, Tailwind CSS v4 e TypeScript sob Node.js 24 LTS. Os comandos abaixo são totalmente funcionais e verificados continuamente na esteira de CI do GitHub Actions.
 
 ### 1. Criando um Novo Repositório a partir do Template
 
