@@ -7,7 +7,7 @@ Este projeto adota práticas rigorosas de engenharia de software fundamentadas n
 
 ## 🧭 1. Princípios de Contribuição (SDD & TDD)
 
-Antes de escrever qualquer linha de código, consulte o arquivo canônico [**`AI-RULES.md`**](AI-RULES.md), que define a **Constituição de Engenharia** e as restrições negativas inegociáveis do repositório.
+Antes de escrever qualquer linha de código, consulte o arquivo canônico central [**`AGENTS.md`**](AGENTS.md), que define a **Constituição de Engenharia** e as restrições negativas inegociáveis do repositório.
 
 1. **A Especificação Precede o Código:**  
    Nenhuma nova funcionalidade ou alteração estrutural deve ser iniciada sem sua respectiva especificação aprovada em [`specs/`](specs/) ou registro em [`docs/adr/`](docs/adr/).
@@ -73,3 +73,4 @@ npm run lint && npm run typecheck && npm test && npm run build
 
 Vulnerabilidades de segurança **NUNCA** devem ser abertas em Issues públicas.  
 Consulte a nossa [Política de Segurança](SECURITY.md) para abrir um **Security Advisory Privado** de forma confidencial.
+

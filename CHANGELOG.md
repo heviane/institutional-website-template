@@ -41,3 +41,4 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Governança de segurança (`SECURITY.md`) com suporte a GitHub Private Vulnerability Reporting.
   * Padronização de ambiente e quebras de linha (`.editorconfig`, `.gitattributes`, `.prettierrc`, `.nvmrc`).
   * Especificação formal da Feature 001 em `specs/001-project-bootstrap/` (`spec.md`, `plan.md`, `tasks.md`).
+

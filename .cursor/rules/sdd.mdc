@@ -1,0 +1,12 @@
+---
+description: Diretrizes canônicas e Spec-Driven Development (SDD) do repositório
+globs: *
+alwaysApply: true
+---
+
+# Cursor AI Rules - Institutional Website Template
+
+Este repositório adota a metodologia **Spec-Driven Development (SDD)**.
+Siga rigorosamente as diretrizes canônicas, restrições negativas, dicionário de nomenclatura e constituição de engenharia centralizadas em:
+
+@AGENTS.md

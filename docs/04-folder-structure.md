@@ -8,11 +8,16 @@ Este documento detalha a organização de arquivos, diretórios e padrões de no
 
 ```text
 institutional-website-template/
+├── .cursor/                         # Configurações do editor Cursor
+│   └── rules/                       # Regras de contexto para IA (.mdc)
+│       └── sdd.mdc                  # Instruções de SDD vinculadas ao AGENTS.md
+│
 ├── .github/                         # Automações e governança do GitHub
 │   ├── ISSUE_TEMPLATE/              # Modelos para abertura de issues
 │   ├── workflows/                   # Pipelines do GitHub Actions
 │   │   └── ci.yml                   # Pipeline de CI (Lint, Typecheck, Test, Build)
 │   ├── CODEOWNERS                   # Titularidade e revisão de código por diretório
+│   ├── copilot-instructions.md      # Instruções de contexto para o GitHub Copilot
 │   ├── dependabot.yml               # Monitoramento semanal de dependências
 │   └── PULL_REQUEST_TEMPLATE.md     # Modelo padrão para Pull Requests
 │
@@ -101,8 +106,10 @@ institutional-website-template/
 ├── .gitignore                       # Arquivos e pastas excluídos do Git
 ├── .nvmrc                           # Versão LTS travada do Node.js (24)
 ├── .prettierrc                      # Configuração de formatação e ordenação do Tailwind
-├── AI-RULES.md                      # Diretrizes canônicas para desenvolvimento assistido por IA
+├── AGENTS.md                        # Hub central de diretrizes canônicas para agentes de IA (SDD)
+├── AI-RULES.md                      # Ponteiro canônico retrocompatível para AGENTS.md
 ├── CHANGELOG.md                     # Histórico estruturado de mudanças (Keep a Changelog)
+├── CLAUDE.md                        # Diretrizes para Claude Code (@AGENTS.md)
 ├── CONTRIBUTING.md                  # Guia de contribuição, padrões SDD e Quality Gates
 ├── eslint.config.mjs                # Configuração do ESLint 9 (Flat Config)
 ├── keystatic.config.ts              # Definição de schemas e coleções do Keystatic

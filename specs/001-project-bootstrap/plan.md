@@ -2,7 +2,7 @@
 
 * **Status:** Pronto para Aprovação
 * **Spec de Referência:** [`spec.md`](spec.md)
-* **Constituição de Engenharia:** [`AI-RULES.md`](../../AI-RULES.md)
+* **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
 
 ---
 
@@ -80,4 +80,4 @@ steps:
 * **Risco de Conflitos de Peer Dependencies (React 19 vs. Pacotes Radix):**  
   *Mitigação:* Usar versões recentes do Shadcn/ui que já possuem suporte testado ao React 19.
 * **Sobrescrita Acidental de Documentação:**  
-  *Mitigação:* Inicializar o projeto de forma cirúrgica na raiz sem sobrescrever `docs/`, `AI-RULES.md` ou `README.md`.
+  *Mitigação:* Inicializar o projeto de forma cirúrgica na raiz sem sobrescrever `docs/`, `AGENTS.md` ou `README.md`.

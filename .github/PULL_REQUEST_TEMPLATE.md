@@ -30,7 +30,7 @@ Marque os critérios técnicos atendidos:
 
 ---
 
-## 🏛️ Checklist da Constituição de Engenharia (`AI-RULES.md`)
+## 🏛️ Checklist da Constituição de Engenharia (`AGENTS.md`)
 
 * [ ] **Simplicidade:** Nenhuma dependência desnecessária ou abstração prematura foi introduzida.
 * [ ] **Segurança:** Toda entrada pública é tratada como não confiável; chaves secretas estão fora do bundle cliente.
