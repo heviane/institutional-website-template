@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Validação de Entrega (Quality Gates Locais 100% Verdes)
+* **Status:** Concluída (Quality Gates Locais e CI 100% Verdes)
 
 ---
 
@@ -32,7 +32,7 @@
   * [x] Executar `npm test` localmente (validar suíte verde).
   * [x] Executar `npm run build` localmente (validar compilação de produção).
 
-* [ ] **6. Entrega e Verificação no GitHub Actions:**
-  * [ ] Gerar e versionar o `package-lock.json`.
-  * [ ] Realizar commit e push do bootstrap funcional.
-  * [ ] Verificar a execução verde de ponta a ponta na esteira do GitHub Actions.
+* [x] **6. Entrega e Verificação no GitHub Actions:**
+  * [x] Gerar e versionar o `package-lock.json`.
+  * [x] Realizar commit e push do bootstrap funcional.
+  * [x] Verificar a execução verde de ponta a ponta na esteira do GitHub Actions.

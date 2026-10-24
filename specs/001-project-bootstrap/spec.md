@@ -1,6 +1,6 @@
 # Feature 001: Project Bootstrap & Quality Gates (Spec)
 
-* **Status:** Em Implementação (Quality Gates Locais Verdes)
+* **Status:** Concluída (Fase 2 Iniciada)
 * **Data:** 2026-10-23
 * **Fase do Roadmap:** [Fase 2 (Core & MVP)](../../docs/03-project-roadmap.md)
 * **ADRs Vinculados:** [ADR 0001](../../docs/adr/0001-escolha-do-framework-next.md), [ADR 0004](../../docs/adr/0004-design-system-e-estilizacao.md), [ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)
