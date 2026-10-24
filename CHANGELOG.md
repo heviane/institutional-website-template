@@ -9,6 +9,13 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Adicionado
+* **Feature 001 (Project Bootstrap & Quality Gates):**
+  * Bootstrap declarativo do Next.js 16 (App Router) com React 19, TypeScript e Tailwind CSS v4 na raiz.
+  * Configuração do design system com tokens `@theme` inline em `oklch()` e utilitário canônico `cn()`.
+  * Configuração do Vitest com ambiente `jsdom` e suíte de testes de sanidade.
+  * Promoção incondicional dos Quality Gates no CI (`.github/workflows/ci.yml`): `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` e `npm run build`.
+
 ### Planejado para a Fase 2 (Core & MVP)
 * Bootstrap do Next.js 16 com TypeScript, React 19 e Tailwind CSS v4.
 * Componentes de interface baseados em Shadcn/ui e Radix UI (WCAG 2.1 AA).

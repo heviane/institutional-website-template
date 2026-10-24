@@ -1,6 +1,6 @@
 # Feature 001: Project Bootstrap & Quality Gates (Plan)
 
-* **Status:** Pronto para Aprovação
+* **Status:** Em Implementação (Quality Gates Locais Verdes)
 * **Spec de Referência:** [`spec.md`](spec.md)
 * **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
 
