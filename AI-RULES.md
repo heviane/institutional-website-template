@@ -1,6 +1,6 @@
 # 🤖 Diretrizes Canônicas para Desenvolvimento Assistido por IA (Spec-Driven Development)
 
-> Este documento é a **ÚNICA Fonte da Verdade (*Single Source of Truth*)** e o conjunto de restrições inegociáveis para qualquer agente ou assistente de Inteligência Artificial (ChatGPT, Claude, GitHub Copilot, Cursor, Antigravity, Gemini) que atue no repositório `institutional-website-template`.
+> Este documento é a **ÚNICA Fonte da Verdade (*Single Source of Truth*)** - cumpre o papel de contrato técnico entre humano e IA - e o conjunto de restrições inegociáveis para qualquer agente ou assistente de Inteligência Artificial (ChatGPT, Claude, GitHub Copilot, Cursor, Antigravity, Gemini) que atue no repositório `institutional-website-template`.
 
 ---
 
@@ -74,12 +74,15 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 ## 🚦 6. Ciclo de Qualidade e Critérios de Aceitação da IA
 
 Ao implementar qualquer funcionalidade na Fase 2:
+
 1. **Consulte a Seção 2.2 do [`docs/03-project-roadmap.md`](docs/03-project-roadmap.md):** O trabalho só será considerado concluído se atender aos critérios de aceitação objetivos ali estipulados.
 2. **Execute os Quality Gates:**
+
    ```bash
    npm run lint        # Zero erros no ESLint
    npm run typecheck   # Zero erros no TypeScript
    npm test            # Suíte do Vitest verde (incluindo testes de acessibilidade vitest-axe)
    npm run build       # Build de produção do Next.js 16 compilando de forma determinística
    ```
+
 3. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.
