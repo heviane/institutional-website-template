@@ -95,7 +95,41 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 
 ---
 
-## 🚫 5. Restrições Negativas (O que a IA NUNCA deve fazer)
+## 🎨 5. Padrões de Codificação e Estilo de Código (Code Style & Conventions)
+
+Para assegurar consistência cirúrgica entre diferentes assistentes de IA e desenvolvedores humanos, o repositório adota os seguintes padrões mandatórios:
+
+### 🌐 5.1. Fronteira de Idioma (Language Boundary)
+* **Código 100% em Inglês:** Variáveis, funções, componentes, métodos, tipos, interfaces, comentários de código (`//`, `/* */`), JSDoc, nomes de arquivos e mensagens de commit (Conventional Commits) devem ser **exclusivamente em inglês**.
+  * ✅ `const clientIp = ...`, `function sendContactEmail()`, `// Validate honeypot field`
+  * ❌ `const ipCliente = ...`, `function enviarEmailContato()`, `// Valida o campo honeypot`
+* **Português (pt-BR) Restrito ao Domínio do Usuário Final:** Textos visíveis na interface, mensagens de validação e feedback do Zod (`"O nome deve conter pelo menos 2 caracteres."`), e-mails enviados a clientes brasileiros, páginas legais (`(legal)/politica-de-privacidade`) e rótulos de campos no painel do Keystatic (`label: "Título da Postagem"`).
+
+### 🏷️ 5.2. Nomenclatura no TypeScript & React
+* **Arquivos e Pastas:** SEMPRE em `kebab-case` (`contact-form.tsx`, `rate-limit.ts`, `site.ts`), seguindo o padrão oficial do Shadcn/ui e Next.js App Router.
+* **Componentes React:** Declaração em `PascalCase` com exportação nomeada explícita (`export function ContactForm() { ... }`).
+* **Funções e Métodos:** `camelCase` iniciando com verbo indicativo de ação (`sendContactEmail`, `verifyTurnstileToken`, `checkRateLimit`).
+* **Variáveis Booleanas:** Obrigatoriamente prefixadas com verbo semântico (`is`, `has`, `should`, `can`):
+  * ✅ `isValid`, `hasConsent`, `isLoading`, `canSubmit`, `isRateLimitAllowed`
+  * ❌ `valid`, `consent`, `loading`, `rateLimit`
+* **Tipos e Interfaces:** `PascalCase` sem prefixos húngaros (`I` ou `T`):
+  * ✅ `SiteConfig`, `ActionResponse`, `ContactFormData`
+  * ❌ `ISiteConfig`, `SiteConfigType`
+* **Schemas Zod:** `camelCase` finalizando com o sufixo `Schema` (`contactFormSchema`, `serverEnvSchema`).
+* **Tipos Invertidos do Zod:** `PascalCase` derivado com `z.infer` e sufixo `Data` ou `Input`:
+  * `export type ContactFormData = z.infer<typeof contactFormSchema>;`
+* **Constantes e Enums:** `UPPER_SNAKE_CASE` para valores literais imutáveis (`MAX_PAYLOAD_SIZE`, `DEFAULT_TTL_SECONDS`) e `camelCase` para objetos de configuração (`siteConfig`).
+
+### 🛡️ 5.3. Qualidade de Código & Guardrails para IA
+1. **Tipagem Estrita e Retornos Explícitos:** Proibido o uso de `any`. Utilize `unknown` para payloads de entrada não confiáveis e refine com Zod. Todas as funções exportadas e Server Actions devem declarar explicitamente seus tipos de retorno (ex.: `Promise<ActionResponse>`).
+2. **Separação de Tipos (`import type`):** Importações que contenham apenas tipos TypeScript devem utilizar obrigatoriamente a sintaxe `import type { ... } from "..."` para garantir compilação limpa e tree-shaking eficiente.
+3. **Composição Segura de Classes CSS com `cn()`:** Nunca realize concatenação pura de strings para classes Tailwind (`className={`btn ${active ? 'active' : ''}`}`). Utilize invariavelmente o utilitário canônico `cn(...)` (`clsx` + `tailwind-merge`).
+4. **Imutabilidade por Padrão:** Declare variáveis com `const`. O uso de `let` é restrito a acumuladores onde reatribuição for indispensável. O uso de `var` é terminantemente proibido.
+5. **Componentes Puros e Server-First:** Priorize React Server Components (RSC). Adicione `'use client'` exclusivamente nos componentes que demandarem interatividade do navegador (hooks como `useState`, `useActionState`, eventos de clique ou formulários).
+
+---
+
+## 🚫 6. Restrições Negativas (O que a IA NUNCA deve fazer)
 
 1. **NUNCA introduzir bancos de dados relacionais (SQL) ou NoSQL persistentes no MVP:** A arquitetura do template é intencionalmente efêmera (*Zero-Database Architecture*), com encaminhamento direto de mensagens para a caixa de e-mail do cliente via Resend API ([ADR 0007](docs/adr/0007-conformidade-lgpd-e-privacidade.md)).
 2. **NUNCA criar rotas REST manuais em `src/app/api/contact/route.ts` para formulários:** Utilize exclusivamente Server Actions com `'use server'` ([ADR 0003](docs/adr/0003-estrategia-de-formularios.md)).
@@ -107,10 +141,12 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 8. **NUNCA manter blocos extensos de código duplicados na documentação após sua implementação em `src/`:** A documentação pós-implementação deve focar no *porquê*, arquitetura, regras de negócio e referenciar os arquivos reais via links, combatendo a deterioração da documentação (*doc rot*).
 9. **NUNCA ajustar testes apenas para forçar aprovação de código defeituoso:** Testes automatizados expressam os critérios objetivos de aceitação do `spec.md`. Se um teste falhar, corrija a implementação em `src/`, nunca fragilize as asserções do teste para mascarar falhas.
 10. **NUNCA manter código morto ou comentado (*Zombie Code*):** O histórico do Git é o arquivo definitivo. Trechos depreciados, rascunhos comentados ou `TODOs` órfãos devem ser excluídos.
+11. **NUNCA utilizar "Portinglês" ou português em identificadores de código:** Nomes de variáveis, funções, arquivos, tipos e comentários de código devem ser 100% em inglês; o português é reservado estritamente para o conteúdo exibido ao usuário final.
+12. **NUNCA utilizar o tipo `any` no TypeScript:** Utilize `unknown`, genéricos ou schemas Zod para validar e tipar entradas externas de forma segura e estrita.
 
 ---
 
-## 🚦 6. Ciclo de Qualidade e Critérios de Aceitação da IA
+## 🚦 7. Ciclo de Qualidade e Critérios de Aceitação da IA
 
 Ao implementar qualquer funcionalidade na Fase 2:
 
