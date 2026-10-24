@@ -36,7 +36,7 @@ Durante o assistente interativo, selecione as seguintes opções:
 3. **Would you like to use Tailwind CSS?** `Yes` *(Instala o Tailwind CSS v4 com motor Oxide de alta velocidade)*
 4. **Would you like your code inside a `src/` directory?** `Yes` *(Organização padrão de mercado)*
 5. **Would you like to use App Router? (recommended)** `Yes` *(Arquitetura moderna do Next.js)*
-6. **Would you like to use Turbopack for `next dev`?** `Yes` *(Compilação local otimizada)*
+6. **Would you like to use Turbopack for `next dev`?** `Yes` *(No Next.js 16, o Turbopack é o motor padrão de alta performance)*
 7. **Would you like to customize the import alias (`@/*` by default)?** `No` *(O padrão `@/*` atende perfeitamente)*
 
 ---
@@ -119,7 +119,7 @@ Com as dependências e o repositório base criados, o foco passa a ser o design 
 
 ```json
 "scripts": {
-  "dev": "next dev --turbopack",
+  "dev": "next dev",
   "build": "next build",
   "start": "next start",
   "lint": "eslint .",

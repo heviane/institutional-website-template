@@ -23,16 +23,18 @@ flowchart LR
 
 Para assegurar uma relação transparente e sem surpresas entre a agência/desenvolvedor e o cliente final, a tabela abaixo mapeia cada serviço utilizado pelo template, seus limites no plano gratuito, gatilhos de upgrade e a respectiva responsabilidade de pagamento:
 
-| Recurso / Serviço | Plano Base Inicial | Limite Gratuito Incluído | Gatilho para Plano Pago | Responsável Financeiro |
-| :--- | :--- | :--- | :--- | :--- |
-| **Registro de Domínio**<br/>*(Registro.br / GoDaddy)* | Pago pelo cliente | Não possui plano gratuito | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`) | **Cliente** (titularidade e dados cadastrais próprios) |
-| **Hospedagem & CDN (Vercel)** | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento) | **Cliente** (conta mantida no nome da empresa do cliente) |
-| **Hospedagem & CDN (Cloudflare Pages)**<br/>*(Alternativa Arquitetural)* | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** |
-| **E-mails Transacionais (Resend)** | Gratuito | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia** | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês) | **Cliente** |
-| **Proteção Anti-Spam (Cloudflare Turnstile)** | Gratuito | Ilimitado para a esmagadora maioria de sites institucionais | Planos enterprise com SLA dedicado | **Cliente** |
-| **Rate Limiting em Produção (Upstash Redis)** | Serverless Free | Até **10.000 comandos/dia** com 256 MB de memória | Ultrapassar 10.000 requisições/dia (modelo Pay-as-you-go centavos/100k) | **Cliente** |
-| **Gestão de Conteúdo (Keystatic Cloud)** | Gratuito | Até **3 editores** por projeto com commits automáticos | Necessidade de mais de 3 editores simultâneos | **Cliente** |
-| **Armazenamento de Mídia** | Repositório Git (Gratuito) | Até **1 GB** recomendado no GitHub sem lentidão de clone | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente** |
+| Recurso / Serviço | Plano Base Inicial | Limite Gratuito Incluído | Gatilho para Plano Pago | Responsável Financeiro | Aferido em |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **Registro de Domínio**<br/>*(Registro.br / GoDaddy)* | Pago pelo cliente | Não possui plano gratuito | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`) | **Cliente** (titularidade e dados cadastrais próprios) | Out/2026 |
+| **Hospedagem & CDN (Vercel)** | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento) | **Cliente** (conta mantida no nome da empresa do cliente) | Out/2026 |
+| **Hospedagem & CDN (Cloudflare Pages)**<br/>*(Alternativa Arquitetural)* | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** | Out/2026 |
+| **E-mails Transacionais (Resend)** | Gratuito | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia** | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês) | **Cliente** | Out/2026 |
+| **Proteção Anti-Spam (Cloudflare Turnstile)** | Gratuito | Ilimitado para a esmagadora maioria de sites institucionais | Planos enterprise com SLA dedicado | **Cliente** | Out/2026 |
+| **Rate Limiting em Produção (Upstash Redis)** | Serverless Free | Até **10.000 comandos/dia**, 256 MB de dados e até 100 conexões simultâneas | Ultrapassar 10.000 comandos/dia (Pay-as-you-go ~US$ 0,20 por 100k comandos) | **Cliente** | Out/2026 |
+| **Gestão de Conteúdo (Keystatic Cloud)** | Gratuito | Até **3 editores** por projeto com commits automáticos | Necessidade de mais de 3 editores simultâneos | **Cliente** | Out/2026 |
+| **Armazenamento de Mídia** | Repositório Git (Gratuito) | Até **1 GB** recomendado no GitHub sem lentidão de clone | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente** | Out/2026 |
+
+> 💡 **Nota sobre Limites e Tarifas:** Os limites de planos gratuitos e políticas comerciais de serviços SaaS (Vercel, Resend, Upstash, Cloudflare) estão sujeitos a alterações periódicas por seus fornecedores. Consulte as tabelas oficiais de preços vigentes ao iniciar cada novo projeto de cliente.
 
 > ℹ️ **Nota sobre Cloudflare Pages:** Embora o plano gratuito da Cloudflare permita uso comercial, rodar Next.js com App Router, Server Actions e Keystatic na Cloudflare exige adaptação de runtime (`@cloudflare/next-on-pages` ou OpenNext), limites de Edge isolates e loader específico para imagens. Para o MVP, a **Vercel é a plataforma de referência oficial**, e a implantação na Cloudflare é mantida como alternativa arquitetural a ser conduzida via guia técnico dedicado.
 
@@ -106,12 +108,12 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
   - Adicionar o domínio raiz (`cliente.com.br`) e o subdomínio canônico (`www.cliente.com.br`).
   - Configurar o redirecionamento automático (ex.: redirecionar `cliente.com.br` para `www.cliente.com.br`).
 - [ ] **3.3. Configurar Apontamentos DNS (no Registro.br, Cloudflare DNS ou GoDaddy):**
-  - Inserir os registros apontando para a rede de borda da Vercel:
+  - ⚠️ **Importante:** Copie **SEMPRE** os valores exatos exibidos na aba **Settings** > **Domains** do seu projeto na Vercel, pois a plataforma pode fornecer endereços Anycast dedicados ou CNAMEs específicos. Os valores padrão de referência são:
 
-  | Tipo | Nome / Host | Valor / Destino | TTL |
+  | Tipo | Nome / Host | Valor / Destino (Padrão de Referência) | TTL |
   | :--- | :--- | :--- | :--- |
-  | **A** | `@` (raiz) | `76.76.21.21` | 3600 (1h) |
-  | **CNAME** | `www` | `cname.vercel-dns.com.` | 3600 (1h) |
+  | **A** | `@` (raiz) | `76.76.21.21` *(ou IP específico gerado no painel)* | 3600 (1h) |
+  | **CNAME** | `www` | `cname.vercel-dns.com.` *(ou CNAME específico do projeto)* | 3600 (1h) |
 
 - [ ] **3.4. Validar Emissão de Certificado SSL/TLS:**
   - Aguardar a propagação do DNS e verificar se o status do domínio na Vercel exibe **Valid Configuration** e o cadeado HTTPS está ativo no navegador.
@@ -124,16 +126,11 @@ Conforme [ADR 0003](adr/0003-estrategia-de-formularios.md), formulários institu
 
 - [ ] **4.1. Criar Domínio no Resend:**
   - No painel do [Resend](https://resend.com/), vá em **Domains** > **Add Domain**.
-  - Recomendado: usar o domínio principal `cliente.com.br` ou subdomínio dedicado `notificacoes.cliente.com.br`.
-- [ ] **4.2. Inserir Registros DNS Fornecidos pelo Resend:**
-  - [ ] **DKIM (Assinatura Criptográfica):** Registro `TXT` ou `CNAME` com nome `resend._domainkey`
-  - [ ] **SPF (Autorização de Envio):** Registro `TXT` com valor:
-
-    ```text
-    v=spf1 include:amazonses.com ~all
-    ```
-
-    *(Ajuste caso o cliente já tenha SPF existente do Google Workspace/Microsoft 365, combinando os includes).*
+  - Recomendado: cadastrar o domínio principal `cliente.com.br` (o Resend gerará automaticamente o subdomínio técnico de envio) ou subdomínio dedicado `notificacoes.cliente.com.br`.
+- [ ] **4.2. Inserir os Registros DNS Exatos Fornecidos pelo Resend:**
+  - ⚠️ **Regra de Ouro:** Copie **SEMPRE os valores exatos gerados pelo painel do Resend**. Não insira registros SPF genéricos na raiz por conta própria, pois o Resend opera via subdomínio dedicado de envio (ex.: `send.cliente.com.br` ou `bounces.cliente.com.br`) para **não conflitar** com os registros MX corporativos do cliente (como Google Workspace ou Microsoft 365).
+  - [ ] **DKIM (Assinatura Criptográfica):** Registro `TXT` ou `CNAME` gerado pelo Resend (ex.: `resend._domainkey`).
+  - [ ] **SPF / Return-Path:** Registro `MX` e `TXT` no subdomínio de envio informado pelo Resend (ex.: `bounces.cliente.com.br`).
   - [ ] **DMARC (Política de Alinhamento):** Adicionar registro `TXT` no host `_dmarc.cliente.com.br`:
 
     ```text
