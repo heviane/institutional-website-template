@@ -31,6 +31,7 @@ Decidimos implementar uma infraestrutura integrada de garantia da qualidade (*Co
 ### 2.2. Suíte de Testes Automatizados no Código (Planejado para Implementação na Fase 2)
 Adotamos o **Vitest** como o executor padrão de testes em substituição ao Jest para ativação assim que o código Next.js for criado:
 * **Justificativa:** Integração nativa com ESM e TypeScript, execução instantânea e compatibilidade com a API do Jest.
+* **Metodologia de Execução (TDD - Test-Driven Development):** Para módulos de lógica crítica (schemas Zod, validação de ambiente em `src/env.ts` e Server Actions), a escrita do teste unitário precede a implementação do código produtivo (ciclo *Red-Green-Refactor*), garantindo convergência estrita com os contratos especificados em `specs/` e prevenindo que testes sejam moldados para mascarar implementações imperfeitas.
 * **Escopo Estratégico de Testes:**
   1. **Integridade de Schemas (Zod):** Validações de e-mail, telefone e consentimento obrigatório da LGPD.
   2. **Configuração Global (`siteConfig`):** Testes unitários garantindo que os campos mandatórios (nome, contatos, CNPJ, DPO) estão presentes e válidos.

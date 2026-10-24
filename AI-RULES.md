@@ -18,7 +18,7 @@ Todo código ou especificação gerada por IA neste repositório deve respeitar 
 1. **Simplicidade antes de Complexidade:** Nenhuma abstração, padrão indireto ou dependência externa deve ser introduzida sem necessidade objetiva e benefício concreto comprovado.
 2. **Segurança por Padrão (*Security by Design*):** Toda entrada de usuário deve ser tratada como não confiável com validação estrita no servidor (Zod). Segredos e chaves de API nunca devem alcançar bundles de cliente, logs ou commits.
 3. **Acessibilidade Inegociável (WCAG 2.1 AA):** Acessibilidade não é polimento tardio; é requisito de arquitetura desde o primeiro componente, validada continuamente via `vitest-axe` e suporte total a navegação por teclado.
-4. **Testabilidade Obrigatória:** Funcionalidades críticas (schemas, regras de negócio e Server Actions) devem ser estruturadas de modo desacoplado para viabilizar testes unitários e de integração confiáveis com *mocks*.
+4. **Testabilidade Obrigatória e Prática de TDD:** Funcionalidades críticas (schemas Zod, regras de negócio, validação de ambiente e Server Actions) devem ser estruturadas de modo desacoplado para viabilizar testes unitários e de integração confiáveis com *mocks*. Para essas camadas lógicas, a IA deve adotar o ciclo TDD (*Red-Green-Refactor*), criando os testes antes da implementação em `src/`.
 5. **Reprodutibilidade em Clone Limpo:** A instalação de dependências (`npm ci`), compilação (`npm run build`) e testes (`npm test`) devem ser rigorosamente determinísticos a partir de um repositório clonado do zero, ancorados em `package-lock.json`.
 6. **Rastreabilidade e Decisões Explícitas:** Todo código gerado deve atender a uma especificação em [`specs/`](specs/) ou a um ADR aprovado em [`docs/adr/`](docs/adr/), sem mudanças de contrato ou escopo não documentadas.
 7. **Mitigação Realista vs. Afirmações Absolutas:** Não presumir imunidade matemática ou conformidade cega; utilizar barreiras defensivas em camadas, monitoramento contínuo e procedimentos claros de contingência.
@@ -31,6 +31,12 @@ Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar
 * **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos, limites e critérios objetivos de aceitação.
 * **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
 * **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
+
+#### 🧪 Execução de Tarefas com TDD (Red-Green-Refactor)
+Para tarefas de código que envolvem lógica de validação (schemas Zod), variáveis de ambiente (`env.ts`), utilitários de negócio e Server Actions, a IA deve aplicar o ciclo TDD:
+1. **🔴 Red (Teste Primeiro):** Escrever ou atualizar o arquivo de teste unitário (`*.test.ts`) expressando os requisitos do contrato definido em `plan.md`. Executar `npm test` para certificar que o teste falha pelas razões esperadas antes da implementação.
+2. **🟢 Green (Implementação Mínima):** Desenvolver o código estritamente necessário em `src/` para fazer a suíte de testes passar no Vitest.
+3. **🔵 Refactor (Qualidade & Limpeza):** Refatorar para atender aos Quality Gates (eliminar código duplicado, garantir tipagem estrita no TypeScript e acessibilidade no `vitest-axe`) mantendo todos os testes verdes.
 
 ---
 
@@ -96,6 +102,8 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 6. **NUNCA recomendar merge de históricos desconectados como procedimento padrão:** O comando `git merge --allow-unrelated-histories` é experimental; atualizações do template devem priorizar releases e patches cirúrgicos (`cherry-pick`) em branch isolada ([ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
 7. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: *"mitigação de abuso"*, *"metas planejadas"*), nunca *"100% blindado"* ou *"imunidade absoluta"*.
 8. **NUNCA manter blocos extensos de código duplicados na documentação após sua implementação em `src/`:** A documentação pós-implementação deve focar no *porquê*, arquitetura, regras de negócio e referenciar os arquivos reais via links, combatendo a deterioração da documentação (*doc rot*).
+9. **NUNCA ajustar testes apenas para forçar aprovação de código defeituoso:** Testes automatizados expressam os critérios objetivos de aceitação do `spec.md`. Se um teste falhar, corrija a implementação em `src/`, nunca fragilize as asserções do teste para mascarar falhas.
+10. **NUNCA manter código morto ou comentado (*Zombie Code*):** O histórico do Git é o arquivo definitivo. Trechos depreciados, rascunhos comentados ou `TODOs` órfãos devem ser excluídos.
 
 ---
 
