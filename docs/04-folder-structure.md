@@ -12,6 +12,7 @@ institutional-website-template/
 │   ├── ISSUE_TEMPLATE/              # Modelos para abertura de issues
 │   ├── workflows/                   # Pipelines do GitHub Actions
 │   │   └── ci.yml                   # Pipeline de CI (Lint, Typecheck, Test, Build)
+│   ├── CODEOWNERS                   # Titularidade e revisão de código por diretório
 │   ├── dependabot.yml               # Monitoramento semanal de dependências
 │   └── PULL_REQUEST_TEMPLATE.md     # Modelo padrão para Pull Requests
 │
@@ -96,9 +97,13 @@ institutional-website-template/
 │
 ├── .editorconfig                    # Padronização de indentação e quebras de linha
 ├── .env.example                     # Modelo documentado de variáveis de ambiente
+├── .gitattributes                   # Normalização canônica de quebras de linha (LF)
 ├── .gitignore                       # Arquivos e pastas excluídos do Git
 ├── .nvmrc                           # Versão LTS travada do Node.js (24)
+├── .prettierrc                      # Configuração de formatação e ordenação do Tailwind
 ├── AI-RULES.md                      # Diretrizes canônicas para desenvolvimento assistido por IA
+├── CHANGELOG.md                     # Histórico estruturado de mudanças (Keep a Changelog)
+├── CONTRIBUTING.md                  # Guia de contribuição, padrões SDD e Quality Gates
 ├── eslint.config.mjs                # Configuração do ESLint 9 (Flat Config)
 ├── keystatic.config.ts              # Definição de schemas e coleções do Keystatic
 ├── LICENSE                          # Licença do projeto (MIT)

@@ -14,7 +14,13 @@ Descreva de forma clara e concisa o que foi implementado, refatorado ou corrigid
 
 ## 🚦 Quality Gates (Verificação Obrigatória do CI)
 
-Marque os critérios técnicos atendidos antes de solicitar revisão:
+Execute o comando unificado localmente antes de solicitar revisão:
+
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+Marque os critérios técnicos atendidos:
 
 * [ ] `npm run lint` executado com zero erros de ESLint.
 * [ ] `npm run typecheck` executado com zero erros de tipagem TypeScript.

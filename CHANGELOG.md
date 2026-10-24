@@ -1,0 +1,43 @@
+# Registro de Alterações (Changelog)
+
+Todas as mudanças relevantes deste projeto serão documentadas neste arquivo.
+
+O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)  
+e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+
+---
+
+## [Unreleased]
+
+### Planejado para a Fase 2 (Core & MVP)
+* Bootstrap do Next.js 16 com TypeScript, React 19 e Tailwind CSS v4.
+* Componentes de interface baseados em Shadcn/ui e Radix UI (WCAG 2.1 AA).
+* Gestão de conteúdo via Keystatic CMS (Markdown/JSON Git-based).
+* Server Action de contato com envio via Resend e tripla barreira anti-spam.
+
+---
+
+## [0.1.0] - 2026-10-24
+
+### Fase 1: Arquitetura, Governança e Spec-Driven Development (Concluída)
+
+#### Adicionado
+* **Governança Canônica:** Criação do `AI-RULES.md` contendo a Constituição de Engenharia, 9 princípios inegociáveis, restrições negativas, ciclo TDD e dicionário canônico.
+* **Instruções para Agentes de IA:** Configuração de ponteiros universais em `AGENTS.md`, `.cursorrules`, `CLAUDE.md` e `.github/copilot-instructions.md`.
+* **Decisões de Arquitetura (ADRs):** Formalização de 11 Architectural Decision Records (`0001` a `0011`) cobrindo Next.js 16, Keystatic CMS, Server Actions, Tailwind v4, hospedagem na Vercel, mídia e CMS Cloud, conformidade LGPD, Vitest + axe-core, headers de segurança HTTP com CSP Report-Only, estratégia de release e tripla camada anti-spam.
+* **Documentação Técnica Canônica (`docs/`):**
+  * `01-architecture-overview.md` (visão geral de arquitetura e pilares).
+  * `02-environment-setup.md` (guia de setup e padrões de código).
+  * `03-project-roadmap.md` (roadmap, marcos e critérios de aceitação).
+  * `04-folder-structure.md` (mapa de diretórios e zonas de manutenção).
+  * `05-keystatic-content-model.md` (modelagem de coleções do CMS e controle de rascunhos).
+  * `06-brand-theming-guide.md` (guia de personalização de marca e cores com OKLCH).
+  * `07-client-onboarding-checklist.md` (checklist de onboarding, DNS e matriz financeira).
+  * `08-architecture-review-phase1.md` (encerramento e homologação da Fase 1).
+* **Automação de CI & Qualidade:**
+  * Workflow de integração contínua (`.github/workflows/ci.yml`) configurado com Node.js 24 LTS, `permissions: contents: read` e validação estrita de lockfile.
+  * Monitoramento de dependências automatizado via Dependabot agrupado (`.github/dependabot.yml`).
+  * Modelos de Issues padronizados (`.github/ISSUE_TEMPLATE/`) e Pull Request template (`.github/PULL_REQUEST_TEMPLATE.md`).
+  * Governança de segurança (`SECURITY.md`) com suporte a GitHub Private Vulnerability Reporting.
+  * Padronização de ambiente e quebras de linha (`.editorconfig`, `.gitattributes`, `.prettierrc`, `.nvmrc`).
+  * Especificação formal da Feature 001 em `specs/001-project-bootstrap/` (`spec.md`, `plan.md`, `tasks.md`).

@@ -1,0 +1,10 @@
+# Regra global de titularidade e revisão de código
+* @heviane
+
+# Esteira de CI/CD e automações
+/.github/ @heviane
+
+# Governança, arquitetura e especificações SDD
+/docs/ @heviane
+/specs/ @heviane
+/AI-RULES.md @heviane
