@@ -26,6 +26,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Criação do script `scripts/audit-docs.mjs` (`npm run audit:docs`) para validação estrita de links internos, sincronização da árvore de arquivos e conformidade com o Princípio 9.
   * Integração do Quality Gate de documentação no pipeline do GitHub Actions (`.github/workflows/ci.yml`).
   * Atualização de `AGENTS.md`, `CONTRIBUTING.md` e `PULL_REQUEST_TEMPLATE.md` instituindo o portão documental obrigatório pós-feature.
+* **Experiência do Desenvolvedor (DX) & Automação de Verificação:**
+  * Criação do script unificado `npm run verify` no `package.json` para encadeamento de todos os Quality Gates locais.
+  * Inclusão do badge dinâmico do GitHub Actions CI (`CI Quality Gates`) no `README.md`.
 
 ### Planejado para a Fase 2 (Core & MVP)
 * Componentes de interface baseados em Shadcn/ui e Radix UI (WCAG 2.1 AA).

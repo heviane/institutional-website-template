@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "audit:docs": "node scripts/audit-docs.mjs"
+    "audit:docs": "node scripts/audit-docs.mjs",
+    "verify": "npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
     "clsx": "^2.1.1",

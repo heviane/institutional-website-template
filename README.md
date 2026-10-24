@@ -6,6 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Shadcn/ui](https://img.shields.io/badge/Shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui)](https://ui.shadcn.com/)
+[![CI Quality Gates](https://img.shields.io/github/actions/workflow/status/heviane/institutional-website-template/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI%20Quality%20Gates)](https://github.com/heviane/institutional-website-template/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Fase_2_Em_Andamento-yellow?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
 
@@ -105,10 +106,14 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=seu_site_key_aqui
 TURNSTILE_SECRET_KEY=sua_secret_key_aqui
 ```
 
-### 4. Executando o Servidor de Desenvolvimento
+### 4. Executando o Servidor de Desenvolvimento e Verificação
 
 ```bash
+# Iniciar o servidor local de desenvolvimento
 npm run dev
+
+# Executar todos os Quality Gates de uma só vez (Auditoria, Lint, Typecheck, Testes e Build)
+npm run verify
 ```
 
 Acesse `http://localhost:3000` no seu navegador para ver a aplicação em execução.
