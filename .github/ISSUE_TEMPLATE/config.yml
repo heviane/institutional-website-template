@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 🔒 Reportar Vulnerabilidade de Segurança
-    url: https://github.com/heviane/institutional-website-template/security/policy
-    about: Por favor, consulte a nossa política de segurança (SECURITY.md) para divulgação responsável.
+  - name: 🔒 Reportar Vulnerabilidade de Segurança (Privado)
+    url: https://github.com/heviane/institutional-website-template/security/advisories/new
+    about: Utilize o Private Vulnerability Reporting do GitHub para envio confidencial de falhas.
   - name: 💬 Discussões e Dúvidas Gerais
     url: https://github.com/heviane/institutional-website-template/discussions
     about: Dúvidas sobre customização de clientes, ideias ou melhores práticas com o template.

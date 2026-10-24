@@ -19,7 +19,15 @@ Atualmente fornecemos correções e atualizações de segurança para as seguint
 
 Se você identificou uma falha de segurança, vulnerabilidade ou vazamento potencial neste template, **por favor, NÃO abra uma Issue pública no GitHub**. Relatórios públicos expõem todos os sites de clientes derivados deste template antes que uma correção possa ser disponibilizada.
 
-### Procedimento para Envio Seguro:
+### 1. Canal Oficial: Private Vulnerability Reporting (Recomendado)
+A forma mais segura e ágil de reportar uma falha é abrindo um **Security Advisory Privado** no GitHub:
+👉 **[Reportar Vulnerabilidade de Segurança Confidencial](https://github.com/heviane/institutional-website-template/security/advisories/new)**
+
+* O relatório permanece estritamente confidencial entre você e os mantenedores do projeto.
+* Permite colaborar em branch privada de correção e credita a autoria da descoberta na emissão da CVE/advisory.
+
+### 2. Canal Alternativo: E-mail de Segurança
+Caso não possua conta no GitHub ou prefira contato direto:
 1. Envie um e-mail detalhado para: **`heviane@gmail.com`**
 2. No assunto, inclua: `[SEGURANÇA] - Vulnerabilidade identificada no institutional-website-template`
 3. No corpo da mensagem, descreva:

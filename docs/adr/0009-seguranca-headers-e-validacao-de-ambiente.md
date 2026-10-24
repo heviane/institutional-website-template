@@ -35,6 +35,7 @@ Configuramos *Security Headers* obrigatórios aplicados a todas as rotas da apli
 * **`Referrer-Policy: strict-origin-when-cross-origin`:** Garante que dados confidenciais na URL não vazem ao navegar para links externos.
 * **`Permissions-Policy`:** Desativa permissões de hardware desnecessárias para um site institucional (`camera=(), microphone=(), geolocation=()`).
 * **`X-DNS-Prefetch-Control: on`:** Habilita prefetch controlado de DNS para otimizar velocidade de navegação segura.
+* **`Content-Security-Policy-Report-Only` (Monitoramento Preventivo sem Bloqueios):** Estabelece uma política base de controle de recursos (liberando `'self'`, `challenges.cloudflare.com` para o Turnstile, `data:`, `blob:` e origens HTTPS) em modo *Report-Only*. Essa abordagem atende aos scanners de conformidade de segurança (como Mozilla Observatory e SecurityHeaders) e viabiliza a auditoria de scripts sem o risco operacional de quebrar widgets ou fontes personalizadas de novos clientes.
 
 ### 2.3. Governança e Divulgação Responsável (`SECURITY.md`)
 Instituímos o arquivo `SECURITY.md` na raiz do repositório, definindo versões suportadas e canal seguro para reporte privado de falhas, protegendo todos os sites derivados deste template.

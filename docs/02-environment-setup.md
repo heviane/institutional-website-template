@@ -159,6 +159,21 @@ import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
 
+// Content Security Policy em modo Report-Only:
+// Permite auditar e identificar violações de segurança no console/relatórios sem bloquear
+// preventivamente integrações dinâmicas (Turnstile, fontes do Google, analytics e CDNs de mídia).
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data: https:;
+  font-src 'self' data:;
+  frame-src 'self' https://challenges.cloudflare.com;
+  connect-src 'self' https://challenges.cloudflare.com;
+`
+  .replace(/\s{2,}/g, " ")
+  .trim();
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
   // HSTS conservador ativo apenas em produção (sem includeSubDomains/preload para não afetar outros subdomínios do cliente)
@@ -169,6 +184,7 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+  { key: "Content-Security-Policy-Report-Only", value: cspHeader },
 ];
 
 const nextConfig: NextConfig = {
@@ -351,13 +367,16 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
     };
   }
 
+  // Higienização contra Email Header Injection (remoção de caracteres de controle CR/LF)
+  const sanitizedSubjectName = name.replace(/[\r\n]/g, "").trim();
+
   // 7. Envio via Resend API com tratamento gracioso de falhas e contingência de cota
   try {
     const { error } = await resend.emails.send({
       from: serverEnv.RESEND_FROM_EMAIL,
       to: serverEnv.CONTACT_EMAIL_TO,
       replyTo: email,
-      subject: `[Contato Site] Mensagem de ${name}`,
+      subject: `[Contato Site] Mensagem de ${sanitizedSubjectName}`,
       text: `Nome: ${name}\nE-mail: ${email}\nTelefone: ${phone ?? "Não informado"}\n\nMensagem:\n${message}`,
     });
 

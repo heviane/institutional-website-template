@@ -12,6 +12,10 @@ updates:
     commit-message:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
 
   # Monitoramento de versões das GitHub Actions (.github/workflows)
   - package-ecosystem: "github-actions"
@@ -24,4 +28,8 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "ci(deps)"
+    groups:
+      actions:
+        patterns:
+          - "*"
 
