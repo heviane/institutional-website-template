@@ -11,9 +11,9 @@
 3. **Tratamento dos ADRs como Leis do Sistema:** As decisões registradas nos Architectural Decision Records ([`docs/adr/`](docs/adr/)) têm força mandatória. Nenhuma IA tem autorização para violar um ADR aprovado sem solicitação explícita e justificada do desenvolvedor.
 4. **Protocolo "Stop-and-Ask" para Casos Ambíguos:** Se houver conflito, divergência ou lacuna técnica entre uma instrução do desenvolvedor e as especificações em [`docs/`](docs/) (ou entre diferentes documentos), a IA **DEVE** pausar a geração de código e solicitar esclarecimentos objetivos antes de prosseguir, sendo terminantemente proibido assumir premissas ou padrões arbitrários por conta própria.
 
-### 🏛️ Constituição de Engenharia (8 Princípios Inegociáveis)
+### 🏛️ Constituição de Engenharia (9 Princípios Inegociáveis)
 
-Todo código ou especificação gerada por IA neste repositório deve respeitar integralmente estes oito princípios:
+Todo código ou especificação gerada por IA neste repositório deve respeitar integralmente estes nove princípios:
 
 1. **Simplicidade antes de Complexidade:** Nenhuma abstração, padrão indireto ou dependência externa deve ser introduzida sem necessidade objetiva e benefício concreto comprovado.
 2. **Segurança por Padrão (*Security by Design*):** Toda entrada de usuário deve ser tratada como não confiável com validação estrita no servidor (Zod). Segredos e chaves de API nunca devem alcançar bundles de cliente, logs ou commits.
@@ -23,6 +23,7 @@ Todo código ou especificação gerada por IA neste repositório deve respeitar 
 6. **Rastreabilidade e Decisões Explícitas:** Todo código gerado deve atender a uma especificação em [`specs/`](specs/) ou a um ADR aprovado em [`docs/adr/`](docs/adr/), sem mudanças de contrato ou escopo não documentadas.
 7. **Mitigação Realista vs. Afirmações Absolutas:** Não presumir imunidade matemática ou conformidade cega; utilizar barreiras defensivas em camadas, monitoramento contínuo e procedimentos claros de contingência.
 8. **Soberania da Revisão Humana:** Todo código e artefato gerado por IA é tratado como proposta técnica não confiável até a validação formal pelos testes automatizados e aprovação expressa do desenvolvedor.
+9. **Código Real como Única Fonte da Verdade (Anti-Doc Rot):** Trechos extensos de código em `docs/` e `specs/` são permitidos SOMENTE antes da implementação como contratos preliminares ou especificações de design. Uma vez que o código correspondente for implementado e testado em `src/`, os blocos duplicados na documentação devem ser removidos e substituídos por referências diretas para os arquivos reais. O código executável, tipado e testado é a única fonte viva da verdade do sistema.
 
 ### 🔄 Ciclo de Trabalho por Funcionalidade (SDD Lifecycle)
 
@@ -94,6 +95,7 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 5. **NUNCA instalar dependências redundantes:** Sempre verifique se o projeto já não possui a ferramenta necessária antes de sugerir pacotes npm (ex.: use Zod para validação, Vitest para testes, Radix para acessibilidade).
 6. **NUNCA recomendar merge de históricos desconectados como procedimento padrão:** O comando `git merge --allow-unrelated-histories` é experimental; atualizações do template devem priorizar releases e patches cirúrgicos (`cherry-pick`) em branch isolada ([ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
 7. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: *"mitigação de abuso"*, *"metas planejadas"*), nunca *"100% blindado"* ou *"imunidade absoluta"*.
+8. **NUNCA manter blocos extensos de código duplicados na documentação após sua implementação em `src/`:** A documentação pós-implementação deve focar no *porquê*, arquitetura, regras de negócio e referenciar os arquivos reais via links, combatendo a deterioração da documentação (*doc rot*).
 
 ---
 
