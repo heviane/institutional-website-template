@@ -18,18 +18,20 @@ institutional-website-template/
 ├── content/                         # Armazenamento de dados do Keystatic (Markdown/JSON)
 │   ├── posts/                       # Artigos do blog (.mdoc / .json)
 │   ├── services/                    # Itens de serviços oferecidos
+│   ├── faqs/                        # Perguntas frequentes (FAQ)
 │   ├── testimonials/                # Depoimentos de clientes
 │   └── singletons/                  # Conteúdos de páginas fixas (Home, Sobre)
 │
 ├── docs/                            # Documentação técnica e governança do projeto
-│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0010)
+│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0011)
 │   ├── 01-architecture-overview.md  # Visão geral de requisitos e decisões
 │   ├── 02-environment-setup.md      # Guia de setup local e padrões de código
 │   ├── 03-project-roadmap.md        # Roadmap e fases de desenvolvimento
 │   ├── 04-folder-structure.md       # Este documento (mapa de pastas)
 │   ├── 05-keystatic-content-model.md# Modelagem de schemas e coleções do CMS
 │   ├── 06-brand-theming-guide.md    # Guia prático de personalização de marcas
-│   └── 07-client-onboarding-checklist.md # Checklist de entrega e Go-Live
+│   ├── 07-client-onboarding-checklist.md # Checklist de entrega e Go-Live
+│   └── 08-architecture-review-phase1.md # Revisão arquitetural e encerramento da Fase 1
 │
 ├── public/                          # Arquivos estáticos servidos diretamente
 │   ├── images/                      # Imagens estáticas e mídias institucionais
@@ -83,6 +85,7 @@ institutional-website-template/
 │   │   ├── schemas/                 # Schemas de validação Zod
 │   │   │   └── contact.ts           # Schema do formulário e opt-in LGPD
 │   │   ├── keystatic.ts             # Leitor de dados estáticos do Keystatic (Reader API)
+│   │   ├── rate-limit.ts            # Rate limiting com hash de IP e TTL (Upstash / Map)
 │   │   ├── resend.ts                # Instância inicializada do cliente Resend
 │   │   └── utils.ts                 # Função utilitária cn() do Shadcn/ui
 │   │
@@ -94,14 +97,18 @@ institutional-website-template/
 ├── .editorconfig                    # Padronização de indentação e quebras de linha
 ├── .env.example                     # Modelo documentado de variáveis de ambiente
 ├── .gitignore                       # Arquivos e pastas excluídos do Git
-├── .nvmrc                           # Versão LTS travada do Node.js (22)
+├── .nvmrc                           # Versão LTS travada do Node.js (24)
+├── AI-RULES.md                      # Diretrizes canônicas para desenvolvimento assistido por IA
+├── eslint.config.mjs                # Configuração do ESLint 9 (Flat Config)
 ├── keystatic.config.ts              # Definição de schemas e coleções do Keystatic
 ├── LICENSE                          # Licença do projeto (MIT)
+├── lighthouserc.json                # Metas e orçamentos de performance do Lighthouse CI
 ├── next.config.ts                   # Configurações do Next.js e Security Headers
 ├── package.json                     # Metadados e dependências do projeto
 ├── README.md                        # Apresentação do projeto e guia de uso
 ├── SECURITY.md                      # Política de segurança e reporte responsável
-└── tsconfig.json                    # Configurações do TypeScript e path aliases (@/*)
+├── tsconfig.json                    # Configurações do TypeScript e path aliases (@/*)
+└── vitest.config.ts                 # Configuração da suíte de testes Vitest (jsdom e vitest-axe)
 ```
 
 ---

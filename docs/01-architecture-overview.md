@@ -39,7 +39,7 @@ Criar um template modular, de fácil personalização e pronto para reaproveitam
 
 * **Mínimo Essencial do MVP (Fase 2):**
   * **Next.js Metadata API:** Configuração centralizada de metadados dinâmicos e estáticos (`title`, `description`, `canonical`, `keywords`) sincronizados com `src/config/site.ts`.
-  * **Open Graph e Twitter Cards:** Imagens sociais (`/public/og-image.jpg`) pré-configuradas para compartilhamento rico.
+  * **Open Graph e Twitter Cards:** Imagens sociais (`/public/og.jpg`) pré-configuradas para compartilhamento rico.
   * **Sitemap XML (`src/app/sitemap.ts`):** Geração automática de `/sitemap.xml` cobrindo todas as rotas estáticas e os artigos publicados via Keystatic.
   * **Robots TXT (`src/app/robots.ts`):** Regras de indexação para robôs de busca e apontamento do sitemap.
   * **Schema.org JSON-LD (Essencial):** Injeção estruturada dos tipos `Organization` e `WebSite` no `<head>` do layout raiz para enriquecer snippets de busca do Google.

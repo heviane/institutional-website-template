@@ -37,38 +37,63 @@ No Tailwind v4, toda a paleta de cores reside nas variáveis CSS nativas gerenci
 | `--radius` | Arredondamento dos cantos de botões e cards | `0.5rem` (arredondado) ou `0rem` (reto) |
 
 #### 2. Como Aplicar a Cor do Cliente:
-Basta converter a cor hexadecimal fornecida no manual de marca do cliente para o formato HSL ou OKLCH e atualizar o bloco raiz no `globals.css`:
+Basta converter a cor hexadecimal fornecida no manual de marca do cliente para o formato `oklch()` (padrão nativo do Tailwind v4 e Shadcn/ui) ou `hsl()` completo, e atualizar as variáveis em `src/app/globals.css`:
 
 ```css
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    /* Exemplo: Cliente da área de Saúde (Verde Esmeralda) */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
 
-    /* Cor Principal da Marca: #059669 -> HSL: 160 84% 39% */
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
+:root {
+  /* Exemplo: Cliente da área de Saúde (Verde Esmeralda) */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
 
-    --secondary: 160 20% 96%;
-    --secondary-foreground: 160 84% 20%;
+  /* Cor Principal da Marca: #059669 -> OKLCH */
+  --primary: oklch(0.6 0.18 160);
+  --primary-foreground: oklch(0.985 0 0);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+  --secondary: oklch(0.97 0.02 160);
+  --secondary-foreground: oklch(0.205 0.05 160);
 
-    --border: 214.3 31.8% 91.4%;
-    --radius: 0.5rem;
-  }
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
 
-  .dark {
-    /* Ajustes automáticos para Modo Escuro */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --primary: 160 70% 45%;
-    --primary-foreground: 0 0% 100%;
-  }
+  --accent: oklch(0.97 0.02 160);
+  --accent-foreground: oklch(0.205 0.05 160);
+
+  --border: oklch(0.922 0 0);
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Ajustes automáticos para Modo Escuro */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.65 0.18 160);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0.05 160);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0.05 160);
+  --accent-foreground: oklch(0.985 0 0);
+  --border: oklch(0.269 0 0);
 }
 ```
 

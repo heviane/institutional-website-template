@@ -14,7 +14,7 @@ Após a conclusão do planejamento conceitual, o primeiro passo é erguer a infr
 
 ### Pré-requisitos de Ambiente
 
-* **Node.js:** Versão `24.x` (Active LTS padrão oficial) ou `>= 22.x` (Maintenance LTS mínimo suportado). O Node.js 20 alcançou o fim de vida útil (EOL) e não é suportado. O repositório inclui o arquivo [`.nvmrc`](.nvmrc) para sincronizar a versão do Node via `nvm use`.
+* **Node.js:** Versão `24.x` (Active LTS padrão oficial travado no [`.nvmrc`](.nvmrc) e no CI). Versões legadas (Node 20 ou anterior) não são suportadas. O repositório inclui o arquivo [`.nvmrc`](.nvmrc) para sincronizar a versão do Node via `nvm use`.
 * **Gerenciador de Pacotes:** `npm` (padrão) ou `pnpm`.
 * **Git:** Para controle de versão e CI/CD.
 
@@ -393,7 +393,10 @@ import { z } from "zod";
 export const clientEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+  // Keystatic Cloud (Padrão de produção conforme ADR 0006)
   NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
+  // Keystatic Modo GitHub App (Alternativa self-hosted)
+  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: z.string().optional(),
 });
 
 // 2. Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
@@ -435,6 +438,7 @@ export const clientEnv = clientEnvSchema.parse({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   NEXT_PUBLIC_KEYSTATIC_PROJECT: process.env.NEXT_PUBLIC_KEYSTATIC_PROJECT,
+  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG,
 });
 
 // Seguro para Server Components e Server Actions (com runtime guard contra vazamentos para o browser)

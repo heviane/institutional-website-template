@@ -31,11 +31,15 @@ As coleções são conjuntos de itens repetíveis com a mesma estrutura de campo
 | :--- | :--- | :---: | :--- |
 | `title` | `fields.text` | Sim | Título principal do artigo |
 | `slug` | `fields.slug` | Sim | Identificador único de URL amigável gerado do título |
+| `status` | `fields.select` | Sim | Status de publicação (`published` ou `draft`, padrão: `draft`). Permite despublicar conteúdos |
 | `publishedDate` | `fields.date` | Sim | Data de publicação do artigo |
 | `summary` | `fields.text` | Sim | Resumo curto do artigo para listagens e SEO (Meta Description) |
 | `coverImage` | `fields.image` | Não | Imagem de destaque (salva em `public/images/content/posts`) |
 | `author` | `fields.text` | Não | Nome do autor da postagem |
 | `content` | `fields.markdoc` | Sim | Corpo do texto com editor rico WYSIWYG (títulos, links, listas, citações) |
+
+> 💡 **Controle de Publicação e Despublicação:**  
+> Itens com `status: 'draft'` são automaticamente filtrados nas páginas públicas e no sitemap XML (`src/app/sitemap.ts`). Isso permite que o cliente rascunhe postagens ou despublique artigos antigos diretamente no painel do Keystatic sem precisar deletar o arquivo.
 
 ---
 

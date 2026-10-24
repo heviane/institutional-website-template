@@ -59,7 +59,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme`).
   * [ ] Construir layout raiz (`src/app/layout.tsx`) com metadados dinâmicos e componentes acessíveis (`Header`, `Hero`, `Footer`).
 * [ ] **Formulários Transacionais & Anti-Spam:**
-  * [ ] Criar schema de validação com Zod (`src/lib/validations/contact.ts`) com salvaguarda configurável de privacidade.
+  * [ ] Criar schema de validação com Zod (`src/lib/schemas/contact.ts`) com salvaguarda configurável de privacidade.
   * [ ] Implementar componente de formulário com React Hook Form.
   * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
   * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
@@ -75,7 +75,7 @@ Esta fase representa a materialização do template em código, dividida entre a
 #### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído):
 
 * [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env.ts`):**
-  * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas `NEXT_PUBLIC_SITE_URL` e `RESEND_FROM_EMAIL`).
+  * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas variáveis core: `NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL` e `CONTACT_EMAIL_TO`).
   * [ ] Testar build com configuração completa de produção (todas as integrações ativas).
   * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas.
   * [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash em dev) não quebrem o build nem deixem o formulário em estado vulnerável.

@@ -79,14 +79,14 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
   - [ ] Links de redes sociais (LinkedIn, Instagram, Facebook, etc.)
 - [ ] **2.2. Configurar Cores da Marca em `src/app/globals.css`:**
   - Extrair a paleta primária da marca do cliente e substituir as variáveis em `@theme`:
-    - `--color-brand-primary`
-    - `--color-brand-secondary`
-    - `--color-brand-accent`
+    - `--primary` e `--primary-foreground`
+    - `--secondary` e `--secondary-foreground`
+    - `--accent` e `--accent-foreground`
 - [ ] **2.3. Substituir Assets Estáticos em `/public`:**
-  - [ ] `logo.svg` (Logotipo vetorizado em versão clara e escura)
-  - [ ] `favicon.ico` e `favicon.svg` (Ícone de aba)
-  - [ ] `apple-touch-icon.png` (180x180 px para dispositivos iOS)
-  - [ ] `og-image.jpg` (1200x630 px com título, logo e slogan para redes sociais)
+  - [ ] `public/images/brand/logo.svg` e `logo-dark.svg` (Logotipos vetorizados para fundos claro e escuro)
+  - [ ] `public/favicon.ico` e `favicon.svg` (Ícone de aba)
+  - [ ] `public/apple-touch-icon.png` (180x180 px para dispositivos iOS)
+  - [ ] `public/og.jpg` (1200x630 px com título, logo e slogan para redes sociais)
 - [ ] **2.4. Definir Tipografia em `src/app/layout.tsx`:**
   - Ajustar a importação de `next/font/google` com as famílias tipográficas do cliente.
 

@@ -56,7 +56,7 @@ body:
     attributes:
       label: Informações de Ambiente
       description: Versões de Node.js, Sistema Operacional e Navegador utilizados.
-      placeholder: Node.js 22 LTS, Windows 11, Google Chrome 126
+      placeholder: Node.js 24 LTS, Windows 11, Google Chrome 126
     validations:
       required: false
   - type: textarea
