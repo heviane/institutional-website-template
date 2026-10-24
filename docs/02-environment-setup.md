@@ -20,24 +20,16 @@ Após a conclusão do planejamento conceitual, o primeiro passo é erguer a infr
 
 ---
 
-### Passo 1: Inicializar o Next.js na raiz do repositório
+### Passo 1: Inicialização Declarativa do Next.js na Raiz
 
-Execute o criador oficial do Next.js (o ponto `.` final indica a instalação no diretório atual):
+Como este repositório já contém a arquitetura, governança e documentação pré-configuradas na raiz (`AGENTS.md`, `README.md`, `docs/`, `specs/`, `.gitignore`, etc.), a inicialização é feita de forma **declarativa e determinística**, evitando assistentes interativos como `create-next-app` (que conflitam com pastas não-vazias e arriscam sobrescrever arquivos de governança).
+
+O setup declarativo estabelece o `package.json` canônico com dependências travadas e scripts de qualidade, as configurações essenciais (`tsconfig.json`, `next.config.ts`, `eslint.config.mjs`), os utilitários de design system e a estrutura mínima em `src/`:
 
 ```bash
-npx create-next-app@latest .
-# Instala o Next.js 16 (Active LTS oficial) na raiz do repositório
+# Instalação determinística de todas as dependências declaradas no package.json
+npm install
 ```
-
-Durante o assistente interativo, selecione as seguintes opções:
-
-1. **Would you like to use TypeScript?** `Yes` *(Garante tipagem estrita e autocompletar)*
-2. **Would you like to use ESLint?** `Yes` *(Garante padronização e qualidade de código)*
-3. **Would you like to use Tailwind CSS?** `Yes` *(Instala o Tailwind CSS v4 com motor Oxide de alta velocidade)*
-4. **Would you like your code inside a `src/` directory?** `Yes` *(Organização padrão de mercado)*
-5. **Would you like to use App Router? (recommended)** `Yes` *(Arquitetura moderna do Next.js)*
-6. **Would you like to use Turbopack for `next dev`?** `Yes` *(No Next.js 16, o Turbopack é o motor padrão de alta performance)*
-7. **Would you like to customize the import alias (`@/*` by default)?** `No` *(O padrão `@/*` atende perfeitamente)*
 
 ---
 
