@@ -30,35 +30,37 @@ Decidimos implementar uma **arquitetura de defesa anti-spam em três camadas**, 
 ```mermaid
 flowchart TD
     A["Submissão do Formulário"] --> B{"1. Camada Honeypot<br/>(Campo oculto preenchido?)"}
-    B -- "Sim (Bot Simples)" --> C["Descarte Silencioso<br/>(Retorna 200 OK fictício)"]
-    B -- "Não (Humano ou Bot Avançado)" --> D{"2. Camada Cloudflare Turnstile<br/>(Token válido no servidor?)"}
-    D -- "Inválido / Ausente" --> E["Rejeição com Erro 400<br/>('Verificação de segurança falhou')"]
-    D -- "Válido" --> F{"3. Camada Rate Limiting<br/>(Excedeu 5 requisições/hora por IP?)"}
-    F -- "Sim (Abuso de Submissões)" --> G["Bloqueio com Erro 429<br/>('Muitas tentativas. Aguarde 1 hora')"]
-    F -- "Não" --> H["✅ Execução da Server Action<br/>(Validação Zod + Disparo via Resend API)"]
+    B -- "Sim (Bot Simples)" --> C["Descarte Silencioso<br/>(Retorna resposta de sucesso simulada)"]
+    B -- "Não (Humano ou Bot Avançado)" --> D{"2. Camada Rate Limiting<br/>(Excedeu 5 requisições/hora por hash de IP?)"}
+    D -- "Sim (Abuso de Submissões)" --> E["Resposta Tipada de Erro<br/>('Limite temporário atingido')"]
+    D -- "Não" --> F{"3. Validação Zod & Turnstile<br/>(Payload válido e token aprovado?)"}
+    F -- "Inválido / Reprovado" --> G["Resposta Tipada de Erro<br/>('Falha na validação de segurança')"]
+    F -- "Válido" --> H["✅ Execução da Server Action<br/>(Disparo via Resend API com canal WhatsApp de contingência)"]
 ```
 
 ### Detalhamento das Camadas de Proteção:
 
 ### 1. Camada 1: Honeypot Oculto via CSS/Aria
 
-* Inclui um campo de formulário adicional chamado `website` ou `company_fax`.
+* Inclui um campo de formulário adicional chamado `honeypot` (ou campo com rótulo engenhoso como `website`).
 * O campo é completamente invisível para usuários humanos por meio de posicionamento absoluto fora da tela (`position: absolute; left: -9999px; opacity: 0; pointer-events: none;`), com `tabIndex={-1}`, `autoComplete="off"` e `aria-hidden="true"`.
-* *Spambots* ingênuos leem o DOM cru e preenchem todos os campos automaticamente. Se o campo contiver qualquer caractere no momento da submissão na Server Action, a requisição é descartada imediatamente, retornando uma resposta de sucesso simulada para enganar o robô e evitar novas tentativas em lote.
+* *Spambots* ingênuos leem o DOM cru e preenchem todos os campos automaticamente. Se o campo contiver qualquer caractere no momento da submissão na Server Action, a requisição é descartada imediatamente, retornando uma resposta de sucesso simulada (`{ success: true, message: "Mensagem enviada com sucesso!" }`) para despistar o robô e evitar novas tentativas em lote.
 
-### 2. Camada 2: Cloudflare Turnstile (Modo Gerenciado / Invisível)
+### 2. Camada 2: Rate Limiting por Hash Criptográfico de IP (Janela Deslizante com TTL)
+
+* **Ordem de Execução Otimizada:** Executado antes de chamadas de rede externas para economizar recursos e requisições à API do Turnstile e do Resend.
+* **Finalidade e Limites:** Aplica uma política configurável de moderação (padrão de até **5 requisições por hora por visitante**) para conter abusos repetitivos e cliques acidentais originados da mesma máquina/conexão.
+* **Conformidade com LGPD e Zero-Database:** Endereços IP brutos são considerados dados pessoais pela LGPD. Portanto, **endereços IP brutos nunca são persistidos**. O identificador da chave no armazenamento é computado via hash criptográfico unidirecional com salt efêmero (`SHA-256(ip + salt)`) e expiração automática (TTL de 1 hora), assegurando total anonimização e conformidade com a arquitetura Zero-Database.
+* **Estratégia de Armazenamento por Ambiente:**
+  * **Desenvolvimento Local (`npm run dev`):** Utiliza armazenamento volátil em memória (`Map` nativo com TTL) para garantir inicialização rápida e zero atrito sem exigir credenciais externas.
+  * **Produção Serverless / Edge:** Em ambientes como a Vercel, as instâncias de Server Actions são efêmeras, sem estado compartilhado e descartadas a qualquer momento. Um contador em memória RAM local não garante limite global entre diferentes instâncias serverless. Portanto, em produção, é mandatório utilizar armazenamento compartilhado com operações atômicas e expiração TTL via **Upstash Redis** (plano gratuito com até 10.000 requisições/dia, alinhado ao pilar de baixo custo) ou Vercel KV.
+
+### 3. Camada 3: Cloudflare Turnstile (Modo Gerenciado / Invisível)
 
 * Solução de validação de clientes baseada em desafios criptográficos e verificação técnica de características do navegador em tempo de execução (sinais de ambiente e interação não invasiva), **sem gravação de cookies persistentes de rastreamento publicitário** e sem exigir que o usuário resolva quebra-cabeças visuais.
 * O widget gera um token efêmero (`cf-turnstile-response`) no frontend.
 * A Server Action valida esse token diretamente na API da Cloudflare (`https://challenges.cloudflare.com/turnstile/v0/siteverify`) com a chave secreta do cliente antes de acionar a Resend API.
-
-### 3. Camada 3: Rate Limiting por IP (Janela Deslizante Configurável)
-
-* **Finalidade e Limites:** Aplica uma política configurável de moderação (padrão de até **5 requisições por hora por endereço IP**) para conter abusos repetitivos e cliques acidentais originados da mesma máquina/conexão.
-* **Importante (Alinhamento de Escopo):** O rate limiting por IP **não** é uma garantia contra ataques massivos distribuídos (botnets com centenas de IPs rotativos). A contenção real de robôs distribuídos é desempenhada pelas Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
-* **Estratégia de Armazenamento por Ambiente:**
-  * **Desenvolvimento Local (`npm run dev`):** Utiliza armazenamento volátil em memória (`Map` nativo com TTL) para garantir inicialização rápida e zero atrito sem exigir credenciais externas.
-  * **Produção Serverless / Edge:** Em ambientes como a Vercel, as instâncias de Server Actions são efêmeras, sem estado compartilhado e descartadas a qualquer momento. Um contador em memória RAM local não garante limite global entre diferentes instâncias serverless. Portanto, em produção, é mandatório utilizar armazenamento compartilhado com operações atômicas e expiração TTL via **Upstash Redis** (plano gratuito com até 10.000 requisições/dia, alinhado ao pilar de baixo custo) ou Vercel KV.
+* Em ambientes locais de desenvolvimento e CI, o token e a verificação externa admitem bypass controlado caso as chaves não estejam configuradas no `.env.local`. Em produção, a presença das chaves e do token é estritamente exigida no schema e na Server Action.
 
 ### 4. Monitoramento de Cota, Tratamento de Falhas e Procedimento de Contingência
 
@@ -74,7 +76,7 @@ Mesmo com defesa em camadas, nenhuma barreira web garante proteção absoluta co
 
 ### Positivas (Benefícios):
 
-* **Redução Significativa de Abuso e Preservação da Cota:** Mitiga o esgotamento prematuro do limite diário do Resend (100 envios/dia) ao descartar bots simples via Honeypot, filtrar automações via Turnstile e conter envios repetitivos via Rate Limiting.
+* **Redução Significativa de Abuso e Preservação da Cota:** Mitiga o esgotamento prematuro do limite diário do Resend (100 envios/dia) ao descartar bots simples via Honeypot, conter envios repetitivos via Rate Limiting anônimo e filtrar automações via Turnstile.
 * **Minimização de Dados e Finalidade Exclusiva de Segurança:** O Cloudflare Turnstile opera sem cookies de rastreamento publicitário entre domínios e não comercializa dados de visitantes para monetização de anúncios. Os metadados técnicos de requisição e sinais de desafio coletados destinam-se exclusivamente à avaliação de segurança e prevenção a fraudes (legítimo interesse / proteção contra abusos), devendo esse tratamento constar de forma transparente na Política de Privacidade.
 * **Acessibilidade Inclusiva (WCAG 2.1 AA):** O fluxo é 100% transparente para usuários legítimos, sem quebra-cabeças visuais que barram usuários com deficiência.
 * **Impacto Mínimo em Performance:** O script do Turnstile carrega de forma assíncrona (`defer`) e adiciona menos de 20 KB gzipped, mantendo o LCP e INP dentro das metas do Core Web Vitals.
@@ -85,7 +87,7 @@ Mesmo com defesa em camadas, nenhuma barreira web garante proteção absoluta co
 * **Configuração Extra no Onboarding:** Exige criar um widget gratuito no Cloudflare Dashboard e adicionar as variáveis `NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY` para cada cliente.
 * **Dependência Externa de Validação:** Se a API de verificação do Turnstile sofrer indisponibilidade momentânea, envios legítimos podem ser rejeitados temporariamente.
 * **Armazenamento Centralizado para Rate Limit em Produção:** Devido à natureza efêmera e sem estado das funções Serverless, o rate limiting em produção não pode depender de memória local, exigindo credenciais de um banco Redis Serverless compartilhado (Upstash Redis) com expiração atômica.
-* **Limitação contra Botnets Distribuídas:** O bloqueio por IP não protege contra ataques com IPs rotativos massivos; essa responsabilidade recai primordialmente sobre as Camadas 1 (*Honeypot*) e 2 (*Turnstile*).
+* **Limitação contra Botnets Distribuídas:** O bloqueio por IP não protege contra ataques com IPs rotativos massivos; essa responsabilidade recai primordialmente sobre as Camadas 1 (*Honeypot*) e 3 (*Turnstile*).
 
 ---
 

@@ -228,6 +228,7 @@ export type SiteConfig = typeof siteConfig;
 ```typescript
 import { z } from "zod";
 
+// Travado na versão estável Zod 3 (^3.24.x) para compatibilidade com @hookform/resolvers/zod
 export const contactFormSchema = z.object({
   name: z.string().trim().min(2, "O nome deve conter pelo menos 2 caracteres.").max(100, "O nome excede 100 caracteres."),
   email: z.string().trim().email("Insira um e-mail válido.").max(255, "E-mail muito longo."),
@@ -238,8 +239,17 @@ export const contactFormSchema = z.object({
   }),
   // Camada 1: Campo Honeypot (deve estar vazio em envios legítimos)
   honeypot: z.string().max(0, "Tentativa de automação detectada.").optional(),
-  // Camada 2: Token efêmero do Cloudflare Turnstile gerado no frontend
-  turnstileToken: z.string().min(1, "A verificação de segurança é obrigatória."),
+  // Camada 3: Token efêmero do Cloudflare Turnstile gerado no frontend (opcional em dev/test sem chaves)
+  turnstileToken: z.string().optional(),
+}).superRefine((data, ctx) => {
+  // Em produção, a presença do token do Turnstile é obrigatória para combater automações
+  if (process.env.NODE_ENV === "production" && !data.turnstileToken) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["turnstileToken"],
+      message: "A verificação de segurança é obrigatória.",
+    });
+  }
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
@@ -265,10 +275,13 @@ export type ActionResponse = {
 };
 
 // Verificação do token na API do Cloudflare Turnstile
-async function verifyTurnstileToken(token: string, remoteIp: string): Promise<boolean> {
+async function verifyTurnstileToken(token?: string, remoteIp?: string): Promise<boolean> {
   // Bypass gracioso para desenvolvimento local ou CI caso a chave não esteja configurada
   if (process.env.NODE_ENV !== "production" && !serverEnv.TURNSTILE_SECRET_KEY) {
     return true;
+  }
+  if (!token) {
+    return false;
   }
 
   try {
@@ -278,7 +291,7 @@ async function verifyTurnstileToken(token: string, remoteIp: string): Promise<bo
       body: new URLSearchParams({
         secret: serverEnv.TURNSTILE_SECRET_KEY ?? "",
         response: token,
-        remoteip: remoteIp,
+        remoteip: remoteIp ?? "",
       }),
     });
 
@@ -290,9 +303,9 @@ async function verifyTurnstileToken(token: string, remoteIp: string): Promise<bo
 }
 
 export async function sendContactEmail(rawInput: unknown): Promise<ActionResponse> {
-  // 1. Extração segura do IP do visitante para moderação e auditoria
+  // 1. Extração segura do IP do visitante (anomizado com salt/hash antes do rate limit - LGPD)
   const headerList = await headers();
-  const clientIp =
+  const rawIp =
     headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     headerList.get("cf-connecting-ip") ??
     "127.0.0.1";
@@ -308,12 +321,12 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
     return { success: true, message: "Mensagem enviada com sucesso!" };
   }
 
-  // 4. Camada 2: Rate Limiting por IP (padrão de até 5 requisições por hora)
-  const isRateLimitAllowed = await checkRateLimit(clientIp);
+  // 4. Camada 2: Rate Limiting por Hash de IP (padrão de até 5 requisições/hora, sem armazenar IP bruto)
+  const isRateLimitAllowed = await checkRateLimit(rawIp);
   if (!isRateLimitAllowed) {
     return {
       success: false,
-      message: `Limite temporário de envios atingido. Para atendimento imediato, entre em contato via WhatsApp (${siteConfig.contact.phone}) ou e-mail corporativo (${siteConfig.contact.email}).`,
+      message: `Limite temporário de envios atingido. Para atendimento imediato, entre em contato via WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail corporativo (${siteConfig.contact.email}).`,
     };
   }
 
@@ -330,7 +343,7 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
   const { name, email, phone, message, turnstileToken } = parsed.data;
 
   // 6. Camada 3: Verificação do desafio Cloudflare Turnstile no servidor
-  const isTurnstileValid = await verifyTurnstileToken(turnstileToken, clientIp);
+  const isTurnstileValid = await verifyTurnstileToken(turnstileToken, rawIp);
   if (!isTurnstileValid) {
     return {
       success: false,
@@ -352,7 +365,7 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
       // Falha reportada pelo provedor (ex.: HTTP 429 ou cota diária excedida)
       return {
         success: false,
-        message: `Não foi possível encaminhar seu formulário no momento. Por favor, utilize nosso WhatsApp (${siteConfig.contact.phone}) ou e-mail direto (${siteConfig.contact.email}).`,
+        message: `Não foi possível encaminhar seu formulário no momento. Por favor, utilize nosso WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail direto (${siteConfig.contact.email}).`,
       };
     }
 
@@ -364,7 +377,7 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
     // Mascaramento de erros internos de runtime sem vazar credenciais ou rastreamento de pilha
     return {
       success: false,
-      message: `Ocorreu uma instabilidade no envio. Caso prefira, utilize nossos canais diretos: WhatsApp (${siteConfig.contact.phone}) ou e-mail (${siteConfig.contact.email}).`,
+      message: `Ocorreu uma instabilidade no envio. Caso prefira, utilize nossos canais diretos: WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail (${siteConfig.contact.email}).`,
     };
   }
 }
@@ -376,39 +389,61 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
 ```typescript
 import { z } from "zod";
 
-// 1. Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
-export const serverEnvSchema = z.object({
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-
-  // Comunicação Transacional (Core do Formulário)
-  RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY é obrigatória."),
-  RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
-  CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
-
-  // Proteção Anti-Spam (Opcional em dev / validado quando Turnstile estiver ativo em produção)
-  TURNSTILE_SECRET_KEY: z.string().optional(),
-
-  // Rate Limiting Distribuído (Upstash Redis para Serverless / opcional em dev com fallback para Map)
-  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
-
-  // Keystatic CMS (Segredos necessários caso utilize GitHub App próprio em vez de Keystatic Cloud)
-  KEYSTATIC_SECRET: z.string().optional(),
-  KEYSTATIC_GITHUB_CLIENT_ID: z.string().optional(),
-  KEYSTATIC_GITHUB_CLIENT_SECRET: z.string().optional(),
-});
-
-// 2. Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
+// 1. Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
 export const clientEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
   NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
 });
 
-// 3. Schema Unificado com Validação Fail-Fast
-export const envSchema = serverEnvSchema.merge(clientEnvSchema);
+// 2. Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
+export const serverEnvSchema = z
+  .object({
+    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
-export const env = envSchema.parse(process.env);
+    // Comunicação Transacional (Core do Formulário)
+    RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY é obrigatória."),
+    RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
+    CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
+
+    // Proteção Anti-Spam (Opcional em dev / validado quando Turnstile estiver ativo em produção)
+    TURNSTILE_SECRET_KEY: z.string().optional(),
+
+    // Rate Limiting Distribuído (Upstash Redis para Serverless / opcional em dev com fallback para Map)
+    UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+
+    // Keystatic CMS (Segredos necessários caso utilize GitHub App próprio em vez de Keystatic Cloud)
+    KEYSTATIC_SECRET: z.string().optional(),
+    KEYSTATIC_GITHUB_CLIENT_ID: z.string().optional(),
+    KEYSTATIC_GITHUB_CLIENT_SECRET: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Em produção, se o Turnstile estiver ativo no cliente, a chave secreta é mandatória
+    if (data.NODE_ENV === "production" && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !data.TURNSTILE_SECRET_KEY) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["TURNSTILE_SECRET_KEY"],
+        message: "TURNSTILE_SECRET_KEY é obrigatória em produção quando NEXT_PUBLIC_TURNSTILE_SITE_KEY estiver configurada.",
+      });
+    }
+  });
+
+// 3. Exportações Segregadas para Servidor e Cliente
+// Seguro para Client Components: valida e exporta apenas variáveis com prefixo NEXT_PUBLIC_
+export const clientEnv = clientEnvSchema.parse({
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  NEXT_PUBLIC_KEYSTATIC_PROJECT: process.env.NEXT_PUBLIC_KEYSTATIC_PROJECT,
+});
+
+// Seguro para Server Components e Server Actions (com runtime guard contra vazamentos para o browser)
+export const serverEnv = (() => {
+  if (typeof window !== "undefined") {
+    throw new Error("❌ 'serverEnv' não pode ser acessado no navegador (Client Components). Importe apenas 'clientEnv'.");
+  }
+  return serverEnvSchema.parse(process.env);
+})();
 ```
 
 > 🛡️ **Garantias Técnicas de Segurança:**

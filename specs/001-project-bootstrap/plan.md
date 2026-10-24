@@ -17,6 +17,8 @@
 | **React / React DOM** | `19.x` | Runtime nativo do Next.js 16. |
 | **TypeScript** | `^5.x` | Tipagem estrita end-to-end com alias `@/*` via `tsconfig.json`. |
 | **Tailwind CSS** | `^4.x` | CSS-first moderno utilizando `@theme` no `src/app/globals.css` ([ADR 0004](../../docs/adr/0004-design-system-e-estilizacao.md)). |
+| **Zod** | `^3.24.x` | Validação estrita de schemas em runtime (travada na v3 para compatibilidade com `@hookform/resolvers/zod`). |
+| **server-only** | `^0.0.1` | Impede importação acidental de módulos de servidor (`serverEnv`) em Client Components ([ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)). |
 | **Shadcn/ui & Radix** | Latest | Primitivos acessíveis (WCAG 2.1 AA) e utilitário `cn` (`clsx` + `tailwind-merge`). |
 | **Vitest** | `^3.x` | Runner de testes ultra rápido em ESM com `jsdom` e `vitest-axe` ([ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)). |
 

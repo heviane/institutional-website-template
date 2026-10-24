@@ -56,11 +56,12 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 * **Node.js Runtime:** `24.x LTS (Active LTS)` — versão travada no [`.nvmrc`](.nvmrc) e no CI. Não gere sintaxes incompatíveis.
 * **Framework:** `Next.js 16 (App Router / Active LTS)` — NUNCA gere arquivos ou arquitetura baseada no Pages Router (`pages/`).
 * **React:** `19.x`.
+* **Validação de Schemas (Zod):** Travada na versão estável **Zod v3 (`^3.24.x`)** para compatibilidade com `@hookform/resolvers/zod`. NUNCA use métodos ou sintaxes exclusivas do Zod 4.
 * **CSS & Design System:** `Tailwind CSS v4` utilizando variáveis `@theme` diretamente no `src/app/globals.css`. NUNCA crie nem sugira o arquivo legado `tailwind.config.js`.
 * **Componentes de UI:** `Shadcn/ui` fundamentado exclusivamente nos primitivos acessíveis do `Radix UI` (conformidade estrita com WCAG 2.1 AA).
 * **Gestão de Conteúdo (CMS):** `Keystatic` gravando Markdown/JSON no repositório Git. Modo local em desenvolvimento e Keystatic Cloud em produção.
 * **Envio Transacional:** `Resend API` (plano gratuito com cota de até 100 e-mails/dia).
-* **Defesa Anti-Spam em 3 Camadas:** Honeypot oculto + Cloudflare Turnstile + Rate Limiting por IP (Upstash Redis em produção / Map em desenvolvimento local).
+* **Defesa Anti-Spam em 3 Camadas:** Honeypot oculto + Rate Limiting por Hash de IP com TTL + Cloudflare Turnstile (validação condicional a dev/prod).
 
 ---
 
@@ -74,9 +75,10 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
   * Chave de API: SEMPRE `RESEND_API_KEY`.
 * **Acesso a Variáveis de Ambiente:**
   * NUNCA utilize `process.env.*` solto dentro de componentes ou actions.
-  * Importe SEMPRE os schemas validados `serverEnv` ou `clientEnv` a partir de `@/env` (conforme [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)).
+  * Importe SEMPRE os schemas validados `serverEnv` (protegido com `import "server-only"`) ou `clientEnv` a partir de `@/env` (conforme [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)).
 * **Configuração Centralizada da Marca:**
   * Objeto e arquivo único: `src/config/site.ts` exportando a constante `siteConfig` e o tipo `SiteConfig`.
+  * Canal WhatsApp corporativo: SEMPRE `siteConfig.contact.whatsapp` (não confunda com `siteConfig.contact.phone`).
 * **Processamento de Formulários:**
   * Server Action canônica: `src/app/actions/contact.ts` exportando a função `sendContactEmail(rawInput: unknown)`.
   * Schema de validação Zod: `src/lib/schemas/contact.ts` exportando `contactFormSchema`.
@@ -87,9 +89,11 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 
 1. **NUNCA introduzir bancos de dados relacionais (SQL) ou NoSQL persistentes no MVP:** A arquitetura do template é intencionalmente efêmera (*Zero-Database Architecture*), com encaminhamento direto de mensagens para a caixa de e-mail do cliente via Resend API ([ADR 0007](docs/adr/0007-conformidade-lgpd-e-privacidade.md)).
 2. **NUNCA criar rotas REST manuais em `src/app/api/contact/route.ts` para formulários:** Utilize exclusivamente Server Actions com `'use server'` ([ADR 0003](docs/adr/0003-estrategia-de-formularios.md)).
-3. **NUNCA instalar dependências redundantes:** Sempre verifique se o projeto já não possui a ferramenta necessária antes de sugerir pacotes npm (ex.: use Zod para validação, Vitest para testes, Radix para acessibilidade).
-4. **NUNCA recomendar merge de históricos desconectados como procedimento padrão:** O comando `git merge --allow-unrelated-histories` é experimental; atualizações do template devem priorizar releases e patches cirúrgicos (`cherry-pick`) em branch isolada ([ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
-5. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: *"mitigação de abuso"*, *"metas planejadas"*), nunca *"100% blindado"* ou *"imunidade absoluta"*.
+3. **NUNCA armazenar endereços IP brutos no Rate Limiting:** Em conformidade com a LGPD e a política de Zero-Database, calcule e armazene sempre o hash criptográfico anônimo do IP (`SHA-256(ip + salt)`) com expiração de curto prazo (TTL).
+4. **NUNCA retornar códigos HTTP em Server Actions:** Server Actions retornam objetos JavaScript tipados (`ActionResponse` com `{ success: boolean, message?: string }`), não status HTTP REST como 400 ou 429.
+5. **NUNCA instalar dependências redundantes:** Sempre verifique se o projeto já não possui a ferramenta necessária antes de sugerir pacotes npm (ex.: use Zod para validação, Vitest para testes, Radix para acessibilidade).
+6. **NUNCA recomendar merge de históricos desconectados como procedimento padrão:** O comando `git merge --allow-unrelated-histories` é experimental; atualizações do template devem priorizar releases e patches cirúrgicos (`cherry-pick`) em branch isolada ([ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
+7. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: *"mitigação de abuso"*, *"metas planejadas"*), nunca *"100% blindado"* ou *"imunidade absoluta"*.
 
 ---
 
