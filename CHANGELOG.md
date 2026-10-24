@@ -9,6 +9,13 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### 📊 Status das Features (Fase 2 - Core & MVP)
+* [x] **Feature 001: Project Bootstrap & Quality Gates** (Concluída — Commit [`277a96a`](https://github.com/heviane/institutional-website-template/commit/277a96a) / Spec: [`specs/001-project-bootstrap/`](specs/001-project-bootstrap/))
+* [ ] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Próxima / Em Especificação)
+* [ ] **Feature 003: Validação de Ambiente & Formulário Transacional** (Pendente)
+* [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Pendente)
+* [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Pendente)
+
 ### Adicionado
 * **Feature 001 (Project Bootstrap & Quality Gates):**
   * Bootstrap declarativo do Next.js 16 (App Router) com React 19, TypeScript e Tailwind CSS v4 na raiz.
