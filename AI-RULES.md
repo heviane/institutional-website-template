@@ -11,6 +11,26 @@
 3. **Tratamento dos ADRs como Leis do Sistema:** As decisões registradas nos Architectural Decision Records ([`docs/adr/`](docs/adr/)) têm força mandatória. Nenhuma IA tem autorização para violar um ADR aprovado sem solicitação explícita e justificada do desenvolvedor.
 4. **Protocolo "Stop-and-Ask" para Casos Ambíguos:** Se houver conflito, divergência ou lacuna técnica entre uma instrução do desenvolvedor e as especificações em [`docs/`](docs/) (ou entre diferentes documentos), a IA **DEVE** pausar a geração de código e solicitar esclarecimentos objetivos antes de prosseguir, sendo terminantemente proibido assumir premissas ou padrões arbitrários por conta própria.
 
+### 🏛️ Constituição de Engenharia (8 Princípios Inegociáveis)
+
+Todo código ou especificação gerada por IA neste repositório deve respeitar integralmente estes oito princípios:
+
+1. **Simplicidade antes de Complexidade:** Nenhuma abstração, padrão indireto ou dependência externa deve ser introduzida sem necessidade objetiva e benefício concreto comprovado.
+2. **Segurança por Padrão (*Security by Design*):** Toda entrada de usuário deve ser tratada como não confiável com validação estrita no servidor (Zod). Segredos e chaves de API nunca devem alcançar bundles de cliente, logs ou commits.
+3. **Acessibilidade Inegociável (WCAG 2.1 AA):** Acessibilidade não é polimento tardio; é requisito de arquitetura desde o primeiro componente, validada continuamente via `vitest-axe` e suporte total a navegação por teclado.
+4. **Testabilidade Obrigatória:** Funcionalidades críticas (schemas, regras de negócio e Server Actions) devem ser estruturadas de modo desacoplado para viabilizar testes unitários e de integração confiáveis com *mocks*.
+5. **Reprodutibilidade em Clone Limpo:** A instalação de dependências (`npm ci`), compilação (`npm run build`) e testes (`npm test`) devem ser rigorosamente determinísticos a partir de um repositório clonado do zero, ancorados em `package-lock.json`.
+6. **Rastreabilidade e Decisões Explícitas:** Todo código gerado deve atender a uma especificação em [`specs/`](specs/) ou a um ADR aprovado em [`docs/adr/`](docs/adr/), sem mudanças de contrato ou escopo não documentadas.
+7. **Mitigação Realista vs. Afirmações Absolutas:** Não presumir imunidade matemática ou conformidade cega; utilizar barreiras defensivas em camadas, monitoramento contínuo e procedimentos claros de contingência.
+8. **Soberania da Revisão Humana:** Todo código e artefato gerado por IA é tratado como proposta técnica não confiável até a validação formal pelos testes automatizados e aprovação expressa do desenvolvedor.
+
+### 🔄 Ciclo de Trabalho por Funcionalidade (SDD Lifecycle)
+
+Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar estritamente dentro da estrutura de três artefatos em `specs/<feature>/`:
+* **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos, limites e critérios objetivos de aceitação.
+* **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
+* **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
+
 ---
 
 ## 🗺️ 2. Mapa de Especificações (Onde encontrar a verdade)
@@ -27,6 +47,7 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 | **Design System, UI & Temas (Tailwind v4)** | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md) |
 | **Onboarding de Clientes, Envs & Custos** | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md) |
 | **Decisões de Arquitetura (0001 a 0011)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
+| **Especificações de Funcionalidades (Fase 2)** | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`) |
 
 ---
 
