@@ -22,7 +22,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Fase 1: Arquitetura, Governança e Spec-Driven Development (Concluída)
 
 #### Adicionado
-* **Governança Canônica:** Criação do `AI-RULES.md` contendo a Constituição de Engenharia, 9 princípios inegociáveis, restrições negativas, ciclo TDD e dicionário canônico.
+* **Governança Canônica:** Criação do `AGENTS.md` contendo a Constituição de Engenharia, 9 princípios inegociáveis, restrições negativas, ciclo TDD e dicionário canônico.
 * **Instruções para Agentes de IA:** Configuração de ponteiros universais em `AGENTS.md`, `.cursorrules`, `CLAUDE.md` e `.github/copilot-instructions.md`.
 * **Decisões de Arquitetura (ADRs):** Formalização de 11 Architectural Decision Records (`0001` a `0011`) cobrindo Next.js 16, Keystatic CMS, Server Actions, Tailwind v4, hospedagem na Vercel, mídia e CMS Cloud, conformidade LGPD, Vitest + axe-core, headers de segurança HTTP com CSP Report-Only, estratégia de release e tripla camada anti-spam.
 * **Documentação Técnica Canônica (`docs/`):**

@@ -28,12 +28,15 @@ Todo código ou especificação gerada por IA neste repositório deve respeitar 
 ### 🔄 Ciclo de Trabalho por Funcionalidade (SDD Lifecycle)
 
 Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar estritamente dentro da estrutura de três artefatos em `specs/<feature>/`:
+
 * **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos, limites e critérios objetivos de aceitação.
 * **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
 * **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
 
 #### 🧪 Execução de Tarefas com TDD (Red-Green-Refactor)
+
 Para tarefas de código que envolvem lógica de validação (schemas Zod), variáveis de ambiente (`env.ts`), utilitários de negócio e Server Actions, a IA deve aplicar o ciclo TDD:
+
 1. **🔴 Red (Teste Primeiro):** Escrever ou atualizar o arquivo de teste unitário (`*.test.ts`) expressando os requisitos do contrato definido em `plan.md`. Executar `npm test` para certificar que o teste falha pelas razões esperadas antes da implementação.
 2. **🟢 Green (Implementação Mínima):** Desenvolver o código estritamente necessário em `src/` para fazer a suíte de testes passar no Vitest.
 3. **🔵 Refactor (Qualidade & Limpeza):** Refatorar para atender aos Quality Gates (eliminar código duplicado, garantir tipagem estrita no TypeScript e acessibilidade no `vitest-axe`) mantendo todos os testes verdes.

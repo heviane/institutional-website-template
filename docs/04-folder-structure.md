@@ -107,7 +107,6 @@ institutional-website-template/
 ├── .nvmrc                           # Versão LTS travada do Node.js (24)
 ├── .prettierrc                      # Configuração de formatação e ordenação do Tailwind
 ├── AGENTS.md                        # Hub central de diretrizes canônicas para agentes de IA (SDD)
-├── AI-RULES.md                      # Ponteiro canônico retrocompatível para AGENTS.md
 ├── CHANGELOG.md                     # Histórico estruturado de mudanças (Keep a Changelog)
 ├── CLAUDE.md                        # Diretrizes para Claude Code (@AGENTS.md)
 ├── CONTRIBUTING.md                  # Guia de contribuição, padrões SDD e Quality Gates
