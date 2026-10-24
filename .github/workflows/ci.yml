@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies (Strict)
         run: npm ci
 
+      - name: Run Documentation Audit (Strict Quality Gate)
+        run: npm run audit:docs
+
       - name: Run ESLint (Strict Quality Gate)
         run: npm run lint
 

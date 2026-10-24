@@ -17,11 +17,12 @@ Descreva de forma clara e concisa o que foi implementado, refatorado ou corrigid
 Execute o comando unificado localmente antes de solicitar revisão:
 
 ```bash
-npm run lint && npm run typecheck && npm test && npm run build
+npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build
 ```
 
 Marque os critérios técnicos atendidos:
 
+* [ ] `npm run audit:docs` executado com zero links quebrados e sincronização documental comprovada.
 * [ ] `npm run lint` executado com zero erros de ESLint.
 * [ ] `npm run typecheck` executado com zero erros de tipagem TypeScript.
 * [ ] `npm test` executado com toda a suíte do Vitest verde (incluindo testes de acessibilidade `vitest-axe`).
@@ -32,6 +33,7 @@ Marque os critérios técnicos atendidos:
 
 ## 🏛️ Checklist da Constituição de Engenharia (`AGENTS.md`)
 
+* [ ] **Anti-Doc Rot (Princípio 9):** Documentação (`docs/04-folder-structure.md`, `README.md`, `CHANGELOG.md`) e roadmap atualizados; trechos de código implementados substituídos por links.
 * [ ] **Simplicidade:** Nenhuma dependência desnecessária ou abstração prematura foi introduzida.
 * [ ] **Segurança:** Toda entrada pública é tratada como não confiável; chaves secretas estão fora do bundle cliente.
 * [ ] **Acessibilidade:** Componentes atendem aos padrões WCAG 2.1 AA e suportam navegação completa por teclado.

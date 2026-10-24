@@ -52,6 +52,9 @@ institutional-website-template/
 ├── specs/                           # Especificações executáveis de funcionalidades (SDD)
 │   └── 001-project-bootstrap/       # Artefatos da Feature 001 (spec.md, plan.md, tasks.md)
 │
+├── scripts/                         # Scripts utilitários de automação e auditoria
+│   └── audit-docs.mjs               # Validador de integridade documental e Anti-Doc Rot
+│
 ├── src/                             # Código-fonte principal da aplicação
 │   ├── app/                         # Rotas e layouts (Next.js App Router)
 │   │   ├── (legal)/                 # Grupo de rotas legais

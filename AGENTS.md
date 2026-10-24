@@ -41,6 +41,15 @@ Para tarefas de código que envolvem lógica de validação (schemas Zod), vari�
 2. **🟢 Green (Implementação Mínima):** Desenvolver o código estritamente necessário em `src/` para fazer a suíte de testes passar no Vitest.
 3. **🔵 Refactor (Qualidade & Limpeza):** Refatorar para atender aos Quality Gates (eliminar código duplicado, garantir tipagem estrita no TypeScript e acessibilidade no `vitest-axe`) mantendo todos os testes verdes.
 
+#### 📚 Tarefa Obrigatória Final de toda Feature (Sincronização Documental & Anti-Doc Rot)
+
+Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como última tarefa a sincronização da documentação:
+* Atualização de status da feature no `README.md` e em `docs/03-project-roadmap.md`.
+* Inclusão de todos os novos arquivos criados na árvore canônica de `docs/04-folder-structure.md`.
+* Aplicação do Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
+* Registro no `CHANGELOG.md` sob `[Unreleased]`.
+* Execução e validação obrigatória do script: `npm run audit:docs`.
+
 ---
 
 ## 🗺️ 2. Mapa de Especificações (Onde encontrar a verdade)
@@ -154,11 +163,12 @@ Ao implementar qualquer funcionalidade na Fase 2:
 2. **Execute os Quality Gates:**
 
    ```bash
+   npm run audit:docs  # Zero erros de documentação, links quebrados ou violações de Anti-Doc Rot
    npm run lint        # Zero erros no ESLint
    npm run typecheck   # Zero erros no TypeScript
    npm test            # Suíte do Vitest verde (incluindo testes de acessibilidade vitest-axe)
    npm run build       # Build de produção do Next.js 16 compilando de forma determinística
    ```
 
-3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de lint, falhas de tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).
+3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de auditoria documental, falhas de lint, tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).
 4. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.

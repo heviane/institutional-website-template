@@ -38,15 +38,16 @@ npm ci
 
 ## 🚦 3. Quality Gates Obrigatórios
 
-Nenhuma contribuição (código gerado por humanos ou agentes de IA) pode ser mesclada se qualquer um dos quatro portões de qualidade falhar:
+Nenhuma contribuição (código gerado por humanos ou agentes de IA) pode ser mesclada se qualquer um dos cinco portões de qualidade falhar:
 
 ```bash
 # Executar todos os Quality Gates de uma vez:
-npm run lint && npm run typecheck && npm test && npm run build
+npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build
 ```
 
 | Comando | Finalidade | Critério de Aceitação |
 | :--- | :--- | :--- |
+| `npm run audit:docs` | Auditoria de integridade documental e links | **0 erros** (links válidos e Anti-Doc Rot) |
 | `npm run lint` | Auditoria estática com ESLint | **0 erros** |
 | `npm run typecheck` | Checagem estrita de tipos TypeScript | **0 erros** |
 | `npm test` | Suíte de testes automatizados com Vitest | **100% verde** (inclui `vitest-axe`) |

@@ -15,9 +15,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Configuração do design system com tokens `@theme` inline em `oklch()` e utilitário canônico `cn()`.
   * Configuração do Vitest com ambiente `jsdom` e suíte de testes de sanidade.
   * Promoção incondicional dos Quality Gates no CI (`.github/workflows/ci.yml`): `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` e `npm run build`.
+* **Automação de Qualidade Documental (Anti-Doc Rot):**
+  * Criação do script `scripts/audit-docs.mjs` (`npm run audit:docs`) para validação estrita de links internos, sincronização da árvore de arquivos e conformidade com o Princípio 9.
+  * Integração do Quality Gate de documentação no pipeline do GitHub Actions (`.github/workflows/ci.yml`).
+  * Atualização de `AGENTS.md`, `CONTRIBUTING.md` e `PULL_REQUEST_TEMPLATE.md` instituindo o portão documental obrigatório pós-feature.
 
 ### Planejado para a Fase 2 (Core & MVP)
-* Bootstrap do Next.js 16 com TypeScript, React 19 e Tailwind CSS v4.
 * Componentes de interface baseados em Shadcn/ui e Radix UI (WCAG 2.1 AA).
 * Gestão de conteúdo via Keystatic CMS (Markdown/JSON Git-based).
 * Server Action de contato com envio via Resend e tripla barreira anti-spam.

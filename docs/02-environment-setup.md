@@ -14,7 +14,7 @@ Após a conclusão do planejamento conceitual, o primeiro passo é erguer a infr
 
 ### Pré-requisitos de Ambiente
 
-* **Node.js:** Versão `24.x` (Active LTS padrão oficial travado no [`.nvmrc`](.nvmrc) e no CI). Versões legadas (Node 20 ou anterior) não são suportadas. O repositório inclui o arquivo [`.nvmrc`](.nvmrc) para sincronizar a versão do Node via `nvm use`.
+* **Node.js:** Versão `24.x` (Active LTS padrão oficial travado no [`.nvmrc`](../.nvmrc) e no CI). Versões legadas (Node 20 ou anterior) não são suportadas. O repositório inclui o arquivo [`.nvmrc`](../.nvmrc) para sincronizar a versão do Node via `nvm use`.
 * **Gerenciador de Pacotes:** `npm` (padrão) ou `pnpm`.
 * **Git:** Para controle de versão e CI/CD.
 
