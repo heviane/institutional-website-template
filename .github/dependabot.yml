@@ -13,23 +13,8 @@ updates:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
     ignore:
-      # Preserva o invariante de runtime: Zod v3 (^3.24.x) para compatibilidade com @hookform/resolvers/zod
-      - dependency-name: "zod"
-        versions: [">= 4.0.0"]
-        update-types: ["version-update:semver-major"]
-      # Preserva o invariante de runtime: Node.js 24 LTS (.nvmrc e CI)
-      - dependency-name: "@types/node"
-        versions: [">= 25.0.0"]
-        update-types: ["version-update:semver-major"]
-      # Preserva estabilidade dos linters e tooling durante a Fase 2 (compatibilidade com Next.js 16)
-      - dependency-name: "eslint"
-        versions: [">= 10.0.0"]
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "typescript"
-        versions: [">= 6.0.0"]
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "vitest"
-        versions: [">= 4.0.0"]
+      # Durante a Fase 2, bloqueia atualizações semver-major automatizadas para garantir estabilidade do MVP
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
       npm-minor-patch:
@@ -38,11 +23,6 @@ updates:
         update-types:
           - "minor"
           - "patch"
-      npm-major:
-        patterns:
-          - "*"
-        update-types:
-          - "major"
 
   # Monitoramento de versões das GitHub Actions (.github/workflows)
   - package-ecosystem: "github-actions"
