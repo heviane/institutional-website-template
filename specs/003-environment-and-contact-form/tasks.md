@@ -13,16 +13,16 @@
   * [ ] Validar integridade do `package-lock.json` e execução de `npm run typecheck`.
 
 * [ ] **2. Validação Segregada de Variáveis de Ambiente (`src/env/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` testando cenários de desenvolvimento (bypass gracioso de chaves opcionais), produção (obrigatoriedade de Turnstile/Upstash) e rejeição imediata com mensagens amigáveis diante de variáveis ausentes/inválidas.
+  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` testando cenários de micro-projeto (configuração mínima do Resend em produção), produção com integrações ativas (Upstash/Turnstile opcionais com ativação progressiva) e rejeição imediata diante de variáveis core ausentes ou malformatadas.
   * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*`.
-  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"` e regras estritas para produção.
+  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, chaves mínimas obrigatórias e ativação condicional de Upstash/Turnstile.
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos e proteção contra vazamento acidental para o cliente.
 
 * [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**
   * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando campos obrigatórios, regras de tamanho, e-mail, campo honeypot (`website`) e consentimento de privacidade.
-  * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando cálculo de hash HMAC de IP com rotação diária, armazenamento em memória com janela de 1 hora e bloqueio na 6ª requisição.
+  * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando cálculo de hash HMAC de IP com rotação diária, fallback resiliente para Map nativo em memória e bloqueio na 6ª requisição.
   * [ ] 🟢 **Green:** Implementar `src/lib/schemas/contact.ts` exportando `contactFormSchema` e tipos TypeScript.
-  * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte dual (Map em dev/test e Upstash Redis em produção).
+  * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis quando configurado).
   * [ ] 🔵 **Refactor:** Eliminar duplicações e validar conformidade com LGPD.
 
 * [ ] **4. Cliente Resend & Server Action com Defesa em 3 Camadas — TDD:**
@@ -30,7 +30,7 @@
     * **Caso 1:** Submissão válida dispara e-mail via Resend e retorna sucesso.
     * **Caso 2:** Bot preenchendo campo honeypot é descartado silenciosamente com sucesso simulado.
     * **Caso 3:** Estouro de taxa de requisições por IP bloqueia a execução antes de chamar APIs externas.
-    * **Caso 4:** Falha na validação do token Turnstile rejeita com mensagem amigável de segurança.
+    * **Caso 4:** Validação do Turnstile (rejeita quando configurado com token inválido; ignora de forma segura e transparente no modo micro-projeto).
     * **Caso 5:** Erro ou esgotamento de cota do Resend aciona procedimento de contingência apontando para WhatsApp/telefone.
     * **Caso 6:** Payload malformado é rejeitado sem exceção não tratada.
   * [ ] 🟢 **Green:** Implementar `src/lib/resend.ts` inicializando o cliente Resend.

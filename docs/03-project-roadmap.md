@@ -97,8 +97,9 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Executar auditoria do Lighthouse CI em páginas representativas, registrando condições de teste (emulação móvel e conexão 4G) e validando metas de LCP < 2,5 s, INP < 200 ms, CLS < 0,1 e Score ≥ 90/95.
 * [ ] **6. Governança de Privacidade e Fidelidade das Páginas Legais:**
   * [ ] Inspecionar `/politica-de-privacidade` e `/termos-de-uso` para garantir que discriminam exatamente as integrações ativadas para o cliente (sem assumir conformidade automática sem revisão do DPO).
-* [ ] **7. Validação Prática de Atualizações do Template:**
+* [ ] **7. Validação Prática de Atualizações do Template & Automação de Patches:**
   * [ ] Testar procedimento de propagação de atualizações em repositório derivado real, avaliando conflitos e validando aplicação cirúrgica de patches ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
+  * [ ] Projetar utilitário/script CLI de sincronização (`scripts/sync-template.mjs`) para aplicar patches de segurança e melhorias nas zonas de engenharia de múltiplos repositórios clientes sem sobrepor customizações de marca (`src/config/site.ts`, `globals.css` e `/public/`).
 * [ ] **8. Homologação Piloto Ponta a Ponta:**
   * [ ] Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
 

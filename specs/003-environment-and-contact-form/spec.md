@@ -33,18 +33,18 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 1. **Validação Segregada de Variáveis de Ambiente (`src/env/`):**
    - `src/env/client.ts`: Validação de variáveis públicas (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`) acessíveis no browser e servidor.
    - `src/env/server.ts`: Protegido com `import "server-only";`, validando segredos (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`, `TURNSTILE_SECRET_KEY`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `RATE_LIMIT_SECRET`).
-   - Validação condicional: Em produção (`NODE_ENV === "production"`), Turnstile e Upstash são mandatórios; em desenvolvimento e testes, admitem bypass controlado para execução offline e CI.
-   - Padrão *fail-fast*: Interrupção imediata do build caso alguma variável obrigatória esteja ausente ou malformatada.
+   - **Ativação Progressiva & Suporte a Micro-Projetos:** As variáveis mínimas obrigatórias para produção são estritamente as do Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`) e a URL do site (`NEXT_PUBLIC_SITE_URL`). Os serviços de infraestrutura externa (Upstash Redis e Cloudflare Turnstile) são de ativação progressiva (opcionais com fallback transparente). Se ausentes, o sistema opera de forma segura e imediata com as Camadas 1 (Honeypot) e 2 (Rate Limiting via `Map` em memória com TTL), viabilizando o deploy de sites institucionais simples sem atrito de contas de terceiros.
+   - Padrão *fail-fast*: Interrupção imediata do build caso alguma variável core obrigatória esteja ausente ou malformatada.
 
 2. **Schema Canônico de Contato (`src/lib/schemas/contact.ts`):**
-   - Campos: `name` (mínimo 2 caracteres), `email` (e-mail válido), `phone` (opcional ou formatado), `message` (mínimo 10 e máximo 1000 caracteres), `website` (honeypot oculto, deve ser vazio), `turnstileToken` (token do Turnstile) e `privacyConsent` (salvaguarda de consentimento configurável com valor padrão `true`).
+   - Campos: `name` (mínimo 2 caracteres), `email` (e-mail válido), `phone` (opcional ou formatado), `message` (mínimo 10 e máximo 1000 caracteres), `website` (honeypot oculto, deve ser vazio), `turnstileToken` (token do Turnstile, opcional se Turnstile não estiver configurado) e `privacyConsent` (salvaguarda de consentimento configurável com valor padrão `true`).
    - Mensagens de erro amigáveis em português (pt-BR).
 
 3. **Rate Limiting Anônimo por Hash de IP (`src/lib/rate-limit.ts`):**
    - Extração segura do IP via headers confiáveis (`x-real-ip`, `cf-connecting-ip`, fallback `x-forwarded-for`).
-   - Anonimização criptográfica via `HMAC-SHA256(ip, secret + YYYY-MM-DD)` garantindo consistência entre lambdas serverless sem armazenar IPs brutos.
+   - Anonimização criptográfica via `HMAC-SHA256(ip, secret + YYYY-MM-DD)` garantindo consistência entre lambdas serverless sem armazenar IPs brutos (LGPD por design).
    - Janela deslizante de 1 hora com limite de 5 requisições por hash.
-   - Armazenamento em memória (`Map` nativo com TTL) para desenvolvimento/testes e integração com Upstash Redis REST em produção.
+   - **Armazenamento Híbrido com Fallback Gracioso:** Integração nativa com Upstash Redis REST quando as variáveis de ambiente estiverem presentes (ideal para alto tráfego serverless); e fallback automático para `Map` nativo em memória com expiração por TTL quando ausentes (em dev, testes ou micro-projetos).
 
 4. **Cliente Resend & Server Action Canônica (`src/app/actions/contact.ts`):**
    - Inicialização isolada do cliente Resend em `src/lib/resend.ts`.
@@ -52,7 +52,7 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
      - Validação estrita do payload não confiável via Zod.
      - Checagem da Camada 1: se `website` contiver texto, simula sucesso (`{ success: true, message: "Mensagem enviada com sucesso!" }`) e descarta silenciosamente.
      - Checagem da Camada 2: se rate limit estourar, retorna erro tipado (`{ success: false, message: "Limite temporário de envios atingido. Por favor, tente novamente mais tarde ou use nosso WhatsApp." }`).
-     - Checagem da Camada 3: validação do token do Turnstile na API da Cloudflare (com bypass gracioso em dev/test).
+     - Checagem da Camada 3: validação do token do Turnstile na API da Cloudflare quando as chaves do Turnstile estiverem configuradas. Caso não estejam configuradas, essa camada é ignorada de forma segura e transparente.
      - Disparo do e-mail com remetente autenticado `RESEND_FROM_EMAIL` para o destinatário corporativo `CONTACT_EMAIL_TO`.
      - Contingência: em caso de erro da API do Resend (ex.: cota esgotada), captura e retorna mensagem amigável instruindo o contato via WhatsApp corporativo (`siteConfig.contact.whatsapp`).
      - Retorno tipado em JavaScript, **nunca códigos HTTP REST**.
@@ -85,15 +85,15 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 ## 🚦 3. Critérios Objetivos de Aceitação (Acceptance Criteria)
 
 1. **Validação de Ambientes e Segregação de Envs (Item 1 da Seção 2.2 do Roadmap):**
-   - `npm run build` compila com sucesso sob a configuração mínima de desenvolvimento/CI.
-   - `npm run build` rejeita imediatamente com relatório explícito caso alguma variável obrigatória esteja ausente ou malformatada.
+   - `npm run build` compila com sucesso sob a configuração mínima de produção (Resend + URL do site), viabilizando micro-projetos sem dependência de contas externas.
+   - `npm run build` rejeita imediatamente com relatório explícito caso alguma variável core obrigatória esteja ausente ou malformatada.
    - Tentativa de importar `src/env/server.ts` em Client Component resulta em erro de compilação bloqueante (`server-only`).
-   - Suíte `tests/env.test.ts` valida os cenários de dev, prod e entradas inválidas.
+   - Suíte `tests/env.test.ts` valida os cenários de micro-projeto (chaves mínimas), produção com integrações ativas (Upstash/Turnstile) e rejeição de entradas inválidas.
 
 2. **Defesa Anti-Spam & Resiliência Transacional (Item 3 da Seção 2.2 do Roadmap):**
    - **Honeypot:** Submissão com campo `website` preenchido retorna sucesso simulado sem acionar a Resend API.
-   - **Rate Limit:** Submissões repetidas a partir do mesmo IP acima do teto de 5/hora são bloqueadas com mensagem amigável antes de bater no Resend.
-   - **Turnstile:** Submissão sem token válido é rejeitada em ambiente de produção.
+   - **Rate Limit:** Submissões repetidas a partir do mesmo IP acima do teto de 5/hora são bloqueadas com mensagem amigável antes de bater no Resend (usando Redis quando configurado, ou Map com TTL no modo micro-projeto).
+   - **Turnstile:** Quando as chaves do Turnstile estiverem configuradas, submissão sem token válido é rejeitada com mensagem de erro amigável. Quando ausentes (modo micro-projeto ou dev), o desafio é ignorado de forma segura sem quebrar o envio.
    - **Resend Mock:** Envio bem-sucedido dispara e-mail com os dados preenchidos para `CONTACT_EMAIL_TO`.
    - **Contingência:** Falha na API do Resend (ex.: status 429 ou cota esgotada) retorna resposta amigável apontando para o WhatsApp e telefone da empresa.
    - **Payload Não Confiável:** Objetos malformados, arrays ou tipos primitivos na Server Action são rejeitados pelo Zod sem exceções não tratadas (*unhandled rejections*).

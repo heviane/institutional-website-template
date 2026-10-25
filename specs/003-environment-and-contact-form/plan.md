@@ -76,15 +76,13 @@ export const serverEnvSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 }).superRefine((data, ctx) => {
-  // Em produção, Turnstile e Upstash são obrigatórios para mitigar spam e suportar serverless
-  if (data.NODE_ENV === "production") {
-    if (!data.TURNSTILE_SECRET_KEY) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["TURNSTILE_SECRET_KEY"],
-        message: "TURNSTILE_SECRET_KEY é obrigatória em ambiente de produção.",
-      });
-    }
+  // Se UPSTASH_REDIS_REST_URL for configurado, UPSTASH_REDIS_REST_TOKEN passa a ser obrigatório
+  if (data.UPSTASH_REDIS_REST_URL && !data.UPSTASH_REDIS_REST_TOKEN) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["UPSTASH_REDIS_REST_TOKEN"],
+      message: "UPSTASH_REDIS_REST_TOKEN é obrigatório quando UPSTASH_REDIS_REST_URL estiver configurado.",
+    });
   }
 });
 ```
@@ -143,9 +141,9 @@ export interface ActionResponse {
 Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md):
 - **Cálculo da Chave:** `HMAC-SHA256(ip, secret + YYYY-MM-DD)` gerado via módulo nativo `node:crypto`.
 - **Janela e Limite:** Padrão de 5 requisições por hora por chave.
-- **Ambientes:**
-  - `development` e `test`: Armazenamento em memória (`Map<string, { count: number; expiresAt: number }>`).
-  - `production`: Armazenamento distribuído via `@upstash/redis` com expiração atômica de 3600 segundos (1 hora).
+- **Armazenamento e Degradação Graciosa:**
+  - **Com Upstash configurado (`UPSTASH_REDIS_REST_URL` & `TOKEN`):** Armazenamento distribuído via `@upstash/redis` com expiração atômica de 3600 segundos (1 hora), ideal para tráfego em arquitetura serverless.
+  - **Sem Upstash configurado (modo micro-projeto, dev ou fallback):** Armazenamento em memória (`Map<string, { count: number; expiresAt: number }>`) com limpeza periódica por TTL.
 - **Extração Segura do IP:** Priorização de cabeçalhos de borda da Vercel (`x-real-ip`) e Cloudflare (`cf-connecting-ip`), evitando forjamento via `x-forwarded-for` direto.
 
 ---
@@ -156,8 +154,8 @@ A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Da
 
 1. **Validação Preliminar:** Extrai IP e executa `contactFormSchema.safeParse(rawInput)`.
 2. **Camada 1 (Honeypot):** Se `data.website` contiver qualquer valor, retorna silenciosamente `{ success: true, message: "Mensagem enviada com sucesso!" }` sem acionar provedores externos.
-3. **Camada 2 (Rate Limit):** Verifica taxa de envio do hash de IP. Se excedido, retorna `{ success: false, message: "Limite temporário de envios atingido. Por favor, tente novamente mais tarde ou use nosso WhatsApp." }`.
-4. **Camada 3 (Turnstile):** Se em produção ou se o token foi enviado, valida via POST em `https://challenges.cloudflare.com/turnstile/v0/siteverify`. Se inválido, rejeita.
+3. **Camada 2 (Rate Limit):** Verifica taxa de envio do hash de IP (via Redis ou Map local). Se excedido, retorna `{ success: false, message: "Limite temporário de envios atingido. Por favor, tente novamente mais tarde ou use nosso WhatsApp." }`.
+4. **Camada 3 (Turnstile):** Se `TURNSTILE_SECRET_KEY` estiver configurada no servidor, valida o token via POST em `https://challenges.cloudflare.com/turnstile/v0/siteverify`. Se inválido ou ausente, rejeita com erro amigável. Se a chave não estiver configurada no ambiente (modo micro-projeto ou dev), o desafio é ignorado de forma transparente.
 5. **Disparo Transacional (Resend):** Aciona `resend.emails.send(...)` enviando de `RESEND_FROM_EMAIL` para `CONTACT_EMAIL_TO` com assunto informativo e layout claro contendo nome, e-mail, telefone e mensagem.
 6. **Contingência Graciosa:** Se a chamada ao Resend falhar (ex.: erro 429 ou esgotamento de cota), captura o erro, registra log interno e retorna mensagem amigável convidando o usuário a falar diretamente pelo WhatsApp corporativo (`siteConfig.contact.whatsapp`).
 
