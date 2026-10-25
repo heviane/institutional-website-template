@@ -227,7 +227,7 @@ export type ContactFormData = z.infer<typeof contactFormSchema>;
 import { headers } from "next/headers";
 import { contactFormSchema } from "@/lib/schemas/contact";
 import { resend } from "@/lib/resend";
-import { serverEnv } from "@/env";
+import { serverEnv } from "@/env/server";
 import { siteConfig } from "@/config/site";
 import { checkRateLimit } from "@/lib/rate-limit"; // Upstash Redis em produção / Map com TTL em desenvolvimento
 
@@ -266,11 +266,12 @@ async function verifyTurnstileToken(token?: string, remoteIp?: string): Promise<
 }
 
 export async function sendContactEmail(rawInput: unknown): Promise<ActionResponse> {
-  // 1. Extração segura do IP do visitante (anomizado com salt/hash antes do rate limit - LGPD)
+  // 1. Extração segura do IP do visitante (prioriza x-real-ip e cf-connecting-ip contra forjamento)
   const headerList = await headers();
   const rawIp =
-    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headerList.get("x-real-ip") ??
     headerList.get("cf-connecting-ip") ??
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     "127.0.0.1";
 
   // 2. Proteção preliminar de tipo e tamanho da carga (fronteira pública)
@@ -349,23 +350,48 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
 }
 ```
 
-5. **Validação Segregada de Variáveis de Ambiente no Build (`src/env.ts`):**
-* Conforme definido na ADR 0009, valida rigorosamente todas as variáveis de ambiente durante o `next build` com segregação explícita entre escopos de servidor e cliente:
+5. **Validação Segregada de Variáveis de Ambiente no Build (`src/env/`):**
+* Conforme formalizado na [ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md), valida rigorosamente todas as variáveis de ambiente durante o `next build` com segregação física entre escopos de servidor e cliente em dois módulos dedicados:
 
+**Módulo de Cliente (`src/env/client.ts`):**
 ```typescript
 import { z } from "zod";
 
-// 1. Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
-export const clientEnvSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
-  // Keystatic Cloud (Padrão de produção conforme ADR 0006)
-  NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
-  // Keystatic Modo GitHub App (Alternativa self-hosted)
-  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: z.string().optional(),
-});
+// Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
+export const clientEnvSchema = z
+  .object({
+    NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+    // Keystatic Cloud (Padrão de produção conforme ADR 0006)
+    NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
+    // Keystatic Modo GitHub App (Alternativa self-hosted)
+    NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Em produção, o Turnstile é mandatório para proteção anti-spam do formulário (ADR 0011)
+    if (process.env.NODE_ENV === "production" && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["NEXT_PUBLIC_TURNSTILE_SITE_KEY"],
+        message: "NEXT_PUBLIC_TURNSTILE_SITE_KEY é obrigatória em produção para proteção contra spam.",
+      });
+    }
+  });
 
-// 2. Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
+export const clientEnv = clientEnvSchema.parse({
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  NEXT_PUBLIC_KEYSTATIC_PROJECT: process.env.NEXT_PUBLIC_KEYSTATIC_PROJECT,
+  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG,
+});
+```
+
+**Módulo de Servidor (`src/env/server.ts`):**
+```typescript
+import "server-only";
+import { z } from "zod";
+
+// Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
 export const serverEnvSchema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -375,7 +401,7 @@ export const serverEnvSchema = z
     RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
     CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
 
-    // Proteção Anti-Spam (Opcional em dev / validado quando Turnstile estiver ativo em produção)
+    // Proteção Anti-Spam (Mandatória em produção conforme ADR 0011 / opcional em dev)
     TURNSTILE_SECRET_KEY: z.string().optional(),
 
     // Rate Limiting Distribuído (Upstash Redis para Serverless / opcional em dev com fallback para Map)
@@ -388,38 +414,24 @@ export const serverEnvSchema = z
     KEYSTATIC_GITHUB_CLIENT_SECRET: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    // Em produção, se o Turnstile estiver ativo no cliente, a chave secreta é mandatória
-    if (data.NODE_ENV === "production" && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !data.TURNSTILE_SECRET_KEY) {
+    // Em produção, a chave secreta do Turnstile é mandatória para validação dos tokens (ADR 0011)
+    if (data.NODE_ENV === "production" && !data.TURNSTILE_SECRET_KEY) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["TURNSTILE_SECRET_KEY"],
-        message: "TURNSTILE_SECRET_KEY é obrigatória em produção quando NEXT_PUBLIC_TURNSTILE_SITE_KEY estiver configurada.",
+        message: "TURNSTILE_SECRET_KEY é obrigatória em produção para validação dos envios de formulário.",
       });
     }
   });
 
-// 3. Exportações Segregadas para Servidor e Cliente
-// Seguro para Client Components: valida e exporta apenas variáveis com prefixo NEXT_PUBLIC_
-export const clientEnv = clientEnvSchema.parse({
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-  NEXT_PUBLIC_KEYSTATIC_PROJECT: process.env.NEXT_PUBLIC_KEYSTATIC_PROJECT,
-  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG,
-});
-
-// Seguro para Server Components e Server Actions (com runtime guard contra vazamentos para o browser)
-export const serverEnv = (() => {
-  if (typeof window !== "undefined") {
-    throw new Error("❌ 'serverEnv' não pode ser acessado no navegador (Client Components). Importe apenas 'clientEnv'.");
-  }
-  return serverEnvSchema.parse(process.env);
-})();
+export const serverEnv = serverEnvSchema.parse(process.env);
 ```
 
 > 🛡️ **Garantias Técnicas de Segurança:**
-> 1. **Prevenção de Vazamentos:** Segredos definidos em `serverEnvSchema` não podem ser importados em componentes com `'use client'`, garantindo que chaves de API nunca cheguem ao bundle JavaScript público.
-> 2. **Diferenciação Core vs. Opcionais:** As variáveis do formulário (`RESEND_*`) e URL base (`NEXT_PUBLIC_SITE_URL`) são mandatárias para o build, enquanto credenciais de integrações de borda (Turnstile, Upstash, Keystatic Cloud) admitem fallbacks graciosos para desenvolvimento local e pipelines de CI.
-> 3. **Testabilidade Automatizada:** A validação é coberta por testes no Vitest (`src/env.test.ts`), confirmando o comportamento em cenários de setup mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
+> 1. **Prevenção de Vazamentos:** O arquivo `src/env/server.ts` utiliza `import "server-only";`, fazendo com que o compilador do Next.js aborte o build se qualquer Client Component tentar importá-lo.
+> 2. **Imunidade a Erros de Inicialização no Cliente:** Como `src/env/client.ts` é um módulo isolado, Client Components importam `clientEnv` de `@/env/client` sem carregar o código de servidor nem disparar exceções no navegador.
+> 3. **Consistência Anti-Spam (Fail-Fast):** Em produção, o build falha de imediato se o Turnstile não for configurado em ambas as pontas (`NEXT_PUBLIC_TURNSTILE_SITE_KEY` no cliente e `TURNSTILE_SECRET_KEY` no servidor), eliminando formulários quebrados para o usuário final ([ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md)).
+> 4. **Testabilidade Automatizada:** A validação é coberta por testes no Vitest (`tests/env.test.ts`), confirmando o comportamento em cenários de setup mínimo (CI), setup completo de produção e rejeição de entradas inválidas.
 
 ---
 

@@ -72,7 +72,7 @@ Esta fase representa a materialização do template em código, dividida entre a
 
 #### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído):
 
-* [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env.ts`):**
+* [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env/`):**
   * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas variáveis core: `NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL` e `CONTACT_EMAIL_TO`).
   * [ ] Testar build com configuração completa de produção (todas as integrações ativas).
   * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas.

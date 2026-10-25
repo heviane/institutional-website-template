@@ -20,12 +20,17 @@ Além disso, um problema operacional clássico em deploys serverless no Next.js 
 
 Decidimos implementar uma arquitetura de segurança preventiva composta por três mecanismos:
 
-### 2.1. Validação Segregada de Variáveis de Ambiente no Build (`src/env.ts`)
-Adotamos a validação estrita com **Zod** para todas as variáveis de ambiente em tempo de compilação (*fail-fast build pattern*), estruturada em escopos segregados:
-* **Segregação de Escopos (Server vs. Client):** Separação formal entre `serverEnvSchema` (segredos que nunca chegam ao navegador, como `RESEND_API_KEY` e `TURNSTILE_SECRET_KEY`) e `clientEnvSchema` (variáveis públicas com prefixo obrigatório `NEXT_PUBLIC_`). Essa blindagem impede vazamento acidental de chaves de API em componentes de interface (`'use client'`).
-* **Diferenciação entre Core e Opcionais por Feature:** Variáveis essenciais para renderização e formulários são obrigatórias no build. Já credenciais de serviços de borda com fallbacks locais (Cloudflare Turnstile, Upstash Redis e Keystatic Cloud) são tratadas como opcionais em desenvolvimento/CI e validadas conforme o ambiente (`NODE_ENV === "production"`).
+### 2.1. Validação Segregada de Variáveis de Ambiente no Build (`src/env/server.ts` e `src/env/client.ts`)
+Adotamos a validação estrita com **Zod** para todas as variáveis de ambiente em tempo de compilação (*fail-fast build pattern*), com segregação física entre escopos para evitar vazamento acidental para o navegador:
+* **Segregação Física de Módulos (Server vs. Client):**
+  * `src/env/client.ts`: Valida e exporta `clientEnv` apenas com variáveis públicas (`NEXT_PUBLIC_*`). Seguro para consumo tanto em Client Components quanto em Server Components.
+  * `src/env/server.ts`: Protegido com a diretiva nativa `import "server-only";`, valida e exporta `serverEnv` contendo os segredos corporativos (`RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, etc.). O compilador do Next.js bloqueia em tempo de build qualquer tentativa de importar este arquivo em componentes com `'use client'`.
+  * Essa segregação em arquivos distintos elimina o defeito de runtime onde a execução de código do servidor em arquivo único provocava erros fatais de inicialização no navegador.
+* **Validação de Borda e Proteção Anti-Spam em Produção:**
+  * Em **produção (`NODE_ENV === "production"`)**, a presença das chaves do Cloudflare Turnstile (`NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY`) é **mandatória**, garantindo que o formulário nunca seja publicado em estado vulnerável ou disfuncional ([ADR 0011](0011-defesa-antispam-e-protecao-de-formularios.md)).
+  * Em **desenvolvimento e testes (`NODE_ENV !== "production"`)**, as chaves do Turnstile e Redis são tratadas como opcionais com bypass gracioso para viabilizar execução offline e pipelines de CI.
 * **Benefício:** Se qualquer variável mandatória estiver ausente ou malformatada, **o build é abortado imediatamente no CI/CD**, exibindo um relatório explícito dos campos com erro e impedindo a publicação de versões quebradas.
-* **Testabilidade Automatizada:** Inclusão de suíte de testes no Vitest (`src/env.test.ts`) validando o comportamento do parser sob configurações mínimas, setups completos de produção e entradas inválidas.
+* **Testabilidade Automatizada:** Inclusão de suíte de testes no Vitest (`tests/env.test.ts`) validando o comportamento do parser sob configurações mínimas, setups completos de produção e entradas inválidas.
 
 ### 2.2. Cabeçalhos HTTP de Segurança no `next.config.ts`
 Configuramos *Security Headers* obrigatórios aplicados a todas as rotas da aplicação:

@@ -62,6 +62,8 @@ function checkInternalLinks(markdownFiles) {
     "src/config/site.ts",
     "src/lib/schemas/contact.ts",
     "src/lib/validations/contact.ts",
+    "src/env/server.ts",
+    "src/env/client.ts",
     "src/env.ts",
     "src/app/actions/contact.ts",
     "src/lib/rate-limit.ts",

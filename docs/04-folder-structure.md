@@ -104,7 +104,9 @@ institutional-website-template/
 │   ├── types/                       # Declarações de tipos globais do TypeScript
 │   │   └── index.d.ts
 │   │
-│   └── env.ts                       # Validação de variáveis de ambiente no build via Zod
+│   └── env/                         # Validação segregada de variáveis de ambiente no build via Zod
+│       ├── client.ts                # Schema e exportação de clientEnv (NEXT_PUBLIC_*)
+│       └── server.ts                # Schema e exportação de serverEnv (com import "server-only")
 │
 ├── tests/                           # Suíte de testes automatizados (Vitest + axe-core)
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
@@ -151,7 +153,7 @@ São os arquivos que contêm informações de marca, textos de negócio e imagen
 São os arquivos que representam a arquitetura, segurança, performance e esteira de automação do projeto:
 * `src/app/actions/**`: Server Actions e lógica de envio de e-mails.
 * `src/components/ui/**`: Primitivos do Shadcn/ui e regras de acessibilidade.
-* `src/env.ts` e `next.config.ts`: Validações de ambiente e cabeçalhos de segurança HTTP.
+* `src/env/**` e `next.config.ts`: Validações de ambiente e cabeçalhos de segurança HTTP.
 * `.github/**`: Workflows de CI/CD e configuração do Dependabot.
 * `package.json`: Dependências e scripts de automação.
 
