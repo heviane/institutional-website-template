@@ -65,10 +65,13 @@
   * [ ] Executar deploy piloto de sanidade em preview da Vercel (opcional/recomendado) para homologar Server Actions e Resend em ambiente real.
 
 * [ ] **9. Sincronização Documental Obrigatória, Anti-Doc Rot & Auditoria de PRs (Tarefa Final):**
-  * [ ] Atualizar `docs/03-project-roadmap.md` marcando a Feature 003 como concluída.
+  * [ ] Atualizar status da feature na tríade de governança:
+    * `CHANGELOG.md`: marcar Feature 003 como concluída `[x]` sob `### 📊 Status das Features` e registrar notas da entrega sob `[Unreleased]` (fonte da verdade de status).
+    * `README.md`: atualizar bloco de alerta de status para "Features 001, 002 e 003 Concluídas" e indicar a Feature 004 como próxima.
+    * `docs/03-project-roadmap.md`: atualizar cabeçalho da Fase 2 para "Features 001, 002 e 003 Concluídas", marcar checkboxes de execução da Feature 003 como concluídas e indicar a Feature 004.
   * [ ] Atualizar a árvore canônica em `docs/04-folder-structure.md` com todos os novos arquivos criados.
-  * [ ] Atualizar `CHANGELOG.md` registrando a entrega da Feature 003 sob `[Unreleased]`.
-  * [ ] Executar e validar `npm run audit:docs` (0 erros).
+  * [ ] Aplicar o Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
+  * [ ] Executar e validar `npm run audit:docs` (0 erros e 0 warnings, validando a sincronização semântica automática).
   * [ ] Auditar Pull Requests abertos no GitHub (`gh pr list`), tratando pendências de dependências ou colaboradores.
   * [ ] Realizar commit semântico e enviar push para `main`.
 

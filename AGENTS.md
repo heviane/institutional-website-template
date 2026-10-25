@@ -70,11 +70,13 @@ Para tarefas de código que envolvem lógica de validação (schemas Zod), vari�
 #### 📚 Tarefa Obrigatória Final de toda Feature (Sincronização Documental, Anti-Doc Rot & Auditoria de PRs)
 
 Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como última tarefa a sincronização da documentação e a verificação de Pull Requests:
-* Atualização de status da feature no `README.md` e em `docs/03-project-roadmap.md`.
+* Sincronização coordenada de status na tríade de governança:
+  * Registro de conclusão da feature em `CHANGELOG.md` sob `### 📊 Status das Features` e notas da entrega sob `[Unreleased]` (fonte única da verdade de status).
+  * Atualização de status da feature no `README.md` (alerta de status e próxima feature).
+  * Atualização de status da feature em `docs/03-project-roadmap.md` (cabeçalho da fase, checklists da feature e indicação da próxima).
 * Inclusão de todos os novos arquivos criados na árvore canônica de `docs/04-folder-structure.md`.
 * Aplicação do Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
-* Registro no `CHANGELOG.md` sob `[Unreleased]`.
-* Execução e validação obrigatória do script: `npm run audit:docs`.
+* Execução e validação obrigatória do script: `npm run audit:docs` (que valida programaticamente a paridade estrita entre `CHANGELOG.md`, `README.md` e `docs/03-project-roadmap.md`).
 * **Auditoria Obrigatória de Pull Requests Abertos:** Inspecionar Pull Requests abertos no repositório remoto (`gh pr list`). Se houver PRs pendentes (ex.: gerados pelo Dependabot ou colaboradores):
   * Analisar o status do CI e o escopo das alterações.
   * Se for seguro (atualizações minor/patch com CI verde e sem quebra de invariantes): propor ou realizar o merge via squash.

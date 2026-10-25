@@ -204,41 +204,118 @@ function checkAntiDocRot() {
 }
 
 /**
+ * Helper: format completed features label, e.g.
+ * - [001] -> "Feature 001 Concluída"
+ * - [001, 002] -> "Features 001 e 002 Concluídas"
+ * - [001, 002, 003] -> "Features 001, 002 e 003 Concluídas"
+ */
+function formatCompletedFeaturesLabel(features) {
+  if (features.length === 0) return "Nenhuma Feature Concluída";
+  if (features.length === 1) return `Feature ${features[0].num} Concluída`;
+  const nums = features.map((f) => f.num);
+  const last = nums.pop();
+  return `Features ${nums.join(", ")} e ${last} Concluídas`;
+}
+
+/**
  * Check 4: Roadmap & Status Synchronization
+ * Uses CHANGELOG.md as single source of truth for completed and pending features,
+ * asserting that README.md and docs/03-project-roadmap.md match it semantically.
  */
 function checkRoadmapSync() {
   console.log("\n🔍 Checking Roadmap and Status Synchronization...");
   const initialErrors = errorCount;
+  const changelogPath = path.join(ROOT_DIR, "CHANGELOG.md");
   const roadmapPath = path.join(ROOT_DIR, "docs", "03-project-roadmap.md");
   const readmePath = path.join(ROOT_DIR, "README.md");
 
-  if (fs.existsSync(roadmapPath) && fs.existsSync(readmePath)) {
-    const roadmapContent = fs.readFileSync(roadmapPath, "utf-8");
-    const readmeContent = fs.readFileSync(readmePath, "utf-8");
+  if (!fs.existsSync(changelogPath)) {
+    logError("CHANGELOG.md not found.");
+    return;
+  }
+  if (!fs.existsSync(roadmapPath)) {
+    logError("docs/03-project-roadmap.md not found.");
+    return;
+  }
+  if (!fs.existsSync(readmePath)) {
+    logError("README.md not found.");
+    return;
+  }
 
-    // Verify roadmap active status
-    const hasPhase2InProgress = roadmapContent.includes("Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)");
-    const hasReadmePhase2Badge = readmeContent.includes("Status-Fase_2_Em_Andamento");
+  const changelogContent = fs.readFileSync(changelogPath, "utf-8");
+  const roadmapContent = fs.readFileSync(roadmapPath, "utf-8");
+  const readmeContent = fs.readFileSync(readmePath, "utf-8");
 
-    if (!hasPhase2InProgress) {
-      logError("docs/03-project-roadmap.md should mark Phase 2 as '(Em Andamento)'.");
+  // Parse features from CHANGELOG.md
+  const featureRegex = /\*\s*\[([ xX])\]\s*\*\*Feature\s*(\d{3}):\s*([^*]+)\*\*/g;
+  const completedFeatures = [];
+  const pendingFeatures = [];
+  let match;
+
+  while ((match = featureRegex.exec(changelogContent)) !== null) {
+    const isDone = match[1].toLowerCase() === "x";
+    const featureNum = match[2];
+    const featureName = match[3].trim();
+    if (isDone) {
+      completedFeatures.push({ num: featureNum, name: featureName });
+    } else {
+      pendingFeatures.push({ num: featureNum, name: featureName });
     }
+  }
 
-    if (!hasReadmePhase2Badge) {
-      logError("README.md badge should indicate 'Status-Fase_2_Em_Andamento'.");
+  if (completedFeatures.length === 0 && pendingFeatures.length === 0) {
+    logError("Could not parse any features from CHANGELOG.md under '### 📊 Status das Features'.");
+    return;
+  }
+
+  // 1. Verify roadmap active status badge
+  const hasPhase2InProgress = roadmapContent.includes("Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)");
+  const hasReadmePhase2Badge = readmeContent.includes("Status-Fase_2_Em_Andamento");
+
+  if (!hasPhase2InProgress) {
+    logError("docs/03-project-roadmap.md should mark Phase 2 as '(Em Andamento)'.");
+  }
+
+  if (!hasReadmePhase2Badge) {
+    logError("README.md badge should indicate 'Status-Fase_2_Em_Andamento'.");
+  }
+
+  // 2. Expected completed features label (e.g. "Features 001 e 002 Concluídas")
+  const expectedLabel = formatCompletedFeaturesLabel(completedFeatures);
+
+  if (!readmeContent.includes(expectedLabel)) {
+    logError(`README.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`);
+  }
+
+  if (!roadmapContent.includes(expectedLabel)) {
+    logError(`docs/03-project-roadmap.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`);
+  }
+
+  // 3. Verify each completed feature is mentioned in README and Roadmap
+  for (const feat of completedFeatures) {
+    if (!readmeContent.includes(`Feature ${feat.num}`)) {
+      logError(`README.md is missing reference to completed Feature ${feat.num}.`);
     }
+    if (!roadmapContent.includes(`Feature ${feat.num}`)) {
+      logError(`docs/03-project-roadmap.md is missing reference to completed Feature ${feat.num}.`);
+    }
+  }
 
-    // Verify feature status consistency between README and Roadmap
-    const hasReadmeFeature002 = readmeContent.includes("Features 001 e 002 Concluídas");
-    const hasRoadmapFeature002 = roadmapContent.includes("Features 001 e 002 Concluídas");
-
-    if (!hasReadmeFeature002 || !hasRoadmapFeature002) {
-      logError("README.md and docs/03-project-roadmap.md must both reflect 'Features 001 e 002 Concluídas'.");
+  // 4. Verify the active feature (next pending feature) is mentioned in README and Roadmap
+  if (pendingFeatures.length > 0) {
+    const nextActive = pendingFeatures[0];
+    if (!readmeContent.includes(`Feature ${nextActive.num}`)) {
+      logError(`README.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`);
+    }
+    if (!roadmapContent.includes(`Feature ${nextActive.num}`)) {
+      logError(`docs/03-project-roadmap.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`);
     }
   }
 
   if (errorCount === initialErrors) {
-    logSuccess("Roadmap and status documentation are synchronized.");
+    logSuccess(
+      `Roadmap and status documentation are dynamically synchronized (${expectedLabel}, próxima: Feature ${pendingFeatures[0]?.num ?? "N/A"}).`
+    );
   }
 }
 
