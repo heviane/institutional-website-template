@@ -1,8 +1,11 @@
 # ADR 0011: Defesa Anti-Spam, Proteção de Formulários e Rate Limiting
 
-* **Status:** Aceito
+* **Status:** Aceito (Emendado parcialmente pelo [ADR 0012](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md))
 * **Data:** 2026-10-22
 * **Decisores:** Engenharia de Software / Autor do Projeto
+
+> [!NOTE] Emenda Arquitetural (ADR 0012)
+> A obrigatoriedade estrita de Upstash Redis e Cloudflare Turnstile em produção (Seções 2.2 e 2.3) foi emendada pelo [ADR 0012](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) para comportar o **Modo Lite (Progressive Enhancement)**. Em ambientes serverless sem Redis configurado, o Rate Limiting em memória local (`Map`) opera formalmente em regime de **"melhor esforço" (*best-effort*)**.
 
 ---
 

@@ -1,8 +1,11 @@
 # ADR 0009: Política de Segurança, Headers HTTP e Validação de Ambiente
 
-* **Status:** Aceito
+* **Status:** Aceito (Emendado parcialmente pelo [ADR 0012](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md))
 * **Data:** 2026-10-22
 * **Decisores:** Engenharia de Software / Autor do Projeto
+
+> [!NOTE] Emenda Arquitetural (ADR 0012)
+> A obrigatoriedade estrita das chaves do Turnstile em produção descrita na Seção 2.1 foi flexibilizada pelo [ADR 0012](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) para viabilizar o **Modo Lite (Progressive Enhancement)** em micro-projetos, mantendo a obrigatoriedade estrita apenas quando o Modo Robusto estiver ativado.
 
 > Estabelece os padrões de segurança defensiva do template, incluindo validação de variáveis de ambiente no build via Zod, cabeçalhos HTTP de segurança no Next.js e política de divulgação responsável de vulnerabilidades.
 

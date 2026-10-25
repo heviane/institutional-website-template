@@ -64,6 +64,7 @@ Para garantir governança, rastreabilidade e facilidade de *onboarding*, o proje
   * [ADR 0009: Política de Segurança, Headers HTTP e Validação de Ambiente](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)
   * [ADR 0010: Estratégia de Versionamento do Template e Propagação de Atualizações para Clientes](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)
   * [ADR 0011: Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md)
+  * [ADR 0012: Estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e Rate Limiting Serverless de Melhor Esforço](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)
 
 ---
 

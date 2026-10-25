@@ -36,7 +36,7 @@ institutional-website-template/
 │   └── singletons/                  # Conteúdos de páginas fixas (Home, Sobre)
 │
 ├── docs/                            # Documentação técnica e governança do projeto
-│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0011)
+│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0012)
 │   ├── 01-architecture-overview.md  # Visão geral de requisitos e decisões
 │   ├── 02-environment-setup.md      # Guia de setup local e padrões de código
 │   ├── 03-project-roadmap.md        # Roadmap e fases de desenvolvimento

@@ -19,6 +19,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado (Unreleased)
 
+* **Governança & Decisões Arquiteturais (ADR 0012 & Spec-to-Docs Parity Gate):**
+  * Formalização do [ADR 0012](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) estabelecendo a estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e documentando o Rate Limiting em memória serverless como de melhor esforço.
+  * Emenda controlada aos [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md) e [ADR 0011](docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md).
+  * Criação do portão mandatória de alinhamento bidirecional de especificações (*Spec-to-Docs Parity Gate*) no [AGENTS.md](AGENTS.md).
 * **Feature 002 (Design System, Layout Base & Componentes Essenciais):**
   * Configuração manual e declarativa do Shadcn/ui (`components.json`) compatível com Tailwind CSS v4.
   * Instalação de dependências acessíveis de UI (`lucide-react`, `class-variance-authority`, `@radix-ui/react-slot`, `@radix-ui/react-dialog`) e de teste de acessibilidade (`axe-core`).

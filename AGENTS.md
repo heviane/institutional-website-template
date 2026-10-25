@@ -59,6 +59,19 @@ Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar
 * **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
 * **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
 
+#### 📑 Portão Obrigatório de Alinhamento Bidirecional de Specs (Spec-to-Docs Parity Gate)
+
+SEMPRE que novas especificações forem criadas, editadas ou calibradas no diretório `specs/<feature>/`, a IA **DEVE obrigatoriamente** realizar uma verificação cruzada com a documentação formal antes de avançar para a escrita de código em `src/`:
+1. **Auditoria de Compatibilidade com ADRs (`docs/adr/`):**
+   * Verificar se nenhum requisito novo ou flexibilizado na spec contradiz decisões arquiteturais aprovadas em `docs/adr/`.
+   * Se a spec introduzir uma mudança arquitetural deliberada (ex.: novos modos de deploy, relaxamento de variáveis mandatórias, adição de bibliotecas core), a IA **NÃO PODE** apenas alterar a spec de forma isolada; ela DEVE criar um novo ADR formal (ex.: `ADR 0012`), emendar os ADRs impactados e atualizar o índice `docs/adr/README.md`.
+2. **Sincronização com as Especificações de Domínio (`docs/`):**
+   * Verificar se as especificações transversais (`docs/01` a `docs/08`) necessitam de atualização de contrato (ex.: variáveis em `02-environment-setup.md`, novos marcos em `03-project-roadmap.md`, novos passos em `07-client-onboarding-checklist.md`).
+3. **Sincronização com Documentos Raiz:**
+   * Garantir que a documentação na raiz do projeto (`README.md`, `CHANGELOG.md`, `SECURITY.md`, `.env.example`) reflita com fidelidade as alterações de contrato.
+4. **Validação Programática Imediata:**
+   * Executar compulsoriamente `npm run audit:docs` para certificar que a calibração documental possui zero erros de integridade ou links quebrados.
+
 #### 🧪 Execução de Tarefas com TDD (Red-Green-Refactor)
 
 Para tarefas de código que envolvem lógica de validação (schemas Zod), variáveis de ambiente (`env.ts`), utilitários de negócio e Server Actions, a IA deve aplicar o ciclo TDD:
@@ -97,7 +110,7 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 | **Modelo de Dados & Collections do CMS** | [`docs/05-keystatic-content-model.md`](docs/05-keystatic-content-model.md) |
 | **Design System, UI & Temas (Tailwind v4)** | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md) |
 | **Onboarding de Clientes, Envs & Custos** | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md) |
-| **Decisões de Arquitetura (0001 a 0011)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
+| **Decisões de Arquitetura (0001 a 0012)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
 | **Especificações de Funcionalidades (Fase 2)** | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`) |
 
 ---

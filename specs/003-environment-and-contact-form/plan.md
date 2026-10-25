@@ -169,18 +169,19 @@ export interface ActionResponse {
 
 ### 1.4. Rate Limiting com Hash Anônimo de IP (`src/lib/rate-limit.ts`)
 
-Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md):
+Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md) e [ADR 0012](../../docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md):
 - **Cálculo da Chave:** `key = "rate-limit:" + HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` gerado via módulo nativo `node:crypto`. O IP nunca trafega nem é persistido em texto claro (LGPD e privacidade por design).
 - **Algoritmo Escolhido: Janela Fixa com TTL Relativo (Fixed Window with 1-hour TTL):**
   - **Trade-off Deliberado:** Prioriza simplicidade, determinismo e baixíssima sobrecarga de rede sobre a complexidade de algoritmos de janelas deslizantes (que demandariam sorted sets e múltiplas operações Redis por request). Para a mitigação de robôs de spam e preservação da cota de 100 e-mails/dia do Resend, a janela fixa de 5 envios por hora oferece proteção robusta e custo computacional mínimo.
   - **Eliminação da Data no Salt:** Ao fixar a expiração via TTL atômico de 3.600s, o registro se auto-destrói da memória/Redis após 1 hora de inatividade, eliminando a chave sem resíduos e sem a anomalia de reset artificial na virada da meia-noite (`YYYY-MM-DD`).
 - **Implementação Dual e Degradação Graciosa:**
-  - **Com Upstash configurado (`UPSTASH_REDIS_REST_URL` & `TOKEN`):**
+  - **Com Upstash configurado (Modo Robusto — `UPSTASH_REDIS_REST_URL` & `TOKEN`):**
     - Executa `INCR key`. Se o retorno for `1` (primeira requisição), agenda `EXPIRE key 3600`.
     - Se `count > 5`, retorna `{ isAllowed: false, remaining: 0, resetAt }`.
     - Se `count <= 5`, retorna `{ isAllowed: true, remaining: 5 - count, resetAt }`.
-  - **Sem Upstash configurado (modo micro-projeto, dev ou fallback):**
+  - **Sem Upstash configurado (Modo Lite / dev / micro-projetos — ADR 0012):**
     - Armazena em `Map<string, { count: number; expiresAt: number }>`.
+    - **Compromisso de "Melhor Esforço" (*Best-Effort*):** Em arquiteturas serverless com instâncias efêmeras, a memória RAM não é sincronizada globalmente entre containers concorrentes. O Map atua com eficiência contendo rajadas e disparos acidentais no mesmo container, mas opera formalmente sob regime de melhor esforço ([ADR 0012](../../docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)).
     - Ao consultar: se não existir ou `Date.now() > item.expiresAt`, cria/reseta com `{ count: 1, expiresAt: Date.now() + 3600000 }`.
     - Se existir e ainda válido: incrementa o contador e valida se `count <= 5`.
 - **Extração Segura do IP:** Priorização de cabeçalhos de borda da Vercel (`x-real-ip`) e Cloudflare (`cf-connecting-ip`), evitando forjamento via `x-forwarded-for` direto.
