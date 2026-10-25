@@ -80,8 +80,7 @@ institutional-website-template/
 │   │   │   ├── header/              # Barra de navegação e menu mobile
 │   │   │   ├── footer/              # Rodapé corporativo e links legais
 │   │   │   ├── hero/                # Seção Hero com CTA principal
-│   │   │   ├── contact-form/        # Formulário de contato acessível
-│   │   │   └── mode-toggle/         # Alternador de tema Claro / Escuro
+│   │   │   └── contact-form/        # Formulário de contato acessível
 │   │   └── ui/                      # Primitivos atômicos do Shadcn/ui (Radix UI)
 │   │       ├── button.tsx
 │   │       ├── card.tsx

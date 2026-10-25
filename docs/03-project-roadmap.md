@@ -107,7 +107,7 @@ Esta fase representa a materialização do template em código, dividida entre a
 Funcionalidades opcionais que podem ser ativadas em projetos específicos de clientes, conforme a necessidade do negócio:
 
 * [ ] Suporte a múltiplos idiomas (Internacionalização / i18n com tags `hreflang`)
-* [ ] Implementação de Dark Mode nativo com troca de variáveis no Tailwind
+* [ ] Implementação de Dark Mode dinâmico com alternador de tema interativo (`ModeToggle`), detecção de preferências e persistência de estado (a infraestrutura base de tokens CSS já reside no `src/app/globals.css`)
 * [ ] Área logada / Autenticação de usuários (se exigido pelo projeto do cliente)
 * [ ] Adaptador oficial para deploy alternativo no Cloudflare Pages via OpenNext (`@cloudflare/next-on-pages`)
 * [ ] SEO avançado: Schemas JSON-LD especializados (`LocalBusiness` multi-endereço, `Product`, `Event`), índices de sitemap (`sitemap-index.xml`)

@@ -42,6 +42,8 @@ Basta converter a cor hexadecimal fornecida no manual de marca do cliente para o
 ```css
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
