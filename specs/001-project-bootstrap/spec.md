@@ -23,14 +23,17 @@ Transicionar o repositório da **Fase 1 (Fundação Documental e Governança)** 
    * `typecheck` (`tsc --noEmit`).
    * `test` (Vitest com suporte a DOM e `vitest-axe`).
    * `build` (`next build`).
-3. **Design System & Primitivos:** Instalação e configuração inicial do Shadcn/ui com suporte ao Radix UI e Tailwind CSS v4 via `@theme` no `src/app/globals.css`.
-4. **Infraestrutura de Testes:** Configurar o Vitest (`vitest.config.ts`) e criar um teste básico de sanidade comprovando que o runner executa com sucesso.
-5. **Lockfile Determinístico:** Gerar e versionar o `package-lock.json`.
-6. **Promoção do CI:** Atualizar `.github/workflows/ci.yml`, removendo a lógica provisória de guarda da Fase 1 (`check-bootstrap`) para que os gates executem de forma 100% incondicional e bloqueante via `npm ci`.
+   * `audit:docs` (Auditoria de integridade documental e Anti-Doc Rot).
+   * `verify` (Quality gate unificado).
+3. **Estilização Base & Utilitários:** Configurar Tailwind CSS v4 via `@theme` no `src/app/globals.css` com paleta em `oklch()` e a função canônica `cn()` (`clsx` + `tailwind-merge`) em `src/lib/utils.ts`. (A instalação dos componentes e primitivos Shadcn/ui é expressamente diferida para a Feature 002).
+4. **Headers de Segurança (ADR 0009):** Configurar em `next.config.ts` os cabeçalhos HTTP mandatados pelo [ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md) (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-DNS-Prefetch-Control`, `Content-Security-Policy-Report-Only` e `Strict-Transport-Security`).
+5. **Infraestrutura de Testes:** Configurar o Vitest (`vitest.config.ts`) e criar testes de sanidade e utilitários comprovando que o runner executa com sucesso.
+6. **Lockfile Determinístico:** Gerar e versionar o `package-lock.json`.
+7. **Promoção do CI:** Atualizar `.github/workflows/ci.yml`, removendo a lógica provisória de guarda da Fase 1 (`check-bootstrap`) para que os gates executem de forma 100% incondicional e bloqueante via `npm ci`, incluindo a auditoria documental (`audit:docs`).
 
 ### O que NÃO está no escopo (Out-of-Scope):
 
-* Componentes de layout institucional complexos (Header, Hero, Footer, Sobre, Serviços) — *Tratados na Feature 002*.
+* Instalação de componentes e primitivos do Shadcn/ui (Button, Card, Dialog, Input, Textarea) e componentes estruturais (Header, Hero, Footer) — *Tratados na Feature 002*.
 * Server Action de formulário e integrações (Resend, Turnstile, Rate Limit) — *Tratados na Feature 003*.
 * Configuração do Keystatic CMS e coleções — *Tratados na Feature 004*.
 * Auditorias de produção do Lighthouse e DNS de domínio — *Tratados na Feature 005*.

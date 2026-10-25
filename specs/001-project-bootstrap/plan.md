@@ -26,8 +26,19 @@ Como o repositório já possui a fundação documental e governança estabelecid
 | **Tailwind CSS** | `^4.x` | CSS-first moderno utilizando `@theme` no `src/app/globals.css` ([ADR 0004](../../docs/adr/0004-design-system-e-estilizacao.md)). |
 | **Zod** | `^3.24.x` | Validação estrita de schemas em runtime (travada na v3 para compatibilidade com `@hookform/resolvers/zod`). |
 | **server-only** | `^0.0.1` | Impede importação acidental de módulos de servidor (`serverEnv`) em Client Components ([ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)). |
-| **Shadcn/ui & Radix** | Latest | Primitivos acessíveis (WCAG 2.1 AA) e utilitário `cn` (`clsx` + `tailwind-merge`). |
+| **clsx & tailwind-merge** | `^2.x` | Utilitário canônico `cn()` para composição de classes. Componentes e primitivos Shadcn/ui diferidos para a Feature 002. |
 | **Vitest** | `^3.x` | Runner de testes ultra rápido em ESM com `jsdom` e `vitest-axe` ([ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)). |
+
+### 1.3. Headers de Segurança em `next.config.ts` (ADR 0009)
+
+Conforme deliberado no [ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md), a configuração base do Next.js injeta cabeçalhos HTTP estritos para defesa em profundidade:
+* `X-Frame-Options: SAMEORIGIN` (mitigação de clickjacking).
+* `X-Content-Type-Options: nosniff` (prevenção de MIME-sniffing).
+* `Referrer-Policy: strict-origin-when-cross-origin`.
+* `Permissions-Policy: camera=(), microphone=(), geolocation=()`.
+* `X-DNS-Prefetch-Control: on`.
+* `Content-Security-Policy-Report-Only` (modo observabilidade preliminar).
+* `Strict-Transport-Security: max-age=31536000` (HSTS habilitado em produção).
 
 ---
 
@@ -63,12 +74,13 @@ O arquivo `.github/workflows/ci.yml` deixará de ser provisório:
 ```yaml
 # Fluxo Definitivo Incondicional:
 steps:
-  - uses: actions/checkout@v4
-  - uses: actions/setup-node@v4
+  - uses: actions/checkout@v7
+  - uses: actions/setup-node@v7
     with:
       node-version: 24
       cache: "npm"
   - run: npm ci
+  - run: npm run audit:docs
   - run: npm run lint
   - run: npm run typecheck
   - run: npm test
@@ -84,7 +96,7 @@ steps:
 
 ## ⚠️ 4. Riscos Monitorados e Mitigações
 
-* **Risco de Conflitos de Peer Dependencies (React 19 vs. Pacotes Radix):**  
-  *Mitigação:* Usar versões recentes do Shadcn/ui que já possuem suporte testado ao React 19.
+* **Escopo Mínimo de Bootstrap:**  
+  *Mitigação:* Adoção de dependências estritamente necessárias para a materialização da base técnica. A instalação de primitivos Radix UI e componentes Shadcn/ui foi intencionalmente diferida para a Feature 002, prevenindo atrito preliminar de *peer dependencies* durante a fase de fundação.
 * **Sobrescrita Acidental de Documentação e Governança:**  
   *Mitigação:* Adoção do **Bootstrap Declarativo Direto na Raiz** (Seção 1.1), dispensando o utilitário interativo `create-next-app` e garantindo a preservação intocada de `README.md`, `AGENTS.md`, `.gitignore`, `docs/` e `specs/`.
