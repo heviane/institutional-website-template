@@ -85,8 +85,12 @@ institutional-website-template/
 │   ├── components/                  # Componentes React reutilizáveis
 │   │   ├── shared/                  # Componentes compostos de layout
 │   │   │   ├── header/              # Barra de navegação e menu mobile
+│   │   │   │   ├── header.tsx       # RSC: Cabeçalho institucional com links do siteConfig
+│   │   │   │   └── mobile-nav.tsx   # 'use client': Menu responsivo via Radix Dialog
 │   │   │   ├── footer/              # Rodapé corporativo e links legais
+│   │   │   │   └── footer.tsx       # RSC: Rodapé institucional com links legais e contato
 │   │   │   ├── hero/                # Seção Hero com CTA principal
+│   │   │   │   └── hero.tsx         # RSC: Hero agnóstico de template com HeroProps
 │   │   │   └── contact-form/        # Formulário de contato acessível
 │   │   └── ui/                      # Primitivos atômicos do Shadcn/ui (Radix UI)
 │   │       ├── button.tsx
@@ -118,7 +122,8 @@ institutional-website-template/
 │   ├── components/                  # Testes unitários de componentes e acessibilidade (WCAG 2.1 AA)
 │   │   ├── button.test.tsx          # Teste de variantes do Button, asChild e conformidade WCAG
 │   │   ├── card.test.tsx            # Teste de composição do Card e conformidade WCAG
-│   │   └── dialog.test.tsx          # Teste de ciclo de foco do Dialog (foco, Escape e WCAG)
+│   │   ├── dialog.test.tsx          # Teste de ciclo de foco do Dialog (foco, Escape e WCAG)
+│   │   └── layout.test.tsx          # Matriz de testes funcionais (Casos 1, 2, 4, 5) e acessibilidade WCAG
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe
 │   ├── site-config.test.ts          # Validação do contrato do objeto de marca siteConfig

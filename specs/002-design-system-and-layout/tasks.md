@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Execução (Tarefas 1, 2 e 3 Concluídas)
+* **Status:** Em Execução (Tarefas 1 a 4 Concluídas)
 
 ---
 
@@ -30,18 +30,18 @@
   * [x] 🟢 **Green:** Implementar `src/components/ui/dialog.tsx` baseado em `@radix-ui/react-dialog` com focus trap acessível.
   * [x] 🟢 **Green:** Implementar `src/components/ui/input.tsx` e `src/components/ui/textarea.tsx`.
 
-* [ ] **4. Componentes Estruturais de Layout (Server-First) & Matriz Enxuta de UI (`src/components/shared/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/components/layout.test.tsx` cobrindo os Casos da Matriz:
+* [x] **4. Componentes Estruturais de Layout (Server-First) & Matriz Enxuta de UI (`src/components/shared/`) — TDD:**
+  * [x] 🔴 **Red:** Criar suíte de testes em `tests/components/layout.test.tsx` cobrindo os Casos da Matriz:
     * **Caso 1:** `Header renders nav items` (links vindos de `siteConfig.nav`).
     * **Caso 2:** `Mobile menu toggles correctly` (abrir/fechar via hambúrguer, `Esc` e clique em âncora).
     * **Caso 4:** `CTA links point to correct anchors` (WhatsApp e `#servicos`).
     * **Caso 5:** `Footer shows legal/contact info` (Razão Social, CNPJ e contatos).
     * Asserções `axe` para WCAG 2.1 AA em todos os componentes de layout.
-  * [ ] 🟢 **Green:** Implementar `src/components/shared/header/header.tsx` como Server Component (RSC).
-  * [ ] 🟢 **Green:** Implementar `src/components/shared/header/mobile-nav.tsx` como o único Client Component (`'use client'`) com Radix Dialog e auto-close.
-  * [ ] 🟢 **Green:** Implementar `src/components/shared/hero/hero.tsx` como Server Component (RSC) com `HeroProps` agnóstica e hierarquia clara de botões (máximo 1 CTA primária).
-  * [ ] 🟢 **Green:** Implementar `src/components/shared/footer/footer.tsx` como Server Component (RSC) com dados legais e canais de contato.
-  * [ ] 🔵 **Refactor:** Eliminar redundâncias e validar conformidade total de acessibilidade.
+  * [x] 🟢 **Green:** Implementar `src/components/shared/header/header.tsx` como Server Component (RSC).
+  * [x] 🟢 **Green:** Implementar `src/components/shared/header/mobile-nav.tsx` como o único Client Component (`'use client'`) com Radix Dialog e auto-close.
+  * [x] 🟢 **Green:** Implementar `src/components/shared/hero/hero.tsx` como Server Component (RSC) com `HeroProps` agnóstica e hierarquia clara de botões (máximo 1 CTA primária).
+  * [x] 🟢 **Green:** Implementar `src/components/shared/footer/footer.tsx` como Server Component (RSC) com dados legais e canais de contato.
+  * [x] 🔵 **Refactor:** Eliminar redundâncias e validar conformidade total de acessibilidade.
 
 * [ ] **5. Composição do "Layout Shell Demo" na Home Page (`src/app/page.tsx` - RSC):**
   * [ ] Atualizar `src/app/layout.tsx` (RSC) com carregamento de fonte `Inter` via `next/font/google` e metadados dinâmicos.
