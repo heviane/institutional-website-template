@@ -35,6 +35,7 @@ Para assegurar **Core Web Vitals excelentes (LCP < 2,5s, INP < 200ms)** e reduzi
 ### 1.3. Proteção de Arquivos Existentes (Anti-Sobrescrita do Shadcn)
 
 Para preservar integralmente os arquivos canônicos já configurados e validados na Feature 001 (`src/app/globals.css` com `@custom-variant dark` e tokens OKLCH, e `src/lib/utils.ts` com o helper `cn()`):
+
 * **Proibição de `npx shadcn init`:** O comando interativo de CLI não deve ser executado, pois tenta sobrescrever `globals.css` e `utils.ts`.
 * **Configuração Declarativa Direta (`components.json`):** O arquivo de configuração `components.json` é criado manualmente na raiz, e os componentes primitivos (`button.tsx`, `card.tsx`, `dialog.tsx`, `input.tsx`, `textarea.tsx`) são adicionados diretamente em `src/components/ui/` respeitando o Radix UI e o Tailwind CSS v4.
 
@@ -212,6 +213,7 @@ const buttonVariants = cva(
 ### 1.8. Composição do "Layout Shell Demo" (`src/app/page.tsx` - RSC)
 
 A Home Page demonstrará a harmonia e responsividade de toda a estrutura:
+
 1. `<Header />`: Navegação fixa e botão CTA de contato.
 2. `<Hero />`: Título institucional neutro com chamada primária de WhatsApp e secundária para serviços.
 3. `<FeaturesSection />`: Grid de 3 colunas (`grid grid-cols-1 md:grid-cols-3 gap-6`) utilizando o primitivo `<Card />` com ícones neutros da Lucide.
@@ -271,7 +273,7 @@ A Home Page demonstrará a harmonia e responsividade de toda a estrutura:
 
 ## 🧪 3. Estratégia de Testes (TDD, Matriz Enxuta de UI & WCAG 2.1 AA)
 
-### 📋 A Matriz de Testes Funcionais de UI:
+### 📋 A Matriz de Testes Funcionais de UI
 
 | # | Teste Funcional | Arquivo | Asserção Principal |
 | :--- | :--- | :--- | :--- |
@@ -282,8 +284,10 @@ A Home Page demonstrará a harmonia e responsividade de toda a estrutura:
 | **5** | **`Footer shows legal/contact info`** | `tests/components/layout.test.tsx` | Verifica a presença na tela da Razão Social, CNPJ formatado e canais de contato do `siteConfig`. |
 | **6** | **`Button variants render classes as expected`** | `tests/components/button.test.tsx` | Valida classes semânticas aplicadas em `cta` (escala/destaque), `whatsapp` (esmeralda) e `asChild` (renderiza `<a>`). |
 
-### ♿ Teste de Acessibilidade (WCAG 2.1 AA):
+### ♿ Teste de Acessibilidade (WCAG 2.1 AA)
+
 Cada componente renderizado na suíte de testes passa pela asserção:
+
 ```typescript
 const { container } = render(<Component />);
 expect(await axe(container)).toHaveNoViolations();

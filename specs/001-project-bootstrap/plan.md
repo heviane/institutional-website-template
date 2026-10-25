@@ -11,6 +11,7 @@
 ### 1.1. Metodologia de Bootstrap: Setup Declarativo Direto na Raiz
 
 Como o repositório já possui a fundação documental e governança estabelecidas na Fase 1 (`AGENTS.md`, `README.md`, `docs/`, `specs/`, `.gitignore`, `.gitattributes`, `.editorconfig`, `.prettierrc`), a inicialização do projeto adota o **Bootstrap Declarativo Direto**:
+
 * **Sem uso de CLI interativo (`create-next-app`):** Assistentes interativos como `create-next-app` são projetados para diretórios vazios e tentam sobrescrever arquivos de governança (como `README.md`, `.gitignore` e `AGENTS.md`).
 * **Criação declarativa e determinística:** O `package.json` base, configurações de compilador/linter (`tsconfig.json`, `next.config.ts`, `eslint.config.mjs`, `vitest.config.ts`) e o scaffolding em `src/` são criados diretamente na raiz respeitando as especificações deste documento.
 * **Resolução determinística de dependências:** O comando `npm install` é executado na raiz para baixar as dependências e produzir o `package-lock.json` imutável.
@@ -32,6 +33,7 @@ Como o repositório já possui a fundação documental e governança estabelecid
 ### 1.3. Headers de Segurança em `next.config.ts` (ADR 0009)
 
 Conforme deliberado no [ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md), a configuração base do Next.js injeta cabeçalhos HTTP estritos para defesa em profundidade:
+
 * `X-Frame-Options: SAMEORIGIN` (mitigação de clickjacking).
 * `X-Content-Type-Options: nosniff` (prevenção de MIME-sniffing).
 * `Referrer-Policy: strict-origin-when-cross-origin`.

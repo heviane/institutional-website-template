@@ -15,7 +15,7 @@ Transicionar o repositório da **Fase 1 (Fundação Documental e Governança)** 
 
 ## 📦 2. Escopo Funcional
 
-### O que ESTÁ no escopo (In-Scope):
+### O que ESTÁ no escopo (In-Scope)
 
 1. **Inicialização do Framework:** Inicializar Next.js 16 (App Router), React 19, TypeScript e Tailwind CSS v4 na raiz do projeto, compatível com Node.js 24 LTS.
 2. **Scripts Mandatórios de Qualidade:** Configurar no `package.json` os scripts:
@@ -31,7 +31,7 @@ Transicionar o repositório da **Fase 1 (Fundação Documental e Governança)** 
 6. **Lockfile Determinístico:** Gerar e versionar o `package-lock.json`.
 7. **Promoção do CI:** Atualizar `.github/workflows/ci.yml`, removendo a lógica provisória de guarda da Fase 1 (`check-bootstrap`) para que os gates executem de forma 100% incondicional e bloqueante via `npm ci`, incluindo a auditoria documental (`audit:docs`).
 
-### O que NÃO está no escopo (Out-of-Scope):
+### O que NÃO está no escopo (Out-of-Scope)
 
 * Instalação de componentes e primitivos do Shadcn/ui (Button, Card, Dialog, Input, Textarea) e componentes estruturais (Header, Hero, Footer) — *Tratados na Feature 002*.
 * Server Action de formulário e integrações (Resend, Turnstile, Rate Limit) — *Tratados na Feature 003*.

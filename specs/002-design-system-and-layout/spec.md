@@ -18,7 +18,7 @@ A aplicação adota uma estética **visualmente profissional, neutra e elegante*
 
 ## 📦 2. Escopo Funcional
 
-### O que ESTÁ no escopo (In-Scope):
+### O que ESTÁ no escopo (In-Scope)
 
 1. **Configuração Centralizada do Cliente (`src/config/site.ts`) & Tipagem Escalável:**
    * Declaração de interfaces TypeScript exportadas e modulares: `NavItem`, `ContactConfig`, `LegalConfig`, `SocialLinks` e `SiteConfig`.
@@ -93,7 +93,7 @@ A aplicação adota uma estética **visualmente profissional, neutra e elegante*
      6. `Button variants render classes as expected`: valida aplicação das classes nas variantes `cta`, `whatsapp` e `asChild`.
    * **Acessibilidade Contínua:** Verificação automatizada com `vitest-axe` em todos os componentes (zero violações).
 
-### O que NÃO está no escopo (Out-of-Scope):
+### O que NÃO está no escopo (Out-of-Scope)
 
 * **Aplicativos móveis nativos (React Native, iOS, Android):** O MVP e o template são **estritamente para navegadores Web** de forma responsiva.
 * Formulário transacional funcional com envio de e-mails, Resend API, Rate Limiting e Turnstile — *Tratado na Feature 003*.
