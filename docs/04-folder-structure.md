@@ -123,6 +123,7 @@ institutional-website-template/
 │   │   ├── button.test.tsx          # Teste de variantes do Button, asChild e conformidade WCAG
 │   │   ├── card.test.tsx            # Teste de composição do Card e conformidade WCAG
 │   │   ├── dialog.test.tsx          # Teste de ciclo de foco do Dialog (foco, Escape e WCAG)
+│   │   ├── home.test.tsx            # Teste de integração do Layout Shell Demo e acessibilidade WCAG
 │   │   └── layout.test.tsx          # Matriz de testes funcionais (Casos 1, 2, 4, 5) e acessibilidade WCAG
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe

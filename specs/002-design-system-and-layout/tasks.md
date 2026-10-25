@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Execução (Tarefas 1 a 4 Concluídas)
+* **Status:** Em Execução (Tarefas 1 a 5 Concluídas)
 
 ---
 
@@ -43,10 +43,10 @@
   * [x] 🟢 **Green:** Implementar `src/components/shared/footer/footer.tsx` como Server Component (RSC) com dados legais e canais de contato.
   * [x] 🔵 **Refactor:** Eliminar redundâncias e validar conformidade total de acessibilidade.
 
-* [ ] **5. Composição do "Layout Shell Demo" na Home Page (`src/app/page.tsx` - RSC):**
-  * [ ] Atualizar `src/app/layout.tsx` (RSC) com carregamento de fonte `Inter` via `next/font/google` e metadados dinâmicos.
-  * [ ] Atualizar `src/app/page.tsx` (RSC) aplicando rigorosamente os guardrails de UX (`max-w-7xl`, `py-16 md:py-24`, tokens semânticos, zero raw hex) montando: `<Header />`, `<Hero />`, seção de serviços em grid de `<Card />` e `<Footer />`.
-  * [ ] Validar responsividade e harmonia visual no navegador (`http://localhost:3000`).
+* [x] **5. Composição do "Layout Shell Demo" na Home Page (`src/app/page.tsx` - RSC):**
+  * [x] Atualizar `src/app/layout.tsx` (RSC) com carregamento de fonte `Inter` via `next/font/google` e metadados dinâmicos.
+  * [x] Atualizar `src/app/page.tsx` (RSC) aplicando rigorosamente os guardrails de UX (`max-w-7xl`, `py-16 md:py-24`, tokens semânticos, zero raw hex) montando: `<Header />`, `<Hero />`, seção de serviços em grid de `<Card />` e `<Footer />`.
+  * [x] Validar responsividade e harmonia visual no navegador (`http://localhost:3000`).
 
 * [ ] **6. Execução e Homologação dos Quality Gates Locais:**
   * [ ] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
