@@ -31,9 +31,9 @@ Decidimos implementar uma infraestrutura integrada de garantia da qualidade (*Co
 ### 2.2. Suíte de Testes Automatizados no Código (Planejado para Implementação na Fase 2)
 Adotamos o **Vitest** como o executor padrão de testes em substituição ao Jest para ativação assim que o código Next.js for criado:
 * **Justificativa:** Integração nativa com ESM e TypeScript, execução instantânea e compatibilidade com a API do Jest.
-* **Metodologia de Execução (TDD - Test-Driven Development):** Para módulos de lógica crítica (schemas Zod, validação de ambiente em `src/env.ts` e Server Actions), a escrita do teste unitário precede a implementação do código produtivo (ciclo *Red-Green-Refactor*), garantindo convergência estrita com os contratos especificados em `specs/` e prevenindo que testes sejam moldados para mascarar implementações imperfeitas.
+* **Metodologia de Execução (TDD - Test-Driven Development):** Para módulos de lógica crítica (schemas Zod, validação de ambiente em `src/env/` e Server Actions), a escrita do teste unitário em `tests/` precede a implementação do código produtivo (ciclo *Red-Green-Refactor*), garantindo convergência estrita com os contratos especificados em `specs/` e prevenindo que testes sejam moldados para mascarar implementações imperfeitas.
 * **Escopo Estratégico de Testes:**
-  1. **Integridade de Schemas (Zod):** Validações de e-mail, telefone e consentimento obrigatório da LGPD.
+  1. **Integridade de Schemas (Zod):** Validações de e-mail, telefone e salvaguardas configuráveis de privacidade da LGPD ([ADR 0007](0007-conformidade-lgpd-e-privacidade.md)).
   2. **Configuração Global (`siteConfig`):** Testes unitários garantindo que os campos mandatórios (nome, contatos, CNPJ, DPO) estão presentes e válidos.
   3. **Renderização de Componentes:** Testar montagem sem erros dos componentes estruturais (`Header`, `Footer`, `Hero`).
 
@@ -55,7 +55,7 @@ Parâmetros de aceitação via **Lighthouse CI** (`lighthouserc.json`) a serem e
 
 ### Positivas (Benefícios):
 * **Blindagem do Branch Principal:** Impossibilita o merge de código com erros de tipagem, lint ou build quebrado.
-* **Salvaguarda dos 5 Pilares:** Monitora e protege continuamente Alta Performance (Lighthouse CI), Infraestrutura de Baixo Custo, Acessibilidade Real (axe-core) e LGPD (testes no Zod).
+* **Salvaguarda dos Pilares Arquiteturais:** Monitora e protege continuamente Alta Performance (Lighthouse CI), Infraestrutura de Baixo Custo, Acessibilidade Real (axe-core) e LGPD (testes no Zod).
 * **Segurança e Manutenção Automatizada:** Atualizações de patches e correções de segurança chegam via PRs prontos do Dependabot.
 
 ### Negativas (Riscos e Desvantagens Aceitas):

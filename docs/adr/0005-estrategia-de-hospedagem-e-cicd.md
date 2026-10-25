@@ -10,7 +10,7 @@
 
 ## 1. Contexto (Context)
 
-A entrega de um website institucional para clientes exige uma infraestrutura de hospedagem segura, globalmente distribuída e automatizada, reduzindo o esforço manual do desenvolvedor a cada atualização de código ou conteúdo .
+A entrega de um website institucional para clientes exige uma infraestrutura de hospedagem segura, globalmente distribuída e automatizada, reduzindo o esforço manual do desenvolvedor a cada atualização de código ou conteúdo.
 
 A solução de infraestrutura precisa atender aos seguintes pilares:
 

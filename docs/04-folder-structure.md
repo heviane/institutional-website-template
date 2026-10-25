@@ -12,6 +12,10 @@ institutional-website-template/
 │   └── rules/                       # Regras de contexto para IA (.mdc)
 │       └── sdd.mdc                  # Instruções de SDD vinculadas ao AGENTS.md
 │
+├── .cursor/                         # Regras e contexto para agentes no Cursor IDE
+│   └── rules/
+│       └── sdd.mdc                  # Diretrizes SDD e ponteiro para AGENTS.md
+│
 ├── .github/                         # Automações e governança do GitHub
 │   ├── ISSUE_TEMPLATE/              # Modelos para abertura de issues
 │   ├── workflows/                   # Pipelines do GitHub Actions
@@ -20,6 +24,9 @@ institutional-website-template/
 │   ├── copilot-instructions.md      # Instruções de contexto para o GitHub Copilot
 │   ├── dependabot.yml               # Monitoramento semanal de dependências
 │   └── PULL_REQUEST_TEMPLATE.md     # Modelo padrão para Pull Requests
+│
+├── .vscode/                         # Configurações do VS Code
+│   └── extensions.json              # Recomendações de extensões para a equipe
 │
 ├── content/                         # Armazenamento de dados do Keystatic (Markdown/JSON)
 │   ├── posts/                       # Artigos do blog (.mdoc / .json)

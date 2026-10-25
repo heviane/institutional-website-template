@@ -178,9 +178,8 @@ export const contactFormSchema = z.object({
   email: z.string().trim().email("Insira um e-mail válido.").max(255, "E-mail muito longo."),
   phone: z.string().trim().max(20, "Telefone inválido.").optional(),
   message: z.string().trim().min(10, "A mensagem deve conter pelo menos 10 caracteres.").max(5000, "A mensagem excede o limite de 5.000 caracteres."),
-  privacyConsent: z.literal(true, {
-    errorMap: () => ({ message: "Você deve aceitar a Política de Privacidade para enviar." }),
-  }),
+  // Salvaguarda LGPD configurável (ADR 0007): z.literal(true) para opt-in explícito (Art. 7º, I) ou opcional para contato preliminar (Art. 7º, V)
+  privacyConsent: z.boolean().optional(),
   // Camada 1: Campo Honeypot (deve estar vazio em envios legítimos)
   honeypot: z.string().max(0, "Tentativa de automação detectada.").optional(),
   // Camada 3: Token efêmero do Cloudflare Turnstile gerado no frontend (opcional em dev/test sem chaves)

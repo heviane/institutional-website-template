@@ -26,7 +26,7 @@ Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.j
 
 ### Estrutura do Trio Tecnológico:
 
-1. **React Hook Form (Gerenciamento de Estado no Cliente):** Utiliza componentes não controlados (*uncontrolled components*) via referências do DOM para gerenciar os inputs sem re-renderizar a página a cada caractere digitado .
+1. **React Hook Form (Gerenciamento de Estado no Cliente):** Utiliza componentes não controlados (*uncontrolled components*) via referências do DOM para gerenciar os inputs sem re-renderizar a página a cada caractere digitado.
 2. **Zod (Validação de Schemas):** Define a estrutura e as regras de negócio dos dados (ex.: e-mails válidos, campos obrigatórios, tamanho mínimo de mensagem e consentimento LGPD). O pacote `@hookform/resolvers/zod` conecta as regras do Zod ao ciclo de validação do React Hook Form no navegador; o compartilhamento end-to-end do schema decorre da importação do mesmo arquivo TypeScript (ex.: `src/lib/schemas/contact.ts`) tanto no componente de formulário do cliente quanto na Server Action no servidor.
 3. **Server Actions (`src/app/actions/contact.ts`):** Substitui Route Handlers REST manuais (`/api/contact`). Executa nativamente no servidor via diretiva `'use server'`, proporcionando integração de tipos nativa (*Type-Safety end-to-end*) e ergonomia com formulários React sem a necessidade de boilerplate de serialização HTTP. **Diretriz de Segurança:** Como qualquer Server Action compila para uma rota HTTP pública subjacente, ela é formalmente tratada como uma fronteira de entrada não confiável (*untrusted boundary*): todos os dados são revalidados estritamente no servidor via Zod, o tamanho do payload é limitado, a verificação do Turnstile é mandatória e os erros são mascarados para não expor detalhes internos da infraestrutura.
 4. **Defesa em Camadas contra Spam e Ataques (veja [ADR 0011](0011-defesa-antispam-e-protecao-de-formularios.md)):**
@@ -40,7 +40,7 @@ Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.j
 
 ### Positivas (Benefícios):
 
-* **Performance Extrema no Frontend:** Minimiza o uso de memória e CPU do navegador do usuário por evitar `useState` em cada campo de entrada .
+* **Performance Extrema no Frontend:** Minimiza o uso de memória e CPU do navegador do usuário por evitar `useState` em cada campo de entrada.
 * **Validação Unificada e Tipagem Estrita:** O mesmo *schema* do Zod valida o formulário no navegador (para feedback imediato de UX) e revalida obrigatoriamente na Server Action do Next.js (garantia de integridade no servidor), eliminando duplicidade de código de validação.
 * **Layouts de E-mail com React:** Integração nativa com `@react-email/components`, permitindo construir os templates de e-mail utilizando componentes React estilizados em vez de strings HTML antigas.
 * **Custo de Mensageria Otimizado:** A API do Resend oferece até 3.000 e-mails/mês (com teto de 100 envios/dia) no plano gratuito, cobrindo com folga as necessidades de sites institucionais pequenos e médios sem custos iniciais recorrentes de disparo.
@@ -58,7 +58,7 @@ Decidimos adotar a combinação **React Hook Form + Zod + Server Actions (Next.j
 ## 4. Alternativas Consideradas
 
 * **Formspree / Getform (Formulários Gerenciados via SaaS):** Descartados por redirecionarem requisições para serviços externos sem controle do código no servidor, além de limites severos nos planos gratuitos.
-* **Nodemailer com SMTP Tradicional:** Descartado por ser desafiador de configurar e manter de forma estável em ambientes de execução Serverless efêmeros (Edge/Serverless Functions) .
+* **Nodemailer com SMTP Tradicional:** Descartado por ser desafiador de configurar e manter de forma estável em ambientes de execução Serverless efêmeros (Edge/Serverless Functions).
 * **Netlify Forms:** Descartado por prender a funcionalidade exclusivamente à infraestrutura do Netlify, reduzindo a portabilidade do template.
 * **Route Handlers Tradicionais (`/api/contact`):** Avaliado e descartado para submissões de formulários internos por exigir mais código boilerplate de serialização HTTP manual (`fetch`, headers, parsing de JSON) em comparação à ergonomia e tipagem nativa das Server Actions.
 

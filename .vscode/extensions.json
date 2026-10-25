@@ -7,7 +7,6 @@
     "formulahendry.auto-rename-tag",
     "yoavbls.pretty-ts-errors",
     "usernamehw.errorlens",
-    "ms-vscode.powershell",
     "github.vscode-pull-request-github"
   ]
 }
