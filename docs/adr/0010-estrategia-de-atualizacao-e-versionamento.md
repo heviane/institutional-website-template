@@ -54,10 +54,11 @@ A estrutura do projeto foi intencionalmente desenhada para minimizar conflitos i
   * `src/config/site.ts` (dados da empresa, cores de marca, contatos, CNPJ e DPO).
   * `public/images/content/` (mídias dos clientes).
   * Arquivos de conteúdo Markdown/JSON gerenciados pelo Keystatic.
+  * Arquivos de governança customizados no onboarding (`SECURITY.md`, `LICENSE`, `README.md`, `CONTRIBUTING.md`, `.github/CODEOWNERS`).
 * **Zona de Engenharia do Template (Atualizada via Upstream):**
   * `src/app/actions/` (Server Actions e segurança).
   * `src/components/ui/` e `src/components/shared/` (componentes estruturais).
-  * `src/env.ts`, `package.json` e `.github/workflows/` (regras e automações).
+  * `src/env/` (módulos segregados de validação), `package.json` e `.github/workflows/` (regras e automações).
 
 ### 2.5. Roteiro Obrigatório de Validação Prática (Fase 2 do Roadmap)
 Antes de homologar um método de sincronização como procedimento operacional padrão:

@@ -8,7 +8,7 @@ Este documento é o guia definitivo passo a passo para colocar no ar o site inst
 
 ```mermaid
 flowchart LR
-    A["1. Repositório & Upstream"] --> B["2. Tema & Branding"]
+    A["1. Repositório & Governança"] --> B["2. Tema & Branding"]
     B --> C["3. Domínio & DNS"]
     C --> D["4. Resend & Anti-Spam"]
     D --> E["5. Turnstile & Upstash"]
@@ -43,7 +43,7 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
 
 ---
 
-## 🛠️ Etapa 1: Repositório & Branching
+## 🛠️ Etapa 1: Repositório & Governança
 
 - [ ] **1.1. Criar repositório do cliente:**
   - No GitHub, clique em **Use this template** > **Create a new repository**.
@@ -65,7 +65,15 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
   git fetch template
   ```
 
-- [ ] **1.4. Proteger a Branch `main`:**
+- [ ] **1.4. Desvincular Governança do Template (Ownership & Titularidade):**
+  - [ ] **Atualizar `.github/CODEOWNERS`:** Substituir `@heviane` pelo time técnico ou responsáveis no GitHub da organização do cliente (ou excluir o arquivo caso o cliente não utilize revisão obrigatória por codeowners).
+  - [ ] **Customizar `SECURITY.md`:**
+    - Substituir `heviane@gmail.com` pelo e-mail do DPO ou da equipe técnica do cliente (ex.: `dpo@cliente.com.br` ou `seguranca@cliente.com.br`).
+    - Atualizar a URL do Security Advisory Privado para o repositório do cliente (`https://github.com/[org-cliente]/[repo-cliente]/security/advisories/new`) ou remover a seção caso o repositório não tenha Private Vulnerability Reporting ativado.
+  - [ ] **Ajustar `LICENSE`:** Adaptar a licença de acordo com o contrato comercial firmado com o cliente (substituir o copyright para `Copyright (c) 2026 [Razão Social do Cliente]` ou declarar licença proprietária/fechada).
+  - [ ] **Ajustar `.github/ISSUE_TEMPLATE/config.yml`:** Atualizar os links de contato ou remover apontamentos que redirecionem para o repositório upstream do template (`discussions` e `security advisories`).
+  - [ ] **Ajustar `CONTRIBUTING.md` e `README.md`:** Substituir a documentação do template por um README simples focado no cliente (links de homologação/produção, contatos dos desenvolvedores e comandos básicos).
+- [ ] **1.5. Proteger a Branch `main`:**
   - Em `Settings` > `Branches` no GitHub, crie uma regra de proteção exigindo que o pipeline de CI (`ci.yml`) passe antes de merges.
 
 ---
