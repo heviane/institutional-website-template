@@ -116,6 +116,7 @@ institutional-website-template/
 │
 ├── tests/                           # Suíte de testes automatizados (Vitest + axe-core)
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
+│   ├── setup.ts                     # Configuração de matchers do vitest-axe
 │   └── utils.test.ts                # Testes unitários de funções utilitárias (cn)
 │
 ├── .editorconfig                    # Padronização de indentação e quebras de linha
@@ -127,6 +128,7 @@ institutional-website-template/
 ├── AGENTS.md                        # Hub central de diretrizes canônicas para agentes de IA (SDD)
 ├── CHANGELOG.md                     # Histórico estruturado de mudanças (Keep a Changelog)
 ├── CLAUDE.md                        # Diretrizes para Claude Code (@AGENTS.md)
+├── components.json                  # Configuração do Shadcn/ui para Tailwind CSS v4
 ├── CONTRIBUTING.md                  # Guia de contribuição, padrões SDD e Quality Gates
 ├── eslint.config.mjs                # Configuração do ESLint 9 (Flat Config)
 ├── keystatic.config.ts              # Definição de schemas e coleções do Keystatic

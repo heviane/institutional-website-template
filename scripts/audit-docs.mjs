@@ -153,6 +153,7 @@ function checkFolderStructureSync() {
     path.join(ROOT_DIR, "eslint.config.mjs"),
     path.join(ROOT_DIR, "postcss.config.mjs"),
     path.join(ROOT_DIR, "vitest.config.ts"),
+    path.join(ROOT_DIR, "components.json"),
     ...getRealCodeFiles(path.join(ROOT_DIR, "src")),
     ...getRealCodeFiles(path.join(ROOT_DIR, "tests")),
   ];

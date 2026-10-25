@@ -2,17 +2,17 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Pendente de Execução (Aguardando Aprovação do Desenvolvedor)
+* **Status:** Em Execução (Tarefa 1 Concluída)
 
 ---
 
 ## 📋 Checklist de Tarefas Executáveis
 
-* [ ] **1. Instalação de Dependências e Configuração do Shadcn/ui:**
-  * [ ] Instalar dependências de UI: `lucide-react`, `class-variance-authority`, `@radix-ui/react-slot` e `@radix-ui/react-dialog`.
-  * [ ] Instalar dependências de teste de acessibilidade: `vitest-axe` e `axe-core`.
-  * [ ] Criar arquivo `components.json` alinhado ao Tailwind CSS v4.
-  * [ ] Configurar `tests/setup.ts` com matchers do `vitest-axe` e registrar em `vitest.config.ts`.
+* [x] **1. Instalação de Dependências e Configuração do Shadcn/ui:**
+  * [x] Instalar dependências de UI: `lucide-react`, `class-variance-authority`, `@radix-ui/react-slot` e `@radix-ui/react-dialog`.
+  * [x] Instalar dependências de teste de acessibilidade: `vitest-axe` e `axe-core`.
+  * [x] Criar arquivo `components.json` alinhado ao Tailwind CSS v4.
+  * [x] Configurar `tests/setup.ts` com matchers do `vitest-axe` e registrar em `vitest.config.ts`.
 
 * [ ] **2. Camada de Configuração & Utilitários Resilientes de Contato — TDD:**
   * [ ] 🔴 **Red:** Expandir `tests/utils.test.ts` adicionando testes para `formatWhatsAppUrl`, `formatTelUrl` e `formatPhoneDisplay`.
