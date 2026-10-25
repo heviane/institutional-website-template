@@ -56,10 +56,11 @@
   * [ ] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
   * [ ] Executar deploy piloto de sanidade em preview da Vercel (opcional/recomendado) para homologar Server Actions e Resend em ambiente real.
 
-* [ ] **9. Sincronização Documental Obrigatória & Anti-Doc Rot (Tarefa Final):**
+* [ ] **9. Sincronização Documental Obrigatória, Anti-Doc Rot & Auditoria de PRs (Tarefa Final):**
   * [ ] Atualizar `docs/03-project-roadmap.md` marcando a Feature 003 como concluída.
   * [ ] Atualizar a árvore canônica em `docs/04-folder-structure.md` com todos os novos arquivos criados.
   * [ ] Atualizar `CHANGELOG.md` registrando a entrega da Feature 003 sob `[Unreleased]`.
   * [ ] Executar e validar `npm run audit:docs` (0 erros).
+  * [ ] Auditar Pull Requests abertos no GitHub (`gh pr list`), tratando pendências de dependências ou colaboradores.
   * [ ] Realizar commit semântico e enviar push para `main`.
 

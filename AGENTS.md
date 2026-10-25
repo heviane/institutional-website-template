@@ -67,14 +67,18 @@ Para tarefas de código que envolvem lógica de validação (schemas Zod), vari�
 2. **🟢 Green (Implementação Mínima):** Desenvolver o código estritamente necessário em `src/` para fazer a suíte de testes passar no Vitest.
 3. **🔵 Refactor (Qualidade & Limpeza):** Refatorar para atender aos Quality Gates (eliminar código duplicado, garantir tipagem estrita no TypeScript e acessibilidade no `vitest-axe`) mantendo todos os testes verdes.
 
-#### 📚 Tarefa Obrigatória Final de toda Feature (Sincronização Documental & Anti-Doc Rot)
+#### 📚 Tarefa Obrigatória Final de toda Feature (Sincronização Documental, Anti-Doc Rot & Auditoria de PRs)
 
-Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como última tarefa a sincronização da documentação:
+Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como última tarefa a sincronização da documentação e a verificação de Pull Requests:
 * Atualização de status da feature no `README.md` e em `docs/03-project-roadmap.md`.
 * Inclusão de todos os novos arquivos criados na árvore canônica de `docs/04-folder-structure.md`.
 * Aplicação do Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
 * Registro no `CHANGELOG.md` sob `[Unreleased]`.
 * Execução e validação obrigatória do script: `npm run audit:docs`.
+* **Auditoria Obrigatória de Pull Requests Abertos:** Inspecionar Pull Requests abertos no repositório remoto (`gh pr list`). Se houver PRs pendentes (ex.: gerados pelo Dependabot ou colaboradores):
+  * Analisar o status do CI e o escopo das alterações.
+  * Se for seguro (atualizações minor/patch com CI verde e sem quebra de invariantes): propor ou realizar o merge via squash.
+  * Se violar invariantes técnicos ou falhar no CI: fechar com justificativa técnica explícita e ajustar as regras de dependência no `.github/dependabot.yml` se aplicável.
 
 ---
 
@@ -202,3 +206,4 @@ Ao implementar qualquer funcionalidade na Fase 2:
 
 3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de auditoria documental, falhas de lint, tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).
 4. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.
+5. **Auditoria Obrigatória de Pull Requests Abertos:** Ao concluir uma feature, consulte sempre o status de Pull Requests abertos no repositório remoto (`gh pr list`). Avalie a segurança e o impacto de cada PR pendente (especialmente atualizações de dependências automatizadas), mantendo o ecossistema limpo e sem gargalos operacionais acumulados.
