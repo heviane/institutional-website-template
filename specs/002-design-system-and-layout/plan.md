@@ -32,7 +32,13 @@ Para assegurar **Core Web Vitals excelentes (LCP < 2,5s, INP < 200ms)** e reduzi
 | **`@radix-ui/react-dialog`** | Produção | Primitivo do Radix para modais e o menu web responsivo, garantindo nativamente *focus trap*, *scroll lock*, *escape listener* e *focus restoration*. |
 | **`vitest-axe` & `axe-core`** | Desenvolvimento | Integração do motor oficial do axe-core com o Vitest para validação contínua e automatizada de WCAG 2.1 AA ([ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)). |
 
-### 1.3. Contrato de Configuração do Cliente & Interfaces Tipadas (`src/config/site.ts`)
+### 1.3. Proteção de Arquivos Existentes (Anti-Sobrescrita do Shadcn)
+
+Para preservar integralmente os arquivos canônicos já configurados e validados na Feature 001 (`src/app/globals.css` com `@custom-variant dark` e tokens OKLCH, e `src/lib/utils.ts` com o helper `cn()`):
+* **Proibição de `npx shadcn init`:** O comando interativo de CLI não deve ser executado, pois tenta sobrescrever `globals.css` e `utils.ts`.
+* **Configuração Declarativa Direta (`components.json`):** O arquivo de configuração `components.json` é criado manualmente na raiz, e os componentes primitivos (`button.tsx`, `card.tsx`, `dialog.tsx`, `input.tsx`, `textarea.tsx`) são adicionados diretamente em `src/components/ui/` respeitando o Radix UI e o Tailwind CSS v4.
+
+### 1.4. Contrato de Configuração do Cliente & Interfaces Tipadas (`src/config/site.ts`)
 
 ```typescript
 export interface NavItem {

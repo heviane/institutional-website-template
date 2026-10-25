@@ -55,16 +55,15 @@ function findMarkdownFiles(dir, fileList = []) {
  */
 function checkInternalLinks(markdownFiles) {
   console.log("\n🔍 Checking internal markdown links integrity...");
+  const initialErrors = errorCount;
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
   // Planned future files that are referenced in documentation contracts
   const allowedFutureFiles = new Set([
     "src/config/site.ts",
     "src/lib/schemas/contact.ts",
-    "src/lib/validations/contact.ts",
     "src/env/server.ts",
     "src/env/client.ts",
-    "src/env.ts",
     "src/app/actions/contact.ts",
     "src/lib/rate-limit.ts",
     "src/lib/resend.ts",
@@ -111,7 +110,7 @@ function checkInternalLinks(markdownFiles) {
     }
   }
 
-  if (errorCount === 0) {
+  if (errorCount === initialErrors) {
     logSuccess("All internal markdown links are valid.");
   }
 }
@@ -121,6 +120,7 @@ function checkInternalLinks(markdownFiles) {
  */
 function checkFolderStructureSync() {
   console.log("\n🔍 Checking file tree synchronization in docs/04-folder-structure.md...");
+  const initialErrors = errorCount;
   const folderStructurePath = path.join(ROOT_DIR, "docs", "04-folder-structure.md");
 
   if (!fs.existsSync(folderStructurePath)) {
@@ -130,32 +130,41 @@ function checkFolderStructureSync() {
 
   const content = fs.readFileSync(folderStructurePath, "utf-8");
 
-  // Key implemented files that MUST be documented in the tree
-  const requiredFiles = [
-    "package.json",
-    "package-lock.json",
-    "tsconfig.json",
-    "next.config.ts",
-    "eslint.config.mjs",
-    "postcss.config.mjs",
-    "vitest.config.ts",
-    "src/app/globals.css",
-    "src/app/layout.tsx",
-    "src/app/page.tsx",
-    "src/lib/utils.ts",
-    "tests/sanity.test.ts",
-    "tests/utils.test.ts",
-    "specs/",
+  // Collect all real files in src/ and tests/ to ensure they are documented
+  function getRealCodeFiles(dir, list = []) {
+    if (!fs.existsSync(dir)) return list;
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    for (const item of items) {
+      const full = path.join(dir, item.name);
+      if (item.isDirectory()) {
+        getRealCodeFiles(full, list);
+      } else {
+        list.push(full);
+      }
+    }
+    return list;
+  }
+
+  const realFiles = [
+    path.join(ROOT_DIR, "package.json"),
+    path.join(ROOT_DIR, "package-lock.json"),
+    path.join(ROOT_DIR, "tsconfig.json"),
+    path.join(ROOT_DIR, "next.config.ts"),
+    path.join(ROOT_DIR, "eslint.config.mjs"),
+    path.join(ROOT_DIR, "postcss.config.mjs"),
+    path.join(ROOT_DIR, "vitest.config.ts"),
+    ...getRealCodeFiles(path.join(ROOT_DIR, "src")),
+    ...getRealCodeFiles(path.join(ROOT_DIR, "tests")),
   ];
 
-  for (const item of requiredFiles) {
-    const baseName = item.endsWith("/") ? item.slice(0, -1) : path.basename(item);
+  for (const file of realFiles) {
+    const baseName = path.basename(file);
     if (!content.includes(baseName)) {
-      logError(`docs/04-folder-structure.md is missing documentation for existing item: "${item}"`);
+      logError(`docs/04-folder-structure.md is missing documentation for existing item: "${baseName}" (${path.relative(ROOT_DIR, file)})`);
     }
   }
 
-  if (errorCount === 0) {
+  if (errorCount === initialErrors) {
     logSuccess("docs/04-folder-structure.md is synchronized with existing code files.");
   }
 }
@@ -166,6 +175,7 @@ function checkFolderStructureSync() {
  */
 function checkAntiDocRot() {
   console.log("\n🔍 Checking Principle 9 (Anti-Doc Rot) across documentation...");
+  const initialErrors = errorCount;
   const setupDocPath = path.join(ROOT_DIR, "docs", "02-environment-setup.md");
 
   if (fs.existsSync(setupDocPath)) {
@@ -179,7 +189,7 @@ function checkAntiDocRot() {
     }
   }
 
-  if (errorCount === 0) {
+  if (errorCount === initialErrors) {
     logSuccess("Anti-Doc Rot check passed: implemented files are referenced via links.");
   }
 }
@@ -189,6 +199,7 @@ function checkAntiDocRot() {
  */
 function checkRoadmapSync() {
   console.log("\n🔍 Checking Roadmap and Status Synchronization...");
+  const initialErrors = errorCount;
   const roadmapPath = path.join(ROOT_DIR, "docs", "03-project-roadmap.md");
   const readmePath = path.join(ROOT_DIR, "README.md");
 
@@ -196,17 +207,20 @@ function checkRoadmapSync() {
     const roadmapContent = fs.readFileSync(roadmapPath, "utf-8");
     const readmeContent = fs.readFileSync(readmePath, "utf-8");
 
-    // Check that Phase 2 is marked as in progress since Feature 001 is completed
-    if (roadmapContent.includes("Fase 2<br/>Core & MVP em Código<br/>(Aguardando Início)")) {
-      logError("docs/03-project-roadmap.md still marks Phase 2 as 'Aguardando Início'. Update to 'Em Andamento'.");
+    // Verify roadmap active status
+    const hasPhase2InProgress = roadmapContent.includes("Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)");
+    const hasReadmePhase2Badge = readmeContent.includes("Status-Fase_2_Em_Andamento");
+
+    if (!hasPhase2InProgress) {
+      logError("docs/03-project-roadmap.md should mark Phase 2 as '(Em Andamento)'.");
     }
 
-    if (readmeContent.includes("Status-Fase_1_Concluída")) {
-      logError("README.md badge still points to 'Status-Fase_1_Concluída'. Update to 'Status-Fase_2_Em_Andamento'.");
+    if (!hasReadmePhase2Badge) {
+      logError("README.md badge should indicate 'Status-Fase_2_Em_Andamento'.");
     }
   }
 
-  if (errorCount === 0) {
+  if (errorCount === initialErrors) {
     logSuccess("Roadmap and status documentation are synchronized.");
   }
 }

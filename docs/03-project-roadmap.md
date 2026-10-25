@@ -62,6 +62,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
   * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
 * [ ] **Gestão de Conteúdo (Headless CMS):**
+  * [ ] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
   * [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
   * [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
   * [ ] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.

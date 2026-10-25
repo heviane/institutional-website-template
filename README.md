@@ -89,8 +89,8 @@ git clone https://github.com/seu-usuario/nome-do-projeto.git
 # Entrar na pasta do projeto
 cd nome-do-projeto
 
-# Instalar as dependências
-npm install
+# Instalar as dependências de forma reproduzível (Lockfile estrito)
+npm ci
 ```
 
 ### 3. Variáveis de Ambiente

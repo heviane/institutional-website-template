@@ -54,7 +54,7 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
   ```bash
   git clone https://github.com/sua-organizacao/site-cliente.git
   cd site-cliente
-  npm install
+  npm ci
   ```
 
 - [ ] **1.3. Vincular o Template Original como Upstream:**
@@ -186,9 +186,9 @@ Conforme [ADR 0003](adr/0003-estrategia-de-formularios.md), formulários institu
 Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos o Keystatic Cloud para autenticação segura sem exigir conta de desenvolvedor no GitHub para o cliente.
 
 - [ ] **6.1. Cadastrar Projeto no Keystatic Cloud:**
-  - Acesse [keystatic.cloud](https://keystatic.cloud) e conecte com a conta GitHub da agência.
+  - Acesse [keystatic.cloud](https://keystatic.cloud) e conecte com a conta GitHub da organização ou do responsável do cliente (preservando a titularidade dos ativos do cliente).
   - Crie um novo projeto apontando para o repositório privado do cliente (`site-cliente`).
-  - Copiar o slug do projeto (ex: `agencia/site-cliente`).
+  - Copiar o slug do projeto (ex: `organizacao-cliente/site-cliente`).
 - [ ] **6.2. Convidar o Usuário do Cliente:**
   - No painel do Keystatic Cloud, convidar o e-mail do cliente como **Editor**.
   - O cliente receberá um link seguro de acesso sem precisar entender Git.
@@ -204,7 +204,7 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
     TURNSTILE_SECRET_KEY=0x4AAAAAAxxxxxxxx
     UPSTASH_REDIS_REST_URL=https://xxxx.upstash.io
     UPSTASH_REDIS_REST_TOKEN=Axxxxxxxxxxxxxxxxxxxx
-    NEXT_PUBLIC_KEYSTATIC_PROJECT=agencia/site-cliente
+    NEXT_PUBLIC_KEYSTATIC_PROJECT=organizacao-cliente/site-cliente
     ```
 
 - [ ] **6.4. Validar o CMS em Produção:**

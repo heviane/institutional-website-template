@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "audit:docs": "node scripts/audit-docs.mjs",
     "verify": "npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -22,11 +25,9 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.0",
     "@tailwindcss/postcss": "^4.0.9",
     "@testing-library/react": "^16.2.0",
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.13.5",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.21.0",

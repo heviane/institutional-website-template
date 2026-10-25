@@ -149,6 +149,6 @@ export default async function HomePage() {
 
 Para evitar o inchaço do histórico do Git (*Git Bloat*) com fotos pesadas:
 * Todas as imagens adicionadas no Keystatic são salvas no diretório `public/images/content/`.
-* É configurado um limite no schema de no máximo **1 MB** por imagem.
+* Como o `fields.image` do Keystatic não possui validação nativa de tamanho em bytes no schema, adota-se a diretriz operacional de imagens (teto recomendado de **1 MB** por foto antes do upload no painel), complementada pelo pipeline de otimização em tempo de compilação/execução via `next/image` (conversão automática para **WebP e AVIF**). Para bibliotecas volumosas de mídia, deve-se integrar CDN externa conforme o [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md).
 * As fotos são processadas e servidas pelo componente `<Image />` do Next.js, que realiza compressão automática em tempo de execução para formatos modernos como **WebP e AVIF**.
 

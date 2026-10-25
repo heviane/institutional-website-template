@@ -107,41 +107,22 @@ Com as dependências e o repositório base criados, o foco passa a ser o design 
 
 1. **Scripts de Auditoria e Governança (`package.json`):**
 
-* No Next.js 16 com ESLint 9 (Flat Config via `eslint.config.mjs`), a auditoria de código migrou para o ESLint CLI direto. Configure os scripts essenciais no `package.json`:
-
-```json
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "typecheck": "tsc --noEmit"
-}
-```
-
-* **`npm run lint`**: Executa o ESLint CLI para validar regras de qualidade, acessibilidade e Next.js.
-* **`npm run typecheck`**: Compilação estrita de tipos do TypeScript sem emissão de arquivos (`tsc --noEmit`), garantindo integridade de schemas e contratos.
+* Todos os scripts de ciclo de vida e quality gates residem no arquivo canônico [`package.json`](../package.json):
+  * **`npm run dev`**: Servidor local de desenvolvimento do Next.js 16.
+  * **`npm run build`**: Compilação de produção com Turbopack e geração de SSG.
+  * **`npm run lint`**: Auditoria do ESLint 9 (Flat Config via `eslint.config.mjs`).
+  * **`npm run typecheck`**: Geração de tipos com `next typegen` e compilação de tipos com `tsc --noEmit`.
+  * **`npm test`**: Execução da suíte de testes unitários e de acessibilidade no Vitest.
+  * **`npm run audit:docs`**: Auditoria documental e Anti-Doc Rot (`scripts/audit-docs.mjs`).
+  * **`npm run verify`**: Quality gate unificado local obrigatório antes de commits e no CI.
 
 2. **Configurar Prettier com Ordenação Automática do Tailwind:**
 
-* Instale o formatador e o plugin oficial:
-
-```bash
-npm install -D prettier prettier-plugin-tailwindcss
-```
+* Formatador e plugin oficial instalados em `devDependencies`: `prettier` e `prettier-plugin-tailwindcss`.
 
 3. **Configurar os Aliases de Importação (`paths` no `tsconfig.json`):**
 
-* Manter atalhos limpos para evitar importações relativas longas (`../../components/...`):
-
-```json
-"paths": {
-  "@/*": ["./src/*"]
-}
-```
-
-* *Acessos limpos:* `@/components/...`, `@/config/...`, `@/lib/...`, `@/types/...`.
+* Os atalhos canônicos `@/*` mapeiam diretamente para `./src/*` no arquivo [`tsconfig.json`](../tsconfig.json), permitindo importações limpas (`@/components/...`, `@/config/...`, `@/lib/...`, `@/env/...`).
 
 4. **Configurar Cabeçalhos de Segurança HTTP (`next.config.ts`):**
 * Conforme formalizado na [ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md) e implementado no arquivo canônico [`next.config.ts`](../next.config.ts), o template aplica cabeçalhos HTTP defensivos em todas as rotas da aplicação para blindar o site contra ataques web (*Clickjacking*, *MIME sniffing*, injeções) e monitorar scripts via `Content-Security-Policy-Report-Only` (liberando Cloudflare Turnstile, mídias e conexões seguras).
