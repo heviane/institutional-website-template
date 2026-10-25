@@ -66,6 +66,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
   * [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
   * [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
+  * [ ] Padronizar seeding de conteúdo inicial (*seed data*) com arquivos Markdown/JSON pré-populados de exemplo (Home, Sobre, 2 serviços, 3 FAQs e 2 posts) para que o repositório já nasça 100% preenchido e funcional ao ser clonado.
   * [ ] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
 * [ ] **SEO Técnico Essencial:**
   * [ ] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
@@ -82,13 +83,14 @@ Esta fase representa a materialização do template em código, dividida entre a
 * [ ] **2. Compatibilidade Prática de Dependências & Lockfile:**
   * [x] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci` (Feature 001 Concluída).
   * [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
-* [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action):**
+* [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action) & Deploy Piloto:**
   * [ ] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.
   * [ ] Testar validação estrita de tamanho (rejeição de mensagens acima de 5.000 caracteres ou strings abusivas).
-  * [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido.
+  * [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido (e desativação graciosa no modo Lite).
   * [ ] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
   * [ ] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
-  * [ ] Testar comportamento resiliente caso o serviço de Redis (Upstash) sofra indisponibilidade momentânea.
+  * [ ] Testar comportamento resiliente caso o serviço de Redis (Upstash) sofra indisponibilidade momentânea (fallback para Map em memória).
+  * [ ] Executar deploy piloto de sanidade na Vercel (*smoke test*) ao término da Feature 003, homologando antecipadamente Server Actions, runtime serverless e Resend API em nuvem real.
 * [ ] **4. Autonomia Real de Conteúdo e CMS (Requisito de Produto):**
   * [ ] Validar o fluxo de ponta a ponta com um usuário de perfil não técnico no Keystatic Cloud: criação de post, edição de texto institucional e adição de imagem.
   * [ ] Confirmar que o commit gerado pelo CMS disparou com sucesso o build automático de SSG no GitHub Actions / Vercel.

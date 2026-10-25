@@ -13,8 +13,8 @@
   * [ ] Validar integridade do `package-lock.json` e execução de `npm run typecheck`.
 
 * [ ] **2. Validação Segregada de Variáveis de Ambiente (`src/env/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` testando cenários de micro-projeto (configuração mínima do Resend em produção), produção com integrações ativas (Upstash/Turnstile opcionais com ativação progressiva) e rejeição imediata diante de variáveis core ausentes ou malformatadas.
-  * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*`.
+  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` testando cenários de micro-projeto (configuração mínima do Resend em produção), ativação progressiva com Feature Flag (`NEXT_PUBLIC_ENABLE_TURNSTILE`), chaves opcionais do Upstash/Turnstile e rejeição imediata diante de variáveis core ausentes ou malformatadas.
+  * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*` e flag booleana de Turnstile.
   * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, chaves mínimas obrigatórias e ativação condicional de Upstash/Turnstile.
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos e proteção contra vazamento acidental para o cliente.
 
@@ -38,7 +38,7 @@
   * [ ] 🔵 **Refactor:** Garantir tipagem estrita de retorno (`ActionResponse`) sem retornar códigos HTTP.
 
 * [ ] **5. Componente de Formulário Reativo e Acessível (`src/components/shared/contact-form/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar testes em `tests/components/contact-form.test.tsx` validando renderização de campos, mensagens de erro inline com `aria-invalid`, estado de carregamento com botão desabilitado, campo honeypot oculto e asserções `axe` para WCAG 2.1 AA.
+  * [ ] 🔴 **Red:** Criar testes em `tests/components/contact-form.test.tsx` validando renderização de campos, alternância do widget Turnstile conforme flag `NEXT_PUBLIC_ENABLE_TURNSTILE`, mensagens de erro inline com `aria-invalid`, estado de carregamento com botão desabilitado, campo honeypot oculto e asserções `axe` para WCAG 2.1 AA.
   * [ ] 🟢 **Green:** Implementar `src/components/shared/contact-form/contact-form.tsx` utilizando React Hook Form e Shadcn/ui (`Input`, `Textarea`, `Button`).
   * [ ] 🔵 **Refactor:** Garantir alvos de toque mínimos de 44x44px e experiência fluida no mobile.
 
@@ -52,8 +52,9 @@
   * [ ] Atualizar a seção `#contato` em `src/app/page.tsx` integrando o componente real `<ContactForm />`.
   * [ ] Atualizar os testes em `tests/components/home.test.tsx` validando a integração e a ausência de violações WCAG 2.1 AA.
 
-* [ ] **8. Execução e Homologação dos Quality Gates Locais:**
+* [ ] **8. Execução e Homologação dos Quality Gates Locais & Smoke Test:**
   * [ ] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
+  * [ ] Executar deploy piloto de sanidade em preview da Vercel (opcional/recomendado) para homologar Server Actions e Resend em ambiente real.
 
 * [ ] **9. Sincronização Documental Obrigatória & Anti-Doc Rot (Tarefa Final):**
   * [ ] Atualizar `docs/03-project-roadmap.md` marcando a Feature 003 como concluída.

@@ -53,11 +53,16 @@ import { z } from "zod";
 export const clientEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida.").default("http://localhost:3000"),
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+  NEXT_PUBLIC_ENABLE_TURNSTILE: z
+    .string()
+    .optional()
+    .transform((val) => val !== "false"), // Padrão true, desativável definindo como "false"
 });
 
 export const clientEnv = clientEnvSchema.parse({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  NEXT_PUBLIC_ENABLE_TURNSTILE: process.env.NEXT_PUBLIC_ENABLE_TURNSTILE,
 });
 ```
 
@@ -188,6 +193,14 @@ A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Da
 * `src/app/(legal)/termos-de-uso/page.tsx`:
   - Termos padrão de uso do website institucional com base nas leis brasileiras e dados da empresa.
 * Ambas páginas contam com container de leitura otimizado (`max-w-4xl mx-auto py-16 md:py-24 px-4 sm:px-6 lg:px-8`) e conformidade WCAG 2.1 AA.
+
+---
+
+### 1.8. Homologação & Smoke Test em Nuvem (Vercel Preview)
+
+Após a aprovação local de todos os Quality Gates (`npm run verify`), o template é elegível para um **deploy piloto de sanidade** em ambiente serverless da Vercel:
+- **Objetivo:** Antecipar a validação em nuvem do runtime Next.js 16 com Turbopack, Tailwind CSS v4, headers de segurança e disparo real da Resend API antes de iniciar o desenvolvimento do Keystatic CMS (Feature 004).
+- **Ambiente:** Projeto de teste/preview na Vercel com subdomínio temporário (`.vercel.app`) configurando apenas as variáveis core mínimas (`NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`).
 
 ---
 
