@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Execução (Tarefas 1 a 5 Concluídas)
+* **Status:** Concluída
 
 ---
 
@@ -48,12 +48,12 @@
   * [x] Atualizar `src/app/page.tsx` (RSC) aplicando rigorosamente os guardrails de UX (`max-w-7xl`, `py-16 md:py-24`, tokens semânticos, zero raw hex) montando: `<Header />`, `<Hero />`, seção de serviços em grid de `<Card />` e `<Footer />`.
   * [x] Validar responsividade e harmonia visual no navegador (`http://localhost:3000`).
 
-* [ ] **6. Execução e Homologação dos Quality Gates Locais:**
-  * [ ] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
+* [x] **6. Execução e Homologação dos Quality Gates Locais:**
+  * [x] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
 
-* [ ] **7. Sincronização Documental Obrigatória & Anti-Doc Rot (Tarefa Final):**
-  * [ ] Atualizar `docs/03-project-roadmap.md` marcando a Feature 002 como concluída.
-  * [ ] Atualizar a árvore canônica em `docs/04-folder-structure.md` com todos os novos arquivos criados.
-  * [ ] Atualizar `CHANGELOG.md` registrando a entrega da Feature 002 sob `[Unreleased]`.
-  * [ ] Executar e validar `npm run audit:docs` (0 erros).
-  * [ ] Realizar commit semântico e enviar push para `main`.
+* [x] **7. Sincronização Documental Obrigatória & Anti-Doc Rot (Tarefa Final):**
+  * [x] Atualizar `docs/03-project-roadmap.md` marcando a Feature 002 como concluída.
+  * [x] Atualizar a árvore canônica em `docs/04-folder-structure.md` com todos os novos arquivos criados.
+  * [x] Atualizar `CHANGELOG.md` registrando a entrega da Feature 002 sob `[Unreleased]`.
+  * [x] Executar e validar `npm run audit:docs` (0 erros).
+  * [x] Realizar commit semântico e enviar push para `main`.

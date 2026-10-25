@@ -11,12 +11,22 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### 📊 Status das Features (Fase 2 - Core & MVP)
 * [x] **Feature 001: Project Bootstrap & Quality Gates** (Concluída — Commit [`277a96a`](https://github.com/heviane/institutional-website-template/commit/277a96a) / Spec: [`specs/001-project-bootstrap/`](specs/001-project-bootstrap/))
-* [ ] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Próxima / Em Especificação)
-* [ ] **Feature 003: Validação de Ambiente & Formulário Transacional** (Pendente)
+* [x] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Concluída — Spec: [`specs/002-design-system-and-layout/`](specs/002-design-system-and-layout/))
+* [ ] **Feature 003: Validação de Ambiente & Formulário Transacional** (Próxima / Em Especificação)
 * [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Pendente)
 * [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Pendente)
 
 ### Adicionado
+* **Feature 002 (Design System, Layout Base & Componentes Essenciais):**
+  * Configuração manual e declarativa do Shadcn/ui (`components.json`) compatível com Tailwind CSS v4.
+  * Instalação de dependências acessíveis de UI (`lucide-react`, `class-variance-authority`, `@radix-ui/react-slot`, `@radix-ui/react-dialog`) e de teste de acessibilidade (`axe-core`).
+  * Setup global de testes com `vitest-axe` em `tests/setup.ts` integrado ao `vitest.config.ts`.
+  * Centralização de dados da marca em `src/config/site.ts` com tipagem estrita TypeScript (`SiteConfig`).
+  * Implementação de utilitários resilientes em `src/lib/utils.ts` (`formatWhatsAppUrl`, `formatTelUrl`, `formatPhoneDisplay`).
+  * Implementação dos primitivos atômicos de UI em `src/components/ui/` (`button.tsx` com toque mínimo de 44x44px e variantes `cta`/`whatsapp`, `card.tsx` modular, `dialog.tsx` acessível com ciclo de foco e Escape, `input.tsx`, `textarea.tsx`).
+  * Implementação dos componentes estruturais de layout Server-First em `src/components/shared/` (`header.tsx` RSC, `mobile-nav.tsx` 'use client' com Radix Dialog e auto-close em âncoras, `hero.tsx` RSC universal com `HeroProps`, `footer.tsx` RSC com compliance legal e copyright dinâmico).
+  * Composição do "Layout Shell Demo" integrado na Home Page (`src/app/page.tsx` RSC) e carregamento da fonte `Inter` com metadados dinâmicos em `src/app/layout.tsx`.
+  * Bateria de testes funcionais (Matriz de 6 Casos) e asserções automatizadas de acessibilidade WCAG 2.1 AA (`vitest-axe`) cobrindo 100% dos componentes e telas.
 * **Feature 001 (Project Bootstrap & Quality Gates):**
   * Bootstrap declarativo do Next.js 16 (App Router) com React 19, TypeScript e Tailwind CSS v4 na raiz.
   * Configuração do design system com tokens `@theme` inline em `oklch()` e utilitário canônico `cn()`.

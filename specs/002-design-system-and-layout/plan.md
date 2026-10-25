@@ -1,6 +1,6 @@
 # Feature 002: Design System, Layout Base & Componentes Essenciais (Plan)
 
-* **Status:** Em Especificação (Refinada com Arquitetura Server-First & Design Neutro)
+* **Status:** Concluído
 * **Spec de Referência:** [`spec.md`](spec.md)
 * **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
 * **ADRs Vinculados:** [ADR 0001: Next.js App Router](../../docs/adr/0001-escolha-do-framework-next.md), [ADR 0004: Design System](../../docs/adr/0004-design-system-e-estilizacao.md), [ADR 0008: Qualidade Automatizada](../../docs/adr/0008-qualidade-automatizada-e-testes.md)
