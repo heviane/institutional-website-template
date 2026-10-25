@@ -1,6 +1,6 @@
 # 🤖 Diretrizes Canônicas para Desenvolvimento Assistido por IA (Spec-Driven Development)
 
-> Este documento (`AGENTS.md`) é a **ÚNICA Fonte da Verdade (*Single Source of Truth*)** - cumpre o papel de contrato técnico entre humano e IA - e o conjunto de restrições inegociáveis para qualquer agente ou assistente de Inteligência Artificial (ChatGPT, Claude, GitHub Copilot, Cursor, Antigravity, Gemini, OpenAI Codex) que atue no repositório `institutional-website-template`.
+> Este documento (`AGENTS.md`) é a **Constituição Canônica de Engenharia e Governança para IA** — cumpre o papel de contrato operacional, conjunto de restrições inegociáveis e guia comportamental para qualquer agente ou assistente de Inteligência Artificial (ChatGPT, Claude, GitHub Copilot, Cursor, Antigravity, Gemini, OpenAI Codex) que atue no repositório `institutional-website-template`.
 
 ---
 
@@ -11,7 +11,33 @@
 3. **Tratamento dos ADRs como Leis do Sistema:** As decisões registradas nos Architectural Decision Records ([`docs/adr/`](docs/adr/)) têm força mandatória. Nenhuma IA tem autorização para violar um ADR aprovado sem solicitação explícita e justificada do desenvolvedor.
 4. **Protocolo "Stop-and-Ask" para Casos Ambíguos:** Se houver conflito, divergência ou lacuna técnica entre uma instrução do desenvolvedor e as especificações em [`docs/`](docs/) (ou entre diferentes documentos), a IA **DEVE** pausar a geração de código e solicitar esclarecimentos objetivos antes de prosseguir, sendo terminantemente proibido assumir premissas ou padrões arbitrários por conta própria.
 
-### 🏛️ Constituição de Engenharia (9 Princípios Inegociáveis)
+### 🏛️ 1.1. Hierarquia Canônica de Autoridade (Onde Encontrar a Verdade)
+
+Para evitar ambiguidades entre diretrizes de processo, contratos de negócio, decisões arquiteturais e o código executável, a IA deve respeitar estritamente a seguinte pirâmide de precedência:
+
+```mermaid
+flowchart TD
+    L1["1. AGENTS.md (Constituição & Guardrails de IA)"]
+    L2["2. docs/adr/ (Decisões Arquiteturais Aprovadas)"]
+    L3["3. docs/ (Especificações Canônicas de Domínio)"]
+    L4["4. specs/<feature>/ (Requisitos & Tasks da Feature Ativa)"]
+    L5["5. src/ e tests/ (Código Real: Única Fonte Viva de Comportamento)"]
+
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    L4 --> L5
+```
+
+| Nível | Camada | Papel Canônico no Repositório | Força de Precedência |
+| :---: | :--- | :--- | :--- |
+| **1** | [`AGENTS.md`](AGENTS.md) | **Constituição de Engenharia & Comportamento dos Agentes:** Define os 9 princípios inegociáveis, restrições negativas, convenções de código (Code Style), ciclo SDD/TDD e quality gates. | **Soberano sobre as regras de processo, conduta e limites da IA.** Não dita comportamento funcional de negócio. |
+| **2** | [`docs/adr/`](docs/adr/) | **Decisões Arquiteturais Deliberadas (ADRs 0001 a 0011):** Registra decisões estruturais com justificativas, alternativas descartadas e trade-offs aceitos. | **Força de lei de arquitetura:** a IA não pode violar uma decisão de ADR aprovada sem solicitação explícita do desenvolvedor. |
+| **3** | [`docs/`](docs/) | **Especificações Globais de Domínio:** Contratos de ambiente, modelo de dados do CMS, theming, infraestrutura e onboarding. | **Fonte da verdade para contratos técnicos estáveis e transversais** (*cross-feature*). |
+| **4** | [`specs/<feature>/`](specs/) | **Tríade de Ciclo de Entrega Ativo (`spec.md`, `plan.md`, `tasks.md`):** O quê, por quê e como da funcionalidade em desenvolvimento na Fase 2. | **Fonte da verdade para o escopo e critérios de aceitação da feature em execução.** |
+| **5** | **`src/` e `tests/`** | **Código Executável e Testes Automatizados:** Implementação viva, tipada e verificada pelos testes no Vitest. | **Única fonte viva da verdade** sobre o comportamento efetivamente implementado e verificado no sistema (Princípio 9). |
+
+### 🏛️ 1.2. Constituição de Engenharia (9 Princípios Inegociáveis)
 
 Todo código ou especificação gerada por IA neste repositório deve respeitar integralmente estes nove princípios:
 
