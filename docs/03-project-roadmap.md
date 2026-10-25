@@ -38,27 +38,28 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Feature 001 Concluída)
+### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001 e 002 Concluídas)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
-#### 2.1. Checklist de Execução Técnica:
+#### 2.1. Checklist de Execução Técnica
 
-* [ ] **Inicialização do Projeto & Dependências (Feature 001 Concluída):**
+* [x] **Inicialização do Projeto & Dependências (Feature 001 Concluída):**
   * [x] Inicializar Next.js 16 (App Router - Active LTS), TypeScript e Tailwind CSS v4 com versões registradas e compatíveis com Node.js 24 LTS.
   * [x] Configurar alias de importação (`@/*`) e scripts obrigatórios no `package.json` (`lint`, `typecheck`, `test`, `build`).
   * [x] Promover `.github/workflows/ci.yml` de provisório para definitivo no primeiro commit funcional, removendo a checagem condicional de bootstrap (`check-bootstrap`) para que a esteira execute todos os quality gates (`npm ci`, `lint`, `typecheck`, `test`, `build`) de forma 100% incondicional e bloqueante.
   * [x] Implementar Security Headers HTTP conservadores no `next.config.ts`.
   * [x] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme`).
   * [x] Instalar e configurar Shadcn/ui & primitivos Radix UI acessíveis (Feature 002 Concluída).
-  * [ ] Implementar política de Rate Limiting adequada ao runtime (Upstash Redis em produção serverless / Map nativo em desenvolvimento local).
-* [ ] **Arquitetura de Dados & Layout Base:**
+* [x] **Arquitetura de Dados & Layout Base (Feature 002 Concluída):**
   * [x] Implementar abstração centralizada de dados do cliente (`src/config/site.ts` - Feature 002 Concluída).
   * [x] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme` - Feature 001/002 Concluída).
   * [x] Construir layout raiz (`src/app/layout.tsx`) com metadados dinâmicos e componentes acessíveis (`Header`, `Hero`, `Footer` - Feature 002 Concluída).
-* [ ] **Formulários Transacionais & Anti-Spam:**
+* [ ] **Formulários Transacionais & Anti-Spam (Feature 003 Em Andamento):**
+  * [ ] Validação segregada de variáveis de ambiente (`src/env/server.ts` e `src/env/client.ts`).
   * [ ] Criar schema de validação com Zod (`src/lib/schemas/contact.ts`) com salvaguarda configurável de privacidade.
-  * [ ] Implementar componente de formulário com React Hook Form.
+  * [ ] Implementar política de Rate Limiting anônimo por hash de IP (Upstash Redis em produção / Map nativo em desenvolvimento e testes).
+  * [ ] Implementar componente de formulário acessível com React Hook Form.
   * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
   * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
 * [ ] **Gestão de Conteúdo (Headless CMS):**
@@ -71,7 +72,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
   * [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
 
-#### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído):
+#### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído)
 
 * [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env/`):**
   * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas variáveis core: `NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL` e `CONTACT_EMAIL_TO`).

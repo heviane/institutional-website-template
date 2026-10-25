@@ -10,13 +10,15 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### 📊 Status das Features (Fase 2 - Core & MVP)
+
 * [x] **Feature 001: Project Bootstrap & Quality Gates** (Concluída — Commit [`277a96a`](https://github.com/heviane/institutional-website-template/commit/277a96a) / Spec: [`specs/001-project-bootstrap/`](specs/001-project-bootstrap/))
 * [x] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Concluída — Spec: [`specs/002-design-system-and-layout/`](specs/002-design-system-and-layout/))
 * [ ] **Feature 003: Validação de Ambiente & Formulário Transacional** (Próxima / Em Especificação)
 * [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Pendente)
 * [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Pendente)
 
-### Adicionado
+### Adicionado (Unreleased)
+
 * **Feature 002 (Design System, Layout Base & Componentes Essenciais):**
   * Configuração manual e declarativa do Shadcn/ui (`components.json`) compatível com Tailwind CSS v4.
   * Instalação de dependências acessíveis de UI (`lucide-react`, `class-variance-authority`, `@radix-ui/react-slot`, `@radix-ui/react-dialog`) e de teste de acessibilidade (`axe-core`).
@@ -41,9 +43,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Inclusão do badge dinâmico do GitHub Actions CI (`CI Quality Gates`) no `README.md`.
 
 ### Planejado para a Fase 2 (Core & MVP)
-* Componentes de interface baseados em Shadcn/ui e Radix UI (WCAG 2.1 AA).
-* Gestão de conteúdo via Keystatic CMS (Markdown/JSON Git-based).
-* Server Action de contato com envio via Resend e tripla barreira anti-spam.
+
+* Validação de Ambiente, Formulário Transacional (Resend + Turnstile + Rate Limiting) & Conformidade Legal (Feature 003).
+* Gestão de conteúdo via Keystatic CMS em modo Git (Feature 004).
+* SEO Técnico Avançado, Sitemaps e Homologação do MVP (Feature 005).
 
 ---
 
@@ -52,6 +55,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Fase 1: Arquitetura, Governança e Spec-Driven Development (Concluída)
 
 #### Adicionado
+
 * **Governança Canônica:** Criação do `AGENTS.md` contendo a Constituição de Engenharia, 9 princípios inegociáveis, restrições negativas, ciclo TDD e dicionário canônico.
 * **Instruções para Agentes de IA:** Configuração de ponteiros universais em `AGENTS.md`, `.cursor/rules/sdd.mdc`, `CLAUDE.md` e `.github/copilot-instructions.md`.
 * **Decisões de Arquitetura (ADRs):** Formalização de 11 Architectural Decision Records (`0001` a `0011`) cobrindo Next.js 16, Keystatic CMS, Server Actions, Tailwind v4, hospedagem na Vercel, mídia e CMS Cloud, conformidade LGPD, Vitest + axe-core, headers de segurança HTTP com CSP Report-Only, estratégia de release e tripla camada anti-spam.
@@ -71,4 +75,3 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Governança de segurança (`SECURITY.md`) com suporte a GitHub Private Vulnerability Reporting.
   * Padronização de ambiente e quebras de linha (`.editorconfig`, `.gitattributes`, `.prettierrc`, `.nvmrc`).
   * Especificação formal da Feature 001 em `specs/001-project-bootstrap/` (`spec.md`, `plan.md`, `tasks.md`).
-

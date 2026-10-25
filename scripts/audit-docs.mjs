@@ -145,6 +145,13 @@ function checkFolderStructureSync() {
     return list;
   }
 
+  const specsDir = path.join(ROOT_DIR, "specs");
+  const specFolders = fs.existsSync(specsDir)
+    ? fs.readdirSync(specsDir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => path.join(specsDir, d.name))
+    : [];
+
   const realFiles = [
     path.join(ROOT_DIR, "package.json"),
     path.join(ROOT_DIR, "package-lock.json"),
@@ -156,6 +163,7 @@ function checkFolderStructureSync() {
     path.join(ROOT_DIR, "components.json"),
     ...getRealCodeFiles(path.join(ROOT_DIR, "src")),
     ...getRealCodeFiles(path.join(ROOT_DIR, "tests")),
+    ...specFolders,
   ];
 
   for (const file of realFiles) {
@@ -218,6 +226,14 @@ function checkRoadmapSync() {
 
     if (!hasReadmePhase2Badge) {
       logError("README.md badge should indicate 'Status-Fase_2_Em_Andamento'.");
+    }
+
+    // Verify feature status consistency between README and Roadmap
+    const hasReadmeFeature002 = readmeContent.includes("Features 001 e 002 Concluídas");
+    const hasRoadmapFeature002 = roadmapContent.includes("Features 001 e 002 Concluídas");
+
+    if (!hasReadmeFeature002 || !hasRoadmapFeature002) {
+      logError("README.md and docs/03-project-roadmap.md must both reflect 'Features 001 e 002 Concluídas'.");
     }
   }
 
