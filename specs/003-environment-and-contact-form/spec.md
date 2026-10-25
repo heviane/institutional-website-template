@@ -18,7 +18,7 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 1. **Validação Segregada de Variáveis de Ambiente no Build:** Proteção contra falhas de configuração em tempo de execução via Zod (`src/env/server.ts` com `import "server-only"` e `src/env/client.ts`).
 2. **Defesa Anti-Spam em 3 Camadas:** Proteção contra robôs automatizados preservando o teto gratuito de 100 e-mails/dia do Resend sem quebra de acessibilidade:
    - **Camada 1 (Honeypot):** Campo oculto com descarte silencioso e resposta de sucesso simulada para despistar bots.
-   - **Camada 2 (Rate Limiting com Hash de IP):** Limitação de até 5 submissões/hora por IP, anonimizado via `HMAC-SHA256(ip, secret + YYYY-MM-DD)` em conformidade com a LGPD (Map em dev, Upstash Redis em prod).
+   - **Camada 2 (Rate Limiting com Hash de IP):** Limitação de até 5 submissões por janela fixa de 1 hora com TTL relativo, anonimizado via `HMAC-SHA256(ip, RATE_LIMIT_SECRET)` em estrita conformidade com a LGPD (Map em dev, Upstash Redis em prod).
    - **Camada 3 (Cloudflare Turnstile):** Verificação inteligente invisível sem cookies de rastreamento.
 3. **Disparo Transacional via Resend API:** Envio direto do e-mail com contingência em caso de falha apontando para canais diretos (WhatsApp/Telefone) e arquitetura *Zero-Database* (sem persistência de dados pessoais em banco de dados).
 4. **Formulário Acessível e Reativo:** Componente de interface construído com React Hook Form + Zod (`@hookform/resolvers/zod`), feedback inline, estados de carregamento e conformidade WCAG 2.1 AA.
@@ -45,9 +45,9 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 
 3. **Rate Limiting Anônimo por Hash de IP (`src/lib/rate-limit.ts`):**
    - Extração segura do IP via headers confiáveis (`x-real-ip`, `cf-connecting-ip`, fallback `x-forwarded-for`).
-   - Anonimização criptográfica via `HMAC-SHA256(ip, secret + YYYY-MM-DD)` garantindo consistência entre lambdas serverless sem armazenar IPs brutos (LGPD por design).
-   - Janela deslizante de 1 hora com limite de 5 requisições por hash.
-   - **Armazenamento Híbrido com Fallback Gracioso:** Integração nativa com Upstash Redis REST quando as variáveis de ambiente estiverem presentes (ideal para alto tráfego serverless); e fallback automático para `Map` nativo em memória com expiração por TTL quando ausentes (em dev, testes ou micro-projetos).
+   - Anonimização criptográfica irreversível via `HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` garantindo consistência entre lambdas serverless sem persistir IPs brutos (LGPD por design).
+   - **Algoritmo de Janela Fixa com TTL Relativo (Fixed Window):** Limite de até 5 submissões por janela de 3.600 segundos (1 hora). O TTL é estabelecido na primeira requisição e expira naturalmente após 1 hora de inatividade, eliminando o registro da memória/Redis sem resíduos de dados e sem anomalias na virada da meia-noite.
+   - **Armazenamento Híbrido com Fallback Gracioso:** Integração nativa com Upstash Redis REST (`INCR` + `EXPIRE 3600`) quando as variáveis de ambiente estiverem configuradas em produção; e fallback automático para `Map` nativo em memória com timestamp de expiração quando ausentes (em dev, testes ou micro-projetos).
 
 4. **Cliente Resend & Server Action Canônica (`src/app/actions/contact.ts`):**
    - Inicialização isolada do cliente Resend em `src/lib/resend.ts`.
@@ -99,7 +99,7 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 
 2. **Defesa Anti-Spam & Resiliência Transacional (Item 3 da Seção 2.2 do Roadmap):**
    - **Honeypot:** Submissão com campo `website` preenchido retorna sucesso simulado sem acionar a Resend API.
-   - **Rate Limit:** Submissões repetidas a partir do mesmo IP acima do teto de 5/hora são bloqueadas com mensagem amigável antes de bater no Resend (usando Redis quando configurado, ou Map com TTL no modo micro-projeto).
+   - **Rate Limit:** Submissões repetidas a partir do mesmo IP acima do teto de 5 envios por janela fixa de 1 hora são bloqueadas com mensagem amigável antes de bater no Resend (usando Upstash Redis com TTL de 3.600s quando configurado, ou Map local com expiração no modo micro-projeto).
    - **Turnstile & Feature Flag:** Quando `NEXT_PUBLIC_ENABLE_TURNSTILE` for ativo e as chaves do Turnstile estiverem configuradas, submissão sem token válido é rejeitada com mensagem de erro amigável. Quando `NEXT_PUBLIC_ENABLE_TURNSTILE="false"` ou as chaves estiverem ausentes (modo Lite), o widget não é renderizado e o desafio é ignorado de forma segura sem quebrar o envio.
    - **Resend Mock:** Envio bem-sucedido dispara e-mail com os dados preenchidos para `CONTACT_EMAIL_TO`.
    - **Contingência:** Falha na API do Resend (ex.: status 429 ou cota esgotada) retorna resposta amigável apontando para o WhatsApp e telefone da empresa.

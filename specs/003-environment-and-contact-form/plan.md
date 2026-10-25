@@ -170,11 +170,19 @@ export interface ActionResponse {
 ### 1.4. Rate Limiting com Hash Anônimo de IP (`src/lib/rate-limit.ts`)
 
 Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md):
-- **Cálculo da Chave:** `HMAC-SHA256(ip, secret + YYYY-MM-DD)` gerado via módulo nativo `node:crypto`.
-- **Janela e Limite:** Padrão de 5 requisições por hora por chave.
-- **Armazenamento e Degradação Graciosa:**
-  - **Com Upstash configurado (`UPSTASH_REDIS_REST_URL` & `TOKEN`):** Armazenamento distribuído via `@upstash/redis` com expiração atômica de 3600 segundos (1 hora), ideal para tráfego em arquitetura serverless.
-  - **Sem Upstash configurado (modo micro-projeto, dev ou fallback):** Armazenamento em memória (`Map<string, { count: number; expiresAt: number }>`) com limpeza periódica por TTL.
+- **Cálculo da Chave:** `key = "rate-limit:" + HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` gerado via módulo nativo `node:crypto`. O IP nunca trafega nem é persistido em texto claro (LGPD e privacidade por design).
+- **Algoritmo Escolhido: Janela Fixa com TTL Relativo (Fixed Window with 1-hour TTL):**
+  - **Trade-off Deliberado:** Prioriza simplicidade, determinismo e baixíssima sobrecarga de rede sobre a complexidade de algoritmos de janelas deslizantes (que demandariam sorted sets e múltiplas operações Redis por request). Para a mitigação de robôs de spam e preservação da cota de 100 e-mails/dia do Resend, a janela fixa de 5 envios por hora oferece proteção robusta e custo computacional mínimo.
+  - **Eliminação da Data no Salt:** Ao fixar a expiração via TTL atômico de 3.600s, o registro se auto-destrói da memória/Redis após 1 hora de inatividade, eliminando a chave sem resíduos e sem a anomalia de reset artificial na virada da meia-noite (`YYYY-MM-DD`).
+- **Implementação Dual e Degradação Graciosa:**
+  - **Com Upstash configurado (`UPSTASH_REDIS_REST_URL` & `TOKEN`):**
+    - Executa `INCR key`. Se o retorno for `1` (primeira requisição), agenda `EXPIRE key 3600`.
+    - Se `count > 5`, retorna `{ isAllowed: false, remaining: 0, resetAt }`.
+    - Se `count <= 5`, retorna `{ isAllowed: true, remaining: 5 - count, resetAt }`.
+  - **Sem Upstash configurado (modo micro-projeto, dev ou fallback):**
+    - Armazena em `Map<string, { count: number; expiresAt: number }>`.
+    - Ao consultar: se não existir ou `Date.now() > item.expiresAt`, cria/reseta com `{ count: 1, expiresAt: Date.now() + 3600000 }`.
+    - Se existir e ainda válido: incrementa o contador e valida se `count <= 5`.
 - **Extração Segura do IP:** Priorização de cabeçalhos de borda da Vercel (`x-real-ip`) e Cloudflare (`cf-connecting-ip`), evitando forjamento via `x-forwarded-for` direto.
 
 ---
@@ -236,7 +244,7 @@ Após a aprovação local de todos os Quality Gates (`npm run verify`), o templa
 flowchart TD
     T1["tests/env.test.ts<br/>(Parser Zod, dev vs prod, fail-fast)"]
     T2["tests/contact-schema.test.ts<br/>(Validação de campos, honeypot, consentimento)"]
-    T3["tests/rate-limit.test.ts<br/>(Hash HMAC de IP, rotação diária, janela de 5 reqs)"]
+    T3["tests/rate-limit.test.ts<br/>(Hash HMAC de IP, janela fixa de 5 reqs com TTL)"]
     T4["tests/contact-action.test.ts<br/>(Honeypot silent drop, rate limit block, resend mock, contingência)"]
     T5["tests/components/contact-form.test.tsx<br/>(React Hook Form, validação visual, estados e WCAG)"]
     T6["tests/legal-pages.test.tsx<br/>(Renderização fidedigna de dados e WCAG 2.1 AA)"]
