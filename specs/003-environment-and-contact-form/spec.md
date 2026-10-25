@@ -53,12 +53,12 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - Inicialização isolada do cliente Resend em `src/lib/resend.ts`.
    - Server Action `sendContactEmail(rawInput: unknown): Promise<ActionResponse>`:
      - Validação estrita do payload não confiável via Zod.
-     - Checagem da Camada 1: se `website` contiver texto, simula sucesso (`{ success: true, message: "Mensagem enviada com sucesso!" }`) e descarta silenciosamente.
-     - Checagem da Camada 2: se rate limit estourar, retorna erro tipado (`{ success: false, message: "Limite temporário de envios atingido. Por favor, tente novamente mais tarde ou use nosso WhatsApp." }`).
-     - Checagem da Camada 3: validação do token do Turnstile na API da Cloudflare quando `NEXT_PUBLIC_ENABLE_TURNSTILE` for ativo e as chaves do Turnstile estiverem configuradas. Caso contrário (modo Lite explícito ou chaves ausentes), essa camada é ignorada de forma segura e transparente.
-     - Disparo do e-mail com remetente autenticado `RESEND_FROM_EMAIL` para o destinatário corporativo `CONTACT_EMAIL_TO`.
-     - Contingência: em caso de erro da API do Resend (ex.: cota esgotada), captura e retorna mensagem amigável instruindo o contato via WhatsApp corporativo (`siteConfig.contact.whatsapp`).
-     - Retorno tipado em JavaScript, **nunca códigos HTTP REST**.
+     - Checagem da Camada 1 (Honeypot): se `website` contiver texto, simula sucesso (`{ success: true, message: "Mensagem enviada com sucesso!" }`) e descarta silenciosamente.
+     - Checagem da Camada 2 (Rate Limiting - *Fail-Closed*): verifica taxa de envio do hash de IP. Se excedido ou se o Redis em produção sofrer pane/indisponibilidade, a requisição é bloqueada (*Fail-Closed*, impedindo que falhas de infraestrutura contornem o limite) e retorna mensagem de contingência orientando o contato via WhatsApp.
+     - Checagem da Camada 3 (Turnstile - *Fail-Closed*): quando ativado (`NEXT_PUBLIC_ENABLE_TURNSTILE`), valida o token na Cloudflare. Se o token for inválido OU se a API da Cloudflare falhar/estiver indisponível (timeout/5xx), a Server Action bloqueia o envio imediatamente (*Fail-Closed*, não invoca o Resend) e retorna erro amigável de validação de segurança. Se em modo Lite (desativado ou chaves ausentes), essa camada é ignorada de forma transparente.
+     - Disparo Transacional via Resend: acionado apenas se todas as 3 camadas forem rigorosamente aprovadas.
+     - Contingência com Sanitização Absoluta: se a chamada ao Resend falhar (ex.: status 429, cota diária esgotada ou instabilidade), o erro é registrado internamente via log estruturado (`console.error`), mas a resposta para o frontend NUNCA expõe stack traces, chaves de API, status HTTP ou respostas brutas do provedor. Retorna mensagem amigável instruindo o contato via WhatsApp/telefone da empresa (`siteConfig.contact`).
+     - Retorno tipado em JavaScript (`ActionResponse`), **nunca códigos HTTP REST**.
 
 5. **Componente de Formulário Acessível (`src/components/shared/contact-form/contact-form.tsx`):**
    - Ilha de cliente (`'use client'`) com React Hook Form e `@hookform/resolvers/zod`.
@@ -97,12 +97,12 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
      - Paridade estrita de credenciais do Upstash (rejeita quando apenas URL ou apenas Token é fornecido).
      - Rejeição de variáveis malformatadas (ex.: e-mail ou URL inválidos) sem vazar valores confidenciais nos relatórios de erro.
 
-2. **Defesa Anti-Spam & Resiliência Transacional (Item 3 da Seção 2.2 do Roadmap):**
+2. **Defesa Anti-Spam, Políticas de Falha (Fail-Closed) & Resiliência Transacional:**
    - **Honeypot:** Submissão com campo `website` preenchido retorna sucesso simulado sem acionar a Resend API.
-   - **Rate Limit:** Submissões repetidas a partir do mesmo IP acima do teto de 5 envios por janela fixa de 1 hora são bloqueadas com mensagem amigável antes de bater no Resend (usando Upstash Redis com TTL de 3.600s quando configurado, ou Map local com expiração no modo micro-projeto).
-   - **Turnstile & Feature Flag:** Quando `NEXT_PUBLIC_ENABLE_TURNSTILE` for ativo e as chaves do Turnstile estiverem configuradas, submissão sem token válido é rejeitada com mensagem de erro amigável. Quando `NEXT_PUBLIC_ENABLE_TURNSTILE="false"` ou as chaves estiverem ausentes (modo Lite), o widget não é renderizado e o desafio é ignorado de forma segura sem quebrar o envio.
-   - **Resend Mock:** Envio bem-sucedido dispara e-mail com os dados preenchidos para `CONTACT_EMAIL_TO`.
-   - **Contingência:** Falha na API do Resend (ex.: status 429 ou cota esgotada) retorna resposta amigável apontando para o WhatsApp e telefone da empresa.
+   - **Rate Limit & Fail-Closed do Redis:** Submissões repetidas acima de 5 envios/hora são bloqueadas antes do Resend. Caso o Upstash Redis em produção sofra pane ou indisponibilidade, o envio NÃO é liberado (*Fail-Closed*), retornando mensagem amigável de contingência.
+   - **Turnstile & Fail-Closed:** Token inválido OU indisponibilidade da API da Cloudflare bloqueia o disparo de e-mail (*Fail-Closed*), preservando a cota do Resend. Se desativado (modo Lite), o desafio é ignorado de forma segura.
+   - **Resend Mock & Sanitização Absoluta:** Envio bem-sucedido dispara e-mail com os dados preenchidos. Falha na Resend API (cota ou 429) retorna mensagem amigável e acessível sem vazar detalhes internos, credenciais ou mensagens brutas do provedor.
+   - **Contingência no Formulário:** Respostas com `success: false` exibem no componente alerta acessível (`role="alert"`) com links diretos para WhatsApp e telefone.
    - **Payload Não Confiável:** Objetos malformados, arrays ou tipos primitivos na Server Action são rejeitados pelo Zod sem exceções não tratadas (*unhandled rejections*).
 
 3. **Acessibilidade & Usabilidade (WCAG 2.1 AA):**

@@ -30,20 +30,22 @@
   * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis quando configurado).
   * [ ] 🔵 **Refactor:** Eliminar duplicações e validar conformidade com LGPD.
 
-* [ ] **4. Cliente Resend & Server Action com Defesa em 3 Camadas — TDD:**
-  * [ ] 🔴 **Red:** Criar suíte em `tests/contact-action.test.ts` com *mocks* para Resend e Turnstile cobrindo:
-    * **Caso 1:** Submissão válida dispara e-mail via Resend e retorna sucesso.
-    * **Caso 2:** Bot preenchendo campo honeypot é descartado silenciosamente com sucesso simulado.
-    * **Caso 3:** Estouro de taxa de requisições por IP bloqueia a execução antes de chamar APIs externas.
-    * **Caso 4:** Validação do Turnstile (rejeita quando configurado com token inválido; ignora de forma segura e transparente no modo micro-projeto).
-    * **Caso 5:** Erro ou esgotamento de cota do Resend aciona procedimento de contingência apontando para WhatsApp/telefone.
-    * **Caso 6:** Payload malformado é rejeitado sem exceção não tratada.
+* [ ] **4. Cliente Resend & Server Action com Defesa em 3 Camadas & Fail-Closed — TDD:**
+  * [ ] 🔴 **Red:** Criar suíte em `tests/contact-action.test.ts` com *mocks* para Resend, Upstash e Turnstile cobrindo a matriz estrita de políticas de falha:
+    * **Caso 1 (Caminho Feliz):** Submissão válida dispara e-mail via Resend e retorna sucesso.
+    * **Caso 2 (Honeypot):** Bot preenchendo campo `website` é descartado silenciosamente com sucesso simulado (sem acionar Upstash ou Resend).
+    * **Caso 3 (Rate Limit Estourado):** Excesso de requisições bloqueia antes do Resend com mensagem orientando WhatsApp.
+    * **Caso 4 (Rate Limit Fail-Closed):** Pane/indisponibilidade do Upstash Redis em produção bloqueia o envio (*Fail-Closed*, não chama o Resend).
+    * **Caso 5 (Turnstile Fail-Closed):** Token inválido OU indisponibilidade da API da Cloudflare (500/timeout) bloqueia o envio (*Fail-Closed*, não chama o Resend).
+    * **Caso 6 (Turnstile Modo Lite):** Quando Turnstile desativado (`NEXT_PUBLIC_ENABLE_TURNSTILE="false"` ou chaves ausentes), ignora a Camada 3 e prossegue com envio válido.
+    * **Caso 7 (Resend Fail & Sanitização Absoluta):** Erro de cota (429) ou indisponibilidade da Resend API retorna mensagem de contingência sanitizada, sem vazar chaves, status HTTP ou payloads de erro internos.
+    * **Caso 8 (Payload Inválido):** Payload malformado é rejeitado com validação Zod sem exceções não tratadas (*unhandled rejections*).
   * [ ] 🟢 **Green:** Implementar `src/lib/resend.ts` inicializando o cliente Resend.
-  * [ ] 🟢 **Green:** Implementar `src/app/actions/contact.ts` exportando `sendContactEmail`.
+  * [ ] 🟢 **Green:** Implementar `src/app/actions/contact.ts` exportando `sendContactEmail` com defesas *Fail-Closed*.
   * [ ] 🔵 **Refactor:** Garantir tipagem estrita de retorno (`ActionResponse`) sem retornar códigos HTTP.
 
 * [ ] **5. Componente de Formulário Reativo e Acessível (`src/components/shared/contact-form/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar testes em `tests/components/contact-form.test.tsx` validando renderização de campos, alternância do widget Turnstile conforme flag `NEXT_PUBLIC_ENABLE_TURNSTILE`, mensagens de erro inline com `aria-invalid`, estado de carregamento com botão desabilitado, campo honeypot oculto e asserções `axe` para WCAG 2.1 AA.
+  * [ ] 🔴 **Red:** Criar testes em `tests/components/contact-form.test.tsx` validando renderização de campos, alternância do widget Turnstile conforme flag `NEXT_PUBLIC_ENABLE_TURNSTILE`, mensagens de erro inline com `aria-invalid`, estado de carregamento com botão desabilitado, campo honeypot oculto, alerta de erro acessível (`role="alert"`) com links para WhatsApp/telefone e asserções `axe` para WCAG 2.1 AA.
   * [ ] 🟢 **Green:** Implementar `src/components/shared/contact-form/contact-form.tsx` utilizando React Hook Form e Shadcn/ui (`Input`, `Textarea`, `Button`).
   * [ ] 🔵 **Refactor:** Garantir alvos de toque mínimos de 44x44px e experiência fluida no mobile.
 
