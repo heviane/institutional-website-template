@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Execução (Tarefa 1 Concluída)
+* **Status:** Em Execução (Tarefas 1 e 2 Concluídas)
 
 ---
 
@@ -14,12 +14,12 @@
   * [x] Criar arquivo `components.json` alinhado ao Tailwind CSS v4.
   * [x] Configurar `tests/setup.ts` com matchers do `vitest-axe` e registrar em `vitest.config.ts`.
 
-* [ ] **2. Camada de Configuração & Utilitários Resilientes de Contato — TDD:**
-  * [ ] 🔴 **Red:** Expandir `tests/utils.test.ts` adicionando testes para `formatWhatsAppUrl`, `formatTelUrl` e `formatPhoneDisplay`.
-  * [ ] 🔴 **Red:** Criar teste unitário em `tests/site-config.test.ts` validando presença de campos obrigatórios (`slogan`, `name`, `legal`, `contact`, `social`), estrutura do array `nav` e tipagem escalável.
-  * [ ] 🟢 **Green:** Implementar as funções utilitárias em `src/lib/utils.ts`.
-  * [ ] 🟢 **Green:** Implementar `src/config/site.ts` exportando as interfaces (`SiteConfig`, `NavItem`, etc.) e o objeto canônico `siteConfig`.
-  * [ ] 🔵 **Refactor:** Garantir imutabilidade (`as const`), tipagem estrita no TypeScript e testes verdes.
+* [x] **2. Camada de Configuração & Utilitários Resilientes de Contato — TDD:**
+  * [x] 🔴 **Red:** Expandir `tests/utils.test.ts` adicionando testes para `formatWhatsAppUrl`, `formatTelUrl` e `formatPhoneDisplay`.
+  * [x] 🔴 **Red:** Criar teste unitário em `tests/site-config.test.ts` validando presença de campos obrigatórios (`slogan`, `name`, `legal`, `contact`, `social`), estrutura do array `nav` e tipagem escalável.
+  * [x] 🟢 **Green:** Implementar as funções utilitárias em `src/lib/utils.ts`.
+  * [x] 🟢 **Green:** Implementar `src/config/site.ts` exportando as interfaces (`SiteConfig`, `NavItem`, etc.) e o objeto canônico `siteConfig`.
+  * [x] 🔵 **Refactor:** Garantir imutabilidade (`as const`), tipagem estrita no TypeScript e testes verdes.
 
 * [ ] **3. Primitivos Atômicos de UI & Testes de Foco (`src/components/ui/`):**
   * [ ] 🔴 **Red:** Criar testes em `tests/components/button.test.tsx` cobrindo o Caso 6 da Matriz (`Button variants render classes as expected`: variantes `cta`, `whatsapp` e suporte polimórfico `asChild`) e asserção `axe`.

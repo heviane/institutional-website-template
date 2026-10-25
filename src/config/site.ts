@@ -1,0 +1,67 @@
+export interface NavItem {
+  title: string;
+  href: string;
+}
+
+export interface ContactConfig {
+  email: string;
+  phone: string;
+  whatsapp: string;
+  address: string;
+}
+
+export interface LegalConfig {
+  companyName: string;
+  cnpj: string;
+  dpoEmail: string;
+}
+
+export interface SocialLinks {
+  instagram?: string;
+  linkedin?: string;
+  facebook?: string;
+  github?: string;
+}
+
+export interface SiteConfig {
+  name: string;
+  slogan: string;
+  description: string;
+  url: string;
+  ogImage: string;
+  nav: readonly NavItem[];
+  contact: ContactConfig;
+  legal: LegalConfig;
+  social: SocialLinks;
+}
+
+export const siteConfig: SiteConfig = {
+  name: "Empresa Exemplo",
+  slogan: "Soluções corporativas modernas, ágeis e de alta performance.",
+  description:
+    "Website institucional moderno, acessível e de alta performance com arquitetura serverless.",
+  url: "https://www.empresaexemplo.com.br",
+  ogImage: "https://www.empresaexemplo.com.br/og.jpg",
+  nav: [
+    { title: "Início", href: "#" },
+    { title: "Serviços", href: "#servicos" },
+    { title: "Sobre", href: "#sobre" },
+    { title: "Contato", href: "#contato" },
+  ],
+  contact: {
+    email: "contato@empresaexemplo.com.br",
+    phone: "(11) 99999-9999",
+    whatsapp: "5511999999999",
+    address: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
+  },
+  legal: {
+    companyName: "Empresa Exemplo Ltda",
+    cnpj: "00.000.000/0001-00",
+    dpoEmail: "privacidade@empresaexemplo.com.br",
+  },
+  social: {
+    instagram: "https://instagram.com/empresaexemplo",
+    linkedin: "https://linkedin.com/company/empresaexemplo",
+  },
+} as const;
+

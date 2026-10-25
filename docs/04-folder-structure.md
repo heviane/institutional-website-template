@@ -117,7 +117,8 @@ institutional-website-template/
 ├── tests/                           # Suíte de testes automatizados (Vitest + axe-core)
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe
-│   └── utils.test.ts                # Testes unitários de funções utilitárias (cn)
+│   ├── site-config.test.ts          # Validação do contrato do objeto de marca siteConfig
+│   └── utils.test.ts                # Testes unitários de funções utilitárias (cn, links de contato)
 │
 ├── .editorconfig                    # Padronização de indentação e quebras de linha
 ├── .env.example                     # Modelo documentado de variáveis de ambiente
