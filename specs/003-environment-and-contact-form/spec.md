@@ -52,7 +52,8 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 4. **Cliente Resend & Server Action Canônica (`src/app/actions/contact.ts`):**
    - Inicialização isolada do cliente Resend em `src/lib/resend.ts`.
    - Server Action `sendContactEmail(rawInput: unknown): Promise<ActionResponse>`:
-     - Validação estrita do payload não confiável via Zod.
+     - Guarda Preliminar de Payload Bruto (Anti-DoS): Rejeição imediata antes do parse caso o payload bruto serializado exceda 5.000 caracteres (~5 KB), protegendo a CPU serverless contra buffer stuffing.
+     - Validação estrita do payload não confiável via Zod com limite funcional de 1.000 caracteres no campo `message`.
      - Checagem da Camada 1 (Honeypot): se `website` contiver texto, simula sucesso (`{ success: true, message: "Mensagem enviada com sucesso!" }`) e descarta silenciosamente.
      - Checagem da Camada 2 (Rate Limiting - *Fail-Closed*): verifica taxa de envio do hash de IP. Se excedido ou se o Redis em produção sofrer pane/indisponibilidade, a requisição é bloqueada (*Fail-Closed*, impedindo que falhas de infraestrutura contornem o limite) e retorna mensagem de contingência orientando o contato via WhatsApp.
      - Checagem da Camada 3 (Turnstile - *Fail-Closed*): quando ativado (`NEXT_PUBLIC_ENABLE_TURNSTILE`), valida o token na Cloudflare. Se o token for inválido OU se a API da Cloudflare falhar/estiver indisponível (timeout/5xx), a Server Action bloqueia o envio imediatamente (*Fail-Closed*, não invoca o Resend) e retorna erro amigável de validação de segurança. Se em modo Lite (desativado ou chaves ausentes), essa camada é ignorada de forma transparente.
@@ -103,7 +104,7 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - **Turnstile & Fail-Closed:** Token inválido OU indisponibilidade da API da Cloudflare bloqueia o disparo de e-mail (*Fail-Closed*), preservando a cota do Resend. Se desativado (modo Lite), o desafio é ignorado de forma segura.
    - **Resend Mock & Sanitização Absoluta:** Envio bem-sucedido dispara e-mail com os dados preenchidos. Falha na Resend API (cota ou 429) retorna mensagem amigável e acessível sem vazar detalhes internos, credenciais ou mensagens brutas do provedor.
    - **Contingência no Formulário:** Respostas com `success: false` exibem no componente alerta acessível (`role="alert"`) com links diretos para WhatsApp e telefone.
-   - **Payload Não Confiável:** Objetos malformados, arrays ou tipos primitivos na Server Action são rejeitados pelo Zod sem exceções não tratadas (*unhandled rejections*).
+   - **Payload Não Confiável & Limites de Tamanho:** Mensagens acima de 1.000 caracteres são rejeitadas pelo schema funcional Zod com feedback amigável; payloads abusivos acima de 5.000 caracteres (~5 KB), arrays ou tipos primitivos são bloqueados pelo guarda preliminar sem exceções não tratadas (*unhandled rejections*).
 
 3. **Acessibilidade & Usabilidade (WCAG 2.1 AA):**
    - O formulário `<ContactForm />` e as páginas legais possuem **zero violações de acessibilidade** auditadas pelo `vitest-axe`.

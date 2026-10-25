@@ -24,7 +24,7 @@
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos, relatório de erros sanitizado e proteção contra vazamento acidental para o cliente.
 
 * [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**
-  * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando campos obrigatórios, regras de tamanho, e-mail, campo honeypot (`website`) e consentimento de privacidade.
+  * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando campos obrigatórios, regras de tamanho funcional (aceitando até 1.000 caracteres e rejeitando a partir de 1.001 caracteres no campo `message`), e-mail, campo honeypot (`website`) e consentimento de privacidade.
   * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando cálculo determinístico de hash HMAC de IP com `RATE_LIMIT_SECRET`, algoritmo de janela fixa de 1 hora com TTL de 3.600s, bloqueio na 6ª requisição e liberação após expiração (cobrindo tanto o Map local quanto a simulação com Upstash Redis).
   * [ ] 🟢 **Green:** Implementar `src/lib/schemas/contact.ts` exportando `contactFormSchema` e tipos TypeScript.
   * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis quando configurado).
@@ -39,7 +39,8 @@
     * **Caso 5 (Turnstile Fail-Closed):** Token inválido OU indisponibilidade da API da Cloudflare (500/timeout) bloqueia o envio (*Fail-Closed*, não chama o Resend).
     * **Caso 6 (Turnstile Modo Lite):** Quando Turnstile desativado (`NEXT_PUBLIC_ENABLE_TURNSTILE="false"` ou chaves ausentes), ignora a Camada 3 e prossegue com envio válido.
     * **Caso 7 (Resend Fail & Sanitização Absoluta):** Erro de cota (429) ou indisponibilidade da Resend API retorna mensagem de contingência sanitizada, sem vazar chaves, status HTTP ou payloads de erro internos.
-    * **Caso 8 (Payload Inválido):** Payload malformado é rejeitado com validação Zod sem exceções não tratadas (*unhandled rejections*).
+    * **Caso 8 (Guarda Preliminar de Payload Anti-DoS):** Payload abusivo serializado com mais de 5.000 caracteres (~5 KB) ou tipo não-objeto é rejeitado sumariamente pelo guarda prévio sem onerar os parsers.
+    * **Caso 9 (Validação Zod de Payload):** Payload malformado ou campos inválidos (ex.: mensagem > 1.000 caracteres) são rejeitados pelo Zod retornando erros estruturados sem exceções não tratadas (*unhandled rejections*).
   * [ ] 🟢 **Green:** Implementar `src/lib/resend.ts` inicializando o cliente Resend.
   * [ ] 🟢 **Green:** Implementar `src/app/actions/contact.ts` exportando `sendContactEmail` com defesas *Fail-Closed*.
   * [ ] 🔵 **Refactor:** Garantir tipagem estrita de retorno (`ActionResponse`) sem retornar códigos HTTP.

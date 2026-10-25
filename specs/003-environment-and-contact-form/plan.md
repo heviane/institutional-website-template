@@ -191,14 +191,17 @@ Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formulario
 
 A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Database Architecture*), aplicando rigorosamente a política **Fail-Closed** nas defesas e sanitização absoluta nas respostas:
 
-1. **Validação Preliminar:** Extrai IP dos headers confiáveis e executa `contactFormSchema.safeParse(rawInput)`.
-2. **Camada 1 (Honeypot):** Se `data.website` contiver qualquer valor, retorna silenciosamente `{ success: true, message: "Mensagem enviada com sucesso!" }` sem acionar provedores externos.
-3. **Camada 2 (Rate Limit - Fail-Closed):** Verifica taxa de envio do hash de IP. Se exceder 5 envios na janela de 1 hora OU se a conexão com o Upstash Redis falhar em produção (timeout/5xx), a requisição é bloqueada imediatamente (*Fail-Closed*, não chama o Resend), retornando `{ success: false, message: "Limite temporário de envios atingido ou serviço indisponível. Por favor, entre em contato diretamente pelo nosso WhatsApp." }`.
-4. **Camada 3 (Turnstile - Fail-Closed):** Se `clientEnv.NEXT_PUBLIC_ENABLE_TURNSTILE` for ativo e `serverEnv.TURNSTILE_SECRET_KEY` estiver configurada:
+1. **Guarda Preliminar de Payload (Anti-DoS):**
+   - Constante `MAX_RAW_PAYLOAD_SIZE = 5120` (~5 KB).
+   - Rejeição sumária se o payload bruto não for um objeto ou se sua representação serializada exceder 5.000 caracteres, bloqueando ataques de *Buffer Stuffing* antes de consumir ciclos de CPU com parsers complexos: `{ success: false, message: "Payload excede o limite máximo permitido." }`.
+2. **Validação Funcional via Zod:** Extrai IP dos headers confiáveis e executa `contactFormSchema.safeParse(rawInput)` (validando os limites funcionais de cada campo, incluindo `message` entre 10 e 1.000 caracteres).
+3. **Camada 1 (Honeypot):** Se `data.website` contiver qualquer valor, retorna silenciosamente `{ success: true, message: "Mensagem enviada com sucesso!" }` sem acionar provedores externos.
+4. **Camada 2 (Rate Limit - Fail-Closed):** Verifica taxa de envio do hash de IP. Se exceder 5 envios na janela de 1 hora OU se a conexão com o Upstash Redis falhar em produção (timeout/5xx), a requisição é bloqueada imediatamente (*Fail-Closed*, não chama o Resend), retornando `{ success: false, message: "Limite temporário de envios atingido ou serviço indisponível. Por favor, entre em contato diretamente pelo nosso WhatsApp." }`.
+5. **Camada 3 (Turnstile - Fail-Closed):** Se `clientEnv.NEXT_PUBLIC_ENABLE_TURNSTILE` for ativo e `serverEnv.TURNSTILE_SECRET_KEY` estiver configurada:
    - Se o token for ausente, forjado ou se a chamada à API da Cloudflare falhar (erro 5xx ou timeout de rede), a requisição é bloqueada (*Fail-Closed*, não chama o Resend), retornando `{ success: false, message: "Falha na validação de segurança. Por favor, tente novamente ou fale conosco diretamente pelo WhatsApp." }`.
    - Se em modo Lite (desativado ou chaves omitidas), o desafio é ignorado de forma segura.
-5. **Disparo Transacional (Resend):** Aciona `resend.emails.send(...)` enviando de `RESEND_FROM_EMAIL` para `CONTACT_EMAIL_TO` somente se todas as camadas anteriores forem 100% aprovadas.
-6. **Contingência com Sanitização Absoluta:** Se a chamada ao Resend falhar (ex.: erro 429, cota diária esgotada ou erro 5xx), captura o erro, registra log interno estruturado (`console.error("[CONTACT_ACTION_ERROR]", ...)`), mas retorna para o frontend uma resposta totalmente sanitizada:
+6. **Disparo Transacional (Resend):** Aciona `resend.emails.send(...)` enviando de `RESEND_FROM_EMAIL` para `CONTACT_EMAIL_TO` somente se todas as camadas anteriores forem 100% aprovadas.
+7. **Contingência com Sanitização Absoluta:** Se a chamada ao Resend falhar (ex.: erro 429, cota diária esgotada ou erro 5xx), captura o erro, registra log interno estruturado (`console.error("[CONTACT_ACTION_ERROR]", ...)`), mas retorna para o frontend uma resposta totalmente sanitizada:
    `{ success: false, message: "Ocorreu uma instabilidade temporária no serviço de e-mail. Por favor, utilize nossos canais diretos de WhatsApp ou telefone." }`.
    Nenhum detalhe interno, stack trace, status HTTP ou resposta crua de provedor é exposta.
 

@@ -85,7 +85,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
 * [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action) & Deploy Piloto:**
   * [ ] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.
-  * [ ] Testar validação estrita de tamanho (rejeição de mensagens acima de 5.000 caracteres ou strings abusivas).
+  * [ ] Testar validação estrita de tamanho: rejeição de mensagens acima de 1.000 caracteres no schema funcional e bloqueio prévio de payloads abusivos acima de 5.000 caracteres (~5 KB).
   * [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido (e desativação graciosa no modo Lite).
   * [ ] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
   * [ ] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
