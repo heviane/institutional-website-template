@@ -13,10 +13,15 @@
   * [ ] Validar integridade do `package-lock.json` e execução de `npm run typecheck`.
 
 * [ ] **2. Validação Segregada de Variáveis de Ambiente (`src/env/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` testando cenários de micro-projeto (configuração mínima do Resend em produção), ativação progressiva com Feature Flag (`NEXT_PUBLIC_ENABLE_TURNSTILE`), chaves opcionais do Upstash/Turnstile e rejeição imediata diante de variáveis core ausentes ou malformatadas.
+  * [ ] 🔴 **Red:** Criar suíte de testes em `tests/env.test.ts` cobrindo a matriz estrita de contratos:
+    * Execução offline em `development` e `test` com fallbacks controlados (sem enfraquecer produção).
+    * Rejeição em `production` se `RATE_LIMIT_SECRET` estiver ausente ou utilizar o valor padrão de desenvolvimento.
+    * Paridade estrita de credenciais do Upstash (rejeita quando apenas URL ou apenas Token é fornecido).
+    * Rejeição imediata diante de variáveis core ausentes (`RESEND_API_KEY`, etc.) ou malformatadas sem vazar valores confidenciais no console.
+    * Validação da Feature Flag `NEXT_PUBLIC_ENABLE_TURNSTILE` (true por padrão, false explícito desativando o Turnstile).
   * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*` e flag booleana de Turnstile.
-  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, chaves mínimas obrigatórias e ativação condicional de Upstash/Turnstile.
-  * [ ] 🔵 **Refactor:** Garantir segurança de tipos e proteção contra vazamento acidental para o cliente.
+  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, validação condicional rigorosa de `RATE_LIMIT_SECRET` e paridade de Upstash.
+  * [ ] 🔵 **Refactor:** Garantir segurança de tipos, relatório de erros sanitizado e proteção contra vazamento acidental para o cliente.
 
 * [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**
   * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando campos obrigatórios, regras de tamanho, e-mail, campo honeypot (`website`) e consentimento de privacidade.

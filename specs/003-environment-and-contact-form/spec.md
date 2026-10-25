@@ -33,7 +33,10 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 1. **Validação Segregada de Variáveis de Ambiente (`src/env/`):**
    - `src/env/client.ts`: Validação de variáveis públicas (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `NEXT_PUBLIC_ENABLE_TURNSTILE`) acessíveis no browser e servidor.
    - `src/env/server.ts`: Protegido com `import "server-only";`, validando segredos (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`, `TURNSTILE_SECRET_KEY`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `RATE_LIMIT_SECRET`).
-   - **Ativação Progressiva & Modo "Lite" para Micro-Projetos:** As variáveis mínimas obrigatórias para produção são estritamente as do Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`) e a URL do site (`NEXT_PUBLIC_SITE_URL`). Os serviços de infraestrutura externa (Upstash Redis e Cloudflare Turnstile) são de ativação progressiva com suporte a Feature Flag (`NEXT_PUBLIC_ENABLE_TURNSTILE="false"` para desligar o Turnstile instantaneamente sem apagar credenciais). Se ausentes ou desativados, o sistema opera de forma segura e imediata em "Modo Lite" com as Camadas 1 (Honeypot) e 2 (Rate Limiting via `Map` em memória com TTL), viabilizando o deploy de sites institucionais simples sem atrito de contas de terceiros.
+   - **Ativação Progressiva & Modo "Lite" para Micro-Projetos:** As variáveis mínimas obrigatórias para produção são estritamente as do Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`), a URL do site (`NEXT_PUBLIC_SITE_URL`) e um `RATE_LIMIT_SECRET` forte. Os serviços de infraestrutura externa (Upstash Redis e Cloudflare Turnstile) são de ativação progressiva com suporte a Feature Flag (`NEXT_PUBLIC_ENABLE_TURNSTILE="false"` para desligar o Turnstile instantaneamente sem apagar credenciais). Se ausentes ou desativados, o sistema opera de forma segura e imediata em "Modo Lite" com as Camadas 1 (Honeypot) e 2 (Rate Limiting via `Map` em memória com TTL), viabilizando o deploy de sites institucionais simples sem atrito de contas de terceiros.
+   - **Contrato Estrito de RATE_LIMIT_SECRET:** Em produção (`NODE_ENV === "production"`), `RATE_LIMIT_SECRET` é obrigatório (mínimo 16 caracteres) e **não pode** conter o valor padrão público de desenvolvimento. Em dev/test, admite fallback controlado para viabilizar execução offline e CI.
+   - **Paridade Estrita do Upstash Redis:** Se `UPSTASH_REDIS_REST_URL` for configurado, `UPSTASH_REDIS_REST_TOKEN` também deve ser; e vice-versa. Configurações parciais são rejeitadas imediatamente no build.
+   - **Sanitização de Logs:** Mensagens de erro de validação de ambiente listam apenas os nomes das variáveis e as mensagens de erro, sem vazar valores de segredos nos logs.
    - Padrão *fail-fast*: Interrupção imediata do build caso alguma variável core obrigatória esteja ausente ou malformatada.
 
 2. **Schema Canônico de Contato (`src/lib/schemas/contact.ts`):**
@@ -88,7 +91,11 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - `npm run build` compila com sucesso sob a configuração mínima de produção (Resend + URL do site), viabilizando micro-projetos sem dependência de contas externas.
    - `npm run build` rejeita imediatamente com relatório explícito caso alguma variável core obrigatória esteja ausente ou malformatada.
    - Tentativa de importar `src/env/server.ts` em Client Component resulta em erro de compilação bloqueante (`server-only`).
-   - Suíte `tests/env.test.ts` valida os cenários de micro-projeto (chaves mínimas), produção com integrações ativas (Upstash/Turnstile) e rejeição de entradas inválidas.
+   - Suíte `tests/env.test.ts` valida:
+     - Execução offline em `development` e `test` com fallbacks controlados.
+     - Rejeição estrita em `production` se `RATE_LIMIT_SECRET` estiver ausente ou utilizar o valor padrão de desenvolvimento.
+     - Paridade estrita de credenciais do Upstash (rejeita quando apenas URL ou apenas Token é fornecido).
+     - Rejeição de variáveis malformatadas (ex.: e-mail ou URL inválidos) sem vazar valores confidenciais nos relatórios de erro.
 
 2. **Defesa Anti-Spam & Resiliência Transacional (Item 3 da Seção 2.2 do Roadmap):**
    - **Honeypot:** Submissão com campo `website` preenchido retorna sucesso simulado sem acionar a Resend API.
