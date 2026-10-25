@@ -50,21 +50,27 @@
   * [ ] 🟢 **Green:** Implementar `src/components/shared/contact-form/contact-form.tsx` utilizando React Hook Form e Shadcn/ui (`Input`, `Textarea`, `Button`).
   * [ ] 🔵 **Refactor:** Garantir alvos de toque mínimos de 44x44px e experiência fluida no mobile.
 
-* [ ] **6. Páginas Legais Estáticas Fidedignas (`src/app/(legal)/`) — TDD:**
+* [ ] **6. Botão Flutuante de WhatsApp Global (`src/components/shared/floating-whatsapp/`) — TDD:**
+  * [ ] 🔴 **Red:** Criar testes em `tests/components/floating-whatsapp.test.tsx` validando renderização do botão FAB, alvo de toque mínimo de 56x56px, link correto com `formatWhatsAppUrl(siteConfig.contact.whatsapp)`, atributos de segurança (`target="_blank"`, `rel="noopener noreferrer"`), rótulo acessível (`aria-label`), desativação condicional quando `showFloatingWhatsapp: false` e asserções de acessibilidade WCAG 2.1 AA (`axe`).
+  * [ ] 🟢 **Green:** Adicionar propriedade `showFloatingWhatsapp?: boolean` em `src/config/site.ts`.
+  * [ ] 🟢 **Green:** Implementar `src/components/shared/floating-whatsapp/floating-whatsapp.tsx` e integrá-lo globalmente no `src/app/layout.tsx`.
+  * [ ] 🔵 **Refactor:** Otimizar SVG inline do WhatsApp e assegurar foco visível por teclado (`focus-visible:ring-2`).
+
+* [ ] **7. Páginas Legais Estáticas Fidedignas (`src/app/(legal)/`) — TDD:**
   * [ ] 🔴 **Red:** Criar testes em `tests/legal-pages.test.tsx` validando que a Política de Privacidade e os Termos de Uso exibem a Razão Social, CNPJ, canal do DPO e serviços ativos com conformidade WCAG 2.1 AA (`axe`).
   * [ ] 🟢 **Green:** Implementar `src/app/(legal)/politica-de-privacidade/page.tsx` (RSC).
   * [ ] 🟢 **Green:** Implementar `src/app/(legal)/termos-de-uso/page.tsx` (RSC).
   * [ ] 🔵 **Refactor:** Alinhamento estrito aos dados reais do cliente em `siteConfig`.
 
-* [ ] **7. Integração na Home Page (`src/app/page.tsx`):**
+* [ ] **8. Integração na Home Page (`src/app/page.tsx`):**
   * [ ] Atualizar a seção `#contato` em `src/app/page.tsx` integrando o componente real `<ContactForm />`.
   * [ ] Atualizar os testes em `tests/components/home.test.tsx` validando a integração e a ausência de violações WCAG 2.1 AA.
 
-* [ ] **8. Execução e Homologação dos Quality Gates Locais & Smoke Test:**
+* [ ] **9. Execução e Homologação dos Quality Gates Locais & Smoke Test:**
   * [ ] Executar `npm run verify` e certificar que todos os passos (`audit:docs`, `lint`, `typecheck`, `test`, `build`) estão 100% verdes.
   * [ ] Executar deploy piloto de sanidade em preview da Vercel (opcional/recomendado) para homologar Server Actions e Resend em ambiente real.
 
-* [ ] **9. Sincronização Documental Obrigatória, Anti-Doc Rot & Auditoria de PRs (Tarefa Final):**
+* [ ] **10. Sincronização Documental Obrigatória, Anti-Doc Rot & Auditoria de PRs (Tarefa Final):**
   * [ ] Atualizar status da feature na tríade de governança:
     * `CHANGELOG.md`: marcar Feature 003 como concluída `[x]` sob `### 📊 Status das Features` e registrar notas da entrega sob `[Unreleased]` (fonte da verdade de status).
     * `README.md`: atualizar bloco de alerta de status para "Features 001, 002 e 003 Concluídas" e indicar a Feature 004 como próxima.

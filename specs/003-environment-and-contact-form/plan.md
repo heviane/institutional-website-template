@@ -237,7 +237,17 @@ A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Da
 
 ---
 
-### 1.8. Homologação & Smoke Test em Nuvem (Vercel Preview)
+### 1.8. Botão Flutuante de WhatsApp (`src/components/shared/floating-whatsapp/`)
+
+* Componente de ação flutuante (`FloatingWhatsApp`) renderizado globalmente em `src/app/layout.tsx`:
+  - Visibilidade condicionada a `siteConfig.contact.showFloatingWhatsapp !== false`.
+  - Posicionamento fixo `fixed bottom-6 right-6 z-50` com alvo de toque amplo de 56x56px (acima dos 44x44px mínimos exigidos pela WCAG 2.1 AA).
+  - Ícone vetorial do WhatsApp (SVG inline otimizado sem dependências extras), fundo verde oficial (`#25D366`), transições suaves e sombra projetada (`shadow-lg hover:shadow-xl`).
+  - Navegação segura e acessível: link externo com `target="_blank"`, `rel="noopener noreferrer"`, `aria-label="Falar conosco no WhatsApp"` e anel de foco visível por teclado (`focus-visible:ring-2 focus-visible:ring-offset-2`).
+
+---
+
+### 1.9. Homologação & Smoke Test em Nuvem (Vercel Preview)
 
 Após a aprovação local de todos os Quality Gates (`npm run verify`), o template é elegível para um **deploy piloto de sanidade** em ambiente serverless da Vercel:
 - **Objetivo:** Antecipar a validação em nuvem do runtime Next.js 16 com Turbopack, Tailwind CSS v4, headers de segurança e disparo real da Resend API antes de iniciar o desenvolvimento do Keystatic CMS (Feature 004).
@@ -254,9 +264,10 @@ flowchart TD
     T3["tests/rate-limit.test.ts<br/>(Hash HMAC de IP, janela fixa de 5 reqs com TTL)"]
     T4["tests/contact-action.test.ts<br/>(Honeypot silent drop, rate limit block, resend mock, contingência)"]
     T5["tests/components/contact-form.test.tsx<br/>(React Hook Form, validação visual, estados e WCAG)"]
-    T6["tests/legal-pages.test.tsx<br/>(Renderização fidedigna de dados e WCAG 2.1 AA)"]
+    T6["tests/components/floating-whatsapp.test.tsx<br/>(Alvo de toque 56px, aria-label, noopener e WCAG)"]
+    T7["tests/legal-pages.test.tsx<br/>(Renderização fidedigna de dados e WCAG 2.1 AA)"]
 
-    T1 --> T2 --> T3 --> T4 --> T5 --> T6
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 ---
@@ -275,6 +286,7 @@ institutional-website-template/
 │   │   ├── rate-limit.ts            # Rate limiting anônimo com hash HMAC de IP
 │   │   └── resend.ts                # Instância do cliente Resend
 │   ├── app/
+│   │   ├── layout.tsx               # Inclusão global do FloatingWhatsApp
 │   │   ├── actions/
 │   │   │   └── contact.ts           # Server Action canônica de contato com 3 camadas
 │   │   ├── (legal)/
@@ -285,8 +297,10 @@ institutional-website-template/
 │   │   └── page.tsx                 # Atualização da Home integrando o formulário real
 │   └── components/
 │       └── shared/
-│           └── contact-form/
-│               └── contact-form.tsx # Componente do formulário de contato acessível
+│           ├── contact-form/
+│           │   └── contact-form.tsx # Componente do formulário de contato acessível
+│           └── floating-whatsapp/
+│               └── floating-whatsapp.tsx # Botão flutuante de WhatsApp com WCAG 2.1 AA
 └── tests/
     ├── env.test.ts                  # Testes da camada de validação de ambiente
     ├── contact-schema.test.ts       # Testes unitários do schema Zod de contato
@@ -294,6 +308,7 @@ institutional-website-template/
     ├── contact-action.test.ts       # Testes de integração da Server Action com mocks
     ├── legal-pages.test.tsx         # Testes de renderização e acessibilidade das páginas legais
     └── components/
-        └── contact-form.test.tsx    # Testes do componente de formulário com axe
+        ├── contact-form.test.tsx    # Testes do componente de formulário com axe
+        └── floating-whatsapp.test.tsx # Testes do botão flutuante com axe
 ```
 

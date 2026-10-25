@@ -77,6 +77,12 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
 7. **Integração na Home Page (`src/app/page.tsx`):**
    - Substituição do bloco estático de CTA de contato pela renderização do formulário real `<ContactForm />` integrado na seção `#contato`.
 
+8. **Botão Flutuante de WhatsApp (`src/components/shared/floating-whatsapp/floating-whatsapp.tsx`):**
+   - Componente de ação flutuante (`fixed bottom-6 right-6 z-50`) exibindo o ícone oficial do WhatsApp, cantos circulares (`rounded-full`), sombra projetada e transição suave.
+   - Dimensões acessíveis com alvo de toque de 56x56px (superior ao mínimo WCAG de 44x44px).
+   - Rótulo acessível `aria-label="Falar conosco no WhatsApp"`, foco visível por teclado (`focus-visible:ring-2`) e segurança de link externo (`target="_blank"` e `rel="noopener noreferrer"`).
+   - Integrado globalmente no `src/app/layout.tsx`, respeitando a flag de configuração `siteConfig.contact.showFloatingWhatsapp` (padrão: `true`).
+
 ### O que NÃO está no escopo (Out-of-Scope)
 
 * Armazenamento persistente de leads em banco de dados SQL ou NoSQL (terminantemente proibido pelo ADR 0007 - *Zero-Database Architecture*).
@@ -107,7 +113,8 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - **Payload Não Confiável & Limites de Tamanho:** Mensagens acima de 1.000 caracteres são rejeitadas pelo schema funcional Zod com feedback amigável; payloads abusivos acima de 5.000 caracteres (~5 KB), arrays ou tipos primitivos são bloqueados pelo guarda preliminar sem exceções não tratadas (*unhandled rejections*).
 
 3. **Acessibilidade & Usabilidade (WCAG 2.1 AA):**
-   - O formulário `<ContactForm />` e as páginas legais possuem **zero violações de acessibilidade** auditadas pelo `vitest-axe`.
+   - O formulário `<ContactForm />`, o botão flutuante `<FloatingWhatsApp />` e as páginas legais possuem **zero violações de acessibilidade** auditadas pelo `vitest-axe`.
+   - O botão flutuante `<FloatingWhatsApp />` possui alvo de toque de pelo menos 44x44px (especificado em 56x56px), anel de foco visível, `aria-label` descritivo e abre o WhatsApp em nova aba com segurança (`rel="noopener noreferrer"`).
    - Todos os campos de entrada possuem rótulos (`<label>`) associados via `htmlFor`/`id`.
    - Mensagens de erro são associadas aos campos via `aria-describedby` e `aria-invalid`.
    - Teclado navega por todos os campos de forma lógica, sem armadilhas de foco.

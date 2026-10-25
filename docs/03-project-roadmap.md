@@ -61,6 +61,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Implementar política de Rate Limiting anônimo por hash de IP (Upstash Redis em produção / Map nativo em desenvolvimento e testes).
   * [ ] Implementar componente de formulário acessível com React Hook Form.
   * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
+  * [ ] Implementar botão flutuante de WhatsApp global acessível (`src/components/shared/floating-whatsapp/`) com alvo de 56px e WCAG 2.1 AA.
   * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
 * [ ] **Gestão de Conteúdo (Headless CMS):**
   * [ ] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
