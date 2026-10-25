@@ -27,34 +27,35 @@ Como este repositório já contém a arquitetura, governança e documentação p
 O setup declarativo estabelece o `package.json` canônico com dependências travadas e scripts de qualidade, as configurações essenciais (`tsconfig.json`, `next.config.ts`, `eslint.config.mjs`), os utilitários de design system e a estrutura mínima em `src/`:
 
 ```bash
-# Instalação determinística de todas as dependências declaradas no package.json
-npm install
+# Para clones limpos e reprodução fiel das versões travadas no lockfile:
+npm ci
+
+# Durante o desenvolvimento ativo, caso precise adicionar dependências:
+# npm install <pacote>
 ```
+
+> 💡 **Diretriz de Reprodutibilidade (npm ci vs. npm install):**  
+> * **`npm ci`:** Recomendado para clone inicial, esteiras de CI e deploys de produção. Instala estritamente a árvore congelada no `package-lock.json` e falha diante de inconsistências.  
+> * **`npm install`:** Reservado para o desenvolvimento ativo ao instalar intencionalmente novos pacotes ou atualizar versões semânticas no lockfile.
 
 ---
 
-### Passo 2: Inicializar o Shadcn/ui (Design System)
+### Passo 2: Configuração Declarativa do Shadcn/ui (Design System)
 
-Com o Next.js e o Tailwind v4 instalados, inicialize o **Shadcn/ui** para configurar os componentes acessíveis baseados em Radix UI. É recomendável utilizar a flag `-d` para aplicar os padrões oficiais de forma imediata:
+Com o Next.js e o Tailwind v4 configurados com `@theme` em `src/app/globals.css`, a integração do **Shadcn/ui** adota o modelo **declarativo e manual** via `components.json` na raiz do projeto, dispensando o comando interativo `npx shadcn init` (que arriscaria sobrescrever o `globals.css` e o `src/lib/utils.ts` customizados):
 
-```bash
-npx shadcn@latest init -d
-```
-
-Caso prefira responder aos prompts interativos manualmente (`npx shadcn@latest init`):
-
-1. **Which style would you like to use?** `New York` (ou `Default`)
-2. **Which color would you like to use as the base color?** `Slate` (ou `Neutral` — base neutra ideal para reestilizar para qualquer cliente)
-3. **Would you like to use CSS variables for colors?** `Yes` *(Integração nativa com a diretiva `@theme` do Tailwind v4)*
+* O arquivo `components.json` mapeia os aliases `@/components`, `@/lib/utils` e `@/components/ui`.
+* Os primitivos atômicos do Radix UI (`button.tsx`, `card.tsx`, `dialog.tsx`, `input.tsx`, `textarea.tsx`) são adicionados diretamente em `src/components/ui/`, garantindo conformidade WCAG 2.1 AA sem atritos de sobrescrita.
 
 ---
 
-### Passo 3: Instalar as Bibliotecas da Stack (Comando Único)
+### Passo 3: Dependências da Stack
 
-Instale as dependências essenciais de validação, formulários, e-mails, ícones e animações:
+As dependências essenciais de validação de formulários, comunicação transacional, ícones e acessibilidade são gerenciadas pelo [`package.json`](../package.json):
 
 ```bash
-npm install react-hook-form zod @hookform/resolvers lucide-react resend motion
+# Instalação das dependências com lockfile estrito:
+npm ci
 ```
 
 ---

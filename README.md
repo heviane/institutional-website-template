@@ -88,9 +88,13 @@ git clone https://github.com/seu-usuario/nome-do-projeto.git
 # Entrar na pasta do projeto
 cd nome-do-projeto
 
-# Instalar as dependências de forma reproduzível (Lockfile estrito)
+# Instalação reproduzível recomendada (paridade estrita com o package-lock.json):
 npm ci
 ```
+
+> 💡 **Nota de Engenharia (Reprodutibilidade Estrita):**  
+> * Utilize **`npm ci`** em clones limpos, rotinas de CI e deploys de produção para reproduzir com exatidão matemática as versões congeladas no `package-lock.json`.  
+> * Utilize **`npm install`** exclusivamente durante o desenvolvimento ativo ao adicionar novos pacotes (`npm install <pacote>`) ou atualizar intencionalmente o lockfile.
 
 ### 3. Variáveis de Ambiente
 
