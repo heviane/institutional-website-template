@@ -35,6 +35,13 @@ export interface SiteConfig {
   social: SocialLinks;
 }
 
+/**
+ * ⚠️ DEMO PLACEHOLDER VALUES:
+ * The data below represents sample corporate information used for development,
+ * testing, and layout demonstration. All values (especially corporate name, CNPJ,
+ * address, contact channels, and DPO email) MUST be replaced with verified, real client
+ * data before production deployment (see docs/07-client-onboarding-checklist.md).
+ */
 export const siteConfig: SiteConfig = {
   name: "Empresa Exemplo",
   slogan: "Soluções corporativas modernas, ágeis e de alta performance.",

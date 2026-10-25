@@ -14,6 +14,12 @@ import {
 import { siteConfig } from "@/config/site";
 import { formatWhatsAppUrl } from "@/lib/utils";
 
+/**
+ * ⚠️ DEMO PLACEHOLDER CONTENT:
+ * The services array below is strictly for layout demonstration, design system verification,
+ * and automated accessibility testing (vitest-axe). Replace with the client's actual services
+ * during client onboarding (docs/07-client-onboarding-checklist.md) or manage via Keystatic CMS (Feature 004).
+ */
 const services = [
   {
     icon: Briefcase,

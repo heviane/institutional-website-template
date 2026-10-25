@@ -155,6 +155,9 @@ Toda a informação global do cliente (nome da empresa, redes sociais, telefones
 
 Basta alterar os valores desse arquivo para que todo o cabeçalho, rodapé e metadados SEO sejam atualizados automaticamente no site.
 
+> ℹ️ **Nota de Neutralidade & Conteúdo de Demonstração:**  
+> Os textos institucionais e cards de serviços da Home Page (`src/app/page.tsx`), bem como os dados cadastrais em `src/config/site.ts`, são **placeholders demonstrativos** voltados a testes de layout e acessibilidade. Consulte o [Checklist de Onboarding de Cliente](docs/07-client-onboarding-checklist.md) para o passo a passo completo de substituição por dados e conteúdos reais antes do lançamento em produção.
+
 ---
 
 ## 📄 Licença

@@ -99,6 +99,12 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
   - [ ] `public/og.jpg` (1200x630 px com título, logo e slogan para redes sociais)
 - [ ] **2.4. Definir Tipografia em `src/app/layout.tsx`:**
   - Ajustar a importação de `next/font/google` com as famílias tipográficas do cliente.
+- [ ] **2.5. Revisar e Substituir Conteúdos Demonstrativos da Home Page:**
+  - ⚠️ **Importante (Neutralidade do Template):** O template inclui textos de demonstração na Home (`src/app/page.tsx`) destinados a validar o layout e o design system. Eles **devem ser obrigatoriamente substituídos ou customizados** antes da entrega ao cliente:
+    - [ ] **Hero Section (`src/components/shared/hero/hero.tsx`):** Ajustar slogan, chamada principal e botões de ação para a proposta de valor do cliente.
+    - [ ] **Seção de Serviços (`src/app/page.tsx`):** Substituir o array `services` (títulos demonstrativos como "Consultoria Estratégica", ícones e descrições) pelos serviços reais da empresa ou vincular às coleções do Keystatic CMS (Feature 004).
+    - [ ] **Seção Sobre (`src/app/page.tsx`):** Adaptar o texto institucional com a história, missão e diferenciais reais do contratante.
+    - [ ] **Seção de Contato:** Confirmar se o texto introdutório da seção `#contato` reflete o tom de voz da marca.
 
 ---
 
@@ -222,7 +228,8 @@ Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
 - [ ] **7.1. Identificar o Encarregado de Dados (DPO) ou Canal de Atendimento:**
   - Obter o nome e e-mail de contato para privacidade da empresa do cliente (ex: `privacidade@cliente.com.br`).
 - [ ] **7.2. Customizar as Páginas Legais com os Serviços Efetivamente Ativos:**
-  - Atualizar os dados cadastrais da empresa em `src/config/site.ts`.
+  - ⚠️ **Alerta de Conformidade Legal:** O template utiliza dados cadastrais fictícios de exemplo (`"Empresa Exemplo Ltda"`, `"00.000.000/0001-00"`, `"privacidade@empresaexemplo.com.br"`). É **terminantemente proibido publicar o site em produção com esses dados de exemplo**, sob risco de infrações à LGPD e sanções de órgãos de defesa do consumidor.
+  - Atualizar os dados cadastrais da empresa em `src/config/site.ts` com a Razão Social, CNPJ real ativo, endereço da sede e canal do DPO da empresa cliente.
   - Revisar `src/app/(legal)/politica-de-privacidade/page.tsx` para garantir correspondência exata com as ferramentas ativadas para o cliente:
     - Se Cloudflare Turnstile estiver ativo: descrever a verificação técnica de ambiente e prevenção anti-abuso.
     - Se Plausible estiver ativo: detalhar a telemetria agregada sem cookies e com hash rotativo diário.
