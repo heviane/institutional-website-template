@@ -115,6 +115,10 @@ institutional-website-template/
 │       └── server.ts                # Schema e exportação de serverEnv (com import "server-only")
 │
 ├── tests/                           # Suíte de testes automatizados (Vitest + axe-core)
+│   ├── components/                  # Testes unitários de componentes e acessibilidade (WCAG 2.1 AA)
+│   │   ├── button.test.tsx          # Teste de variantes do Button, asChild e conformidade WCAG
+│   │   ├── card.test.tsx            # Teste de composição do Card e conformidade WCAG
+│   │   └── dialog.test.tsx          # Teste de ciclo de foco do Dialog (foco, Escape e WCAG)
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe
 │   ├── site-config.test.ts          # Validação do contrato do objeto de marca siteConfig

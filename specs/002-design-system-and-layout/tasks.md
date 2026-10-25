@@ -2,7 +2,7 @@
 
 * **Spec:** [`spec.md`](spec.md)
 * **Plan:** [`plan.md`](plan.md)
-* **Status:** Em Execução (Tarefas 1 e 2 Concluídas)
+* **Status:** Em Execução (Tarefas 1, 2 e 3 Concluídas)
 
 ---
 
@@ -21,14 +21,14 @@
   * [x] 🟢 **Green:** Implementar `src/config/site.ts` exportando as interfaces (`SiteConfig`, `NavItem`, etc.) e o objeto canônico `siteConfig`.
   * [x] 🔵 **Refactor:** Garantir imutabilidade (`as const`), tipagem estrita no TypeScript e testes verdes.
 
-* [ ] **3. Primitivos Atômicos de UI & Testes de Foco (`src/components/ui/`):**
-  * [ ] 🔴 **Red:** Criar testes em `tests/components/button.test.tsx` cobrindo o Caso 6 da Matriz (`Button variants render classes as expected`: variantes `cta`, `whatsapp` e suporte polimórfico `asChild`) e asserção `axe`.
-  * [ ] 🔴 **Red:** Criar testes em `tests/components/card.test.tsx` validando composição e asserção `axe`.
-  * [ ] 🔴 **Red:** Criar testes em `tests/components/dialog.test.tsx` cobrindo o Caso 3 da Matriz: ciclo completo de foco (abertura transfere foco para o modal, `Escape` fecha o diálogo e foco é restaurado ao trigger).
-  * [ ] 🟢 **Green:** Implementar `src/components/ui/button.tsx` com variantes CVA e toque mínimo de 44x44px.
-  * [ ] 🟢 **Green:** Implementar `src/components/ui/card.tsx` com subcomponentes compostos (`CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`) sem hexadecimais brutos.
-  * [ ] 🟢 **Green:** Implementar `src/components/ui/dialog.tsx` baseado em `@radix-ui/react-dialog` com focus trap acessível.
-  * [ ] 🟢 **Green:** Implementar `src/components/ui/input.tsx` e `src/components/ui/textarea.tsx`.
+* [x] **3. Primitivos Atômicos de UI & Testes de Foco (`src/components/ui/`):**
+  * [x] 🔴 **Red:** Criar testes em `tests/components/button.test.tsx` cobrindo o Caso 6 da Matriz (`Button variants render classes as expected`: variantes `cta`, `whatsapp` e suporte polimórfico `asChild`) e asserção `axe`.
+  * [x] 🔴 **Red:** Criar testes em `tests/components/card.test.tsx` validando composição e asserção `axe`.
+  * [x] 🔴 **Red:** Criar testes em `tests/components/dialog.test.tsx` cobrindo o Caso 3 da Matriz: ciclo completo de foco (abertura transfere foco para o modal, `Escape` fecha o diálogo e foco é restaurado ao trigger).
+  * [x] 🟢 **Green:** Implementar `src/components/ui/button.tsx` com variantes CVA e toque mínimo de 44x44px.
+  * [x] 🟢 **Green:** Implementar `src/components/ui/card.tsx` com subcomponentes compostos (`CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`) sem hexadecimais brutos.
+  * [x] 🟢 **Green:** Implementar `src/components/ui/dialog.tsx` baseado em `@radix-ui/react-dialog` com focus trap acessível.
+  * [x] 🟢 **Green:** Implementar `src/components/ui/input.tsx` e `src/components/ui/textarea.tsx`.
 
 * [ ] **4. Componentes Estruturais de Layout (Server-First) & Matriz Enxuta de UI (`src/components/shared/`) — TDD:**
   * [ ] 🔴 **Red:** Criar suíte de testes em `tests/components/layout.test.tsx` cobrindo os Casos da Matriz:
