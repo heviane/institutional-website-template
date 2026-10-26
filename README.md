@@ -117,11 +117,41 @@ TURNSTILE_SECRET_KEY=sua_secret_key_aqui
 # Iniciar o servidor local de desenvolvimento
 npm run dev
 
-# Executar todos os Quality Gates de uma só vez (Auditoria, Lint, Typecheck, Testes e Build)
+# Executar todos os Quality Gates de uma só vez (Auditoria, Formatação, Lint, Typecheck, Testes e Build)
 npm run verify
 ```
 
 Acesse `http://localhost:3000` no seu navegador para ver a aplicação em execução.
+
+#### 🛠️ Scripts Disponíveis (`package.json`)
+
+| Script                 | Finalidade                                                                   |  Quality Gate  |
+| :--------------------- | :--------------------------------------------------------------------------- | :------------: |
+| `npm run dev`          | Inicia o servidor local de desenvolvimento (Next.js 16 com Turbopack)        |       —        |
+| `npm run verify`       | Executa todos os 6 Quality Gates em cadeia estrita antes de commits e no CI  | **Bloqueante** |
+| `npm run audit:docs`   | Auditoria de integridade de links internos, árvore e Anti-Doc Rot            |      Sim       |
+| `npm run format:check` | Valida conformidade do código com as regras do Prettier                      |      Sim       |
+| `npm run format`       | Corrige e formata automaticamente todo o código com o Prettier               |       —        |
+| `npm run lint`         | Executa análise estática com regras estritas do ESLint 9                     |      Sim       |
+| `npm run typecheck`    | Gera rotas e valida tipos TypeScript (`next typegen && tsc --noEmit`)        |      Sim       |
+| `npm test`             | Executa a suíte de testes no Vitest e auditoria de acessibilidade `axe-core` |      Sim       |
+| `npm run build`        | Compila o build otimizado de produção do Next.js com Turbopack               |      Sim       |
+| `npm start`            | Inicia o servidor local com o build de produção compilado                    |       —        |
+
+#### 🛠️ Scripts Disponíveis (`package.json`)
+
+| Script                 | Finalidade                                                                   |  Quality Gate  |
+| :--------------------- | :--------------------------------------------------------------------------- | :------------: |
+| `npm run dev`          | Inicia o servidor local de desenvolvimento (Next.js 16 com Turbopack)        |       —        |
+| `npm run verify`       | Executa todos os 6 Quality Gates em cadeia estrita antes de commits e no CI  | **Bloqueante** |
+| `npm run audit:docs`   | Auditoria de integridade de links internos, árvore e Anti-Doc Rot            |      Sim       |
+| `npm run format:check` | Valida conformidade do código com as regras do Prettier                      |      Sim       |
+| `npm run format`       | Corrige e formata automaticamente todo o código com o Prettier               |       —        |
+| `npm run lint`         | Executa análise estática com regras estritas do ESLint 9                     |      Sim       |
+| `npm run typecheck`    | Gera rotas e valida tipos TypeScript (`next typegen && tsc --noEmit`)        |      Sim       |
+| `npm test`             | Executa a suíte de testes no Vitest e auditoria de acessibilidade `axe-core` |      Sim       |
+| `npm run build`        | Compila o build otimizado de produção do Next.js com Turbopack               |      Sim       |
+| `npm start`            | Inicia o servidor local com o build de produção compilado                    |       —        |
 
 ### 5. Atualizações e Manutenção do Template
 

@@ -19,6 +19,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado (Unreleased)
 
+- **Sincronização Rigorosa Documentação × Scripts (`package.json`) × CI:**
+  - Alinhamento em `.github/PULL_REQUEST_TEMPLATE.md`, `CONTRIBUTING.md`, `AGENTS.md`, `docs/02-environment-setup.md` e `docs/07-client-onboarding-checklist.md` consolidando a execução de `npm run verify` e documentando explicitamente os 6 Quality Gates (incluindo `npm run format:check` e `npm run format`).
+  - Criação da tabela consolidada de scripts no `README.md` (Seção 4) detalhando a finalidade e status de bloqueio de cada comando para novos desenvolvedores e agentes.
+
 - **Refatoração de Arquitetura, Tipagem de Marca & Tooling de Qualidade:**
   - Segregação de Tipos da Marca: Criação de `src/types/site.ts` isolando interfaces (`SiteConfig`, `NavItem`, etc.) na Zona do Template Engine e preservando `src/config/site.ts` com `as const satisfies SiteConfig` na Zona Imune do Cliente (ADR 0010), evitando conflitos de merge em atualizações upstream.
   - Imutabilidade e Single Source of Truth para URL: Centralização canônica da URL em `siteConfig.url`; flexibilização de `NEXT_PUBLIC_SITE_URL` como opcional em `src/env/client.ts` sem mascaramento de localhost padrão em produção.

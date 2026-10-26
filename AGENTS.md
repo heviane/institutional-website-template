@@ -235,13 +235,14 @@ Ao implementar qualquer funcionalidade na Fase 2:
 2. **Execute os Quality Gates:**
 
    ```bash
-   npm run verify      # Executa todos os quality gates unificados (audit:docs, lint, typecheck, test, build)
+   npm run verify      # Executa todos os 6 quality gates unificados (audit:docs, format:check, lint, typecheck, test, build)
    # Ou individualmente:
-   # npm run audit:docs  # Zero erros de documentação, links quebrados ou violações de Anti-Doc Rot
-   # npm run lint        # Zero erros no ESLint
-   # npm run typecheck   # Zero erros no TypeScript
-   # npm test            # Suíte do Vitest verde (incluindo testes de acessibilidade vitest-axe)
-   # npm run build       # Build de produção do Next.js 16 compilando de forma determinística
+   # npm run audit:docs   # Zero erros de documentação, links quebrados ou violações de Anti-Doc Rot
+   # npm run format:check # 100% dos arquivos em conformidade com o Prettier (ou npm run format para corrigir)
+   # npm run lint         # Zero erros no ESLint
+   # npm run typecheck    # Zero erros no TypeScript
+   # npm test             # Suíte do Vitest verde (incluindo testes de acessibilidade vitest-axe)
+   # npm run build        # Build de produção do Next.js 16 compilando de forma determinística
    ```
 
 3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de auditoria documental, falhas de lint, tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).

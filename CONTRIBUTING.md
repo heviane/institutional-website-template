@@ -40,20 +40,24 @@ npm ci
 
 ## 🚦 3. Quality Gates Obrigatórios
 
-Nenhuma contribuição (código gerado por humanos ou agentes de IA) pode ser mesclada se qualquer um dos cinco portões de qualidade falhar:
+Nenhuma contribuição (código gerado por humanos ou agentes de IA) pode ser mesclada se qualquer um dos seis portões de qualidade falhar:
 
 ```bash
-# Executar todos os Quality Gates de uma vez:
-npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build
+# Executar todos os Quality Gates de uma só vez:
+npm run verify
 ```
 
-| Comando              | Finalidade                                  | Critério de Aceitação                      |
-| :------------------- | :------------------------------------------ | :----------------------------------------- |
-| `npm run audit:docs` | Auditoria de integridade documental e links | **0 erros** (links válidos e Anti-Doc Rot) |
-| `npm run lint`       | Auditoria estática com ESLint               | **0 erros**                                |
-| `npm run typecheck`  | Checagem estrita de tipos TypeScript        | **0 erros**                                |
-| `npm test`           | Suíte de testes automatizados com Vitest    | **100% verde** (inclui `vitest-axe`)       |
-| `npm run build`      | Compilação de produção do Next.js           | **Compilação determinística**              |
+| Comando                | Finalidade                                  | Critério de Aceitação                      |
+| :--------------------- | :------------------------------------------ | :----------------------------------------- |
+| `npm run audit:docs`   | Auditoria de integridade documental e links | **0 erros** (links válidos e Anti-Doc Rot) |
+| `npm run format:check` | Verificação de conformidade com o Prettier  | **100% dos arquivos em conformidade**      |
+| `npm run lint`         | Auditoria estática com ESLint               | **0 erros**                                |
+| `npm run typecheck`    | Checagem estrita de tipos TypeScript        | **0 erros**                                |
+| `npm test`             | Suíte de testes automatizados com Vitest    | **100% verde** (inclui `vitest-axe`)       |
+| `npm run build`        | Compilação de produção do Next.js           | **Compilação determinística**              |
+
+> [!TIP]
+> Utilize `npm run format` para formatar automaticamente todos os arquivos antes de submeter alterações.
 
 ---
 

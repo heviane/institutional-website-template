@@ -244,13 +244,12 @@ Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
 
 ## 🚀 Etapa 8: Quality Gate Final & Entrega ao Cliente
 
-- [ ] **8.1. Verificação Automatizada Local:**
+- [ ] **8.1. Verificação Automatizada Local (Quality Gate Unificado):**
 
   ```bash
-  npm run lint
-  npm run typecheck
-  npm run test
-  npm run build
+  npm run verify
+
+
   ```
 
 - [ ] **8.2. Auditoria do Google Lighthouse & Core Web Vitals (Mobile):**

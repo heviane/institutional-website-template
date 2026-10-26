@@ -112,11 +112,14 @@ Com as dependências e o repositório base criados, o foco passa a ser o design 
 - Todos os scripts de ciclo de vida e quality gates residem no arquivo canônico [`package.json`](../package.json):
   - **`npm run dev`**: Servidor local de desenvolvimento do Next.js 16.
   - **`npm run build`**: Compilação de produção com Turbopack e geração de SSG.
+  - **`npm start`**: Execução do build de produção em servidor Node local.
   - **`npm run lint`**: Auditoria do ESLint 9 (Flat Config via `eslint.config.mjs`).
+  - **`npm run format:check`**: Verificação de conformidade de código com o Prettier.
+  - **`npm run format`**: Formatação automática de arquivos com Prettier e ordenação de classes Tailwind.
   - **`npm run typecheck`**: Geração de tipos com `next typegen` e compilação de tipos com `tsc --noEmit`.
   - **`npm test`**: Execução da suíte de testes unitários e de acessibilidade no Vitest.
   - **`npm run audit:docs`**: Auditoria documental e Anti-Doc Rot (`scripts/audit-docs.mjs`).
-  - **`npm run verify`**: Quality gate unificado local obrigatório antes de commits e no CI.
+  - **`npm run verify`**: Quality gate unificado local obrigatório antes de commits e no CI (`audit:docs`, `format:check`, `lint`, `typecheck`, `test`, `build`).
 
 2. **Configurar Prettier com Ordenação Automática do Tailwind:**
 

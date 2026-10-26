@@ -17,12 +17,13 @@ Descreva de forma clara e concisa o que foi implementado, refatorado ou corrigid
 Execute o comando unificado localmente antes de solicitar revisão:
 
 ```bash
-npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build
+npm run verify
 ```
 
 Marque os critérios técnicos atendidos:
 
 - [ ] `npm run audit:docs` executado com zero links quebrados e sincronização documental comprovada.
+- [ ] `npm run format:check` executado com 100% dos arquivos compatíveis com o Prettier.
 - [ ] `npm run lint` executado com zero erros de ESLint.
 - [ ] `npm run typecheck` executado com zero erros de tipagem TypeScript.
 - [ ] `npm test` executado com toda a suíte do Vitest verde (incluindo testes de acessibilidade `vitest-axe`).
