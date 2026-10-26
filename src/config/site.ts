@@ -8,6 +8,7 @@ export interface ContactConfig {
   phone: string;
   whatsapp: string;
   address: string;
+  showFloatingWhatsapp?: boolean;
 }
 
 export interface LegalConfig {
@@ -60,6 +61,7 @@ export const siteConfig: SiteConfig = {
     phone: "(11) 99999-9999",
     whatsapp: "5511999999999",
     address: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
+    showFloatingWhatsapp: true,
   },
   legal: {
     companyName: "Empresa Exemplo Ltda",

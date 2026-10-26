@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { siteConfig } from "@/config/site";
+import { FloatingWhatsApp } from "@/components/shared/floating-whatsapp/floating-whatsapp";
 import "./globals.css";
 
 const fontSans = Inter({
@@ -50,6 +51,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={fontSans.variable}>
       <body className="min-h-screen bg-background font-sans antialiased text-foreground flex flex-col">
         {children}
+        <FloatingWhatsApp />
       </body>
     </html>
   );
