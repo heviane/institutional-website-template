@@ -59,7 +59,8 @@ institutional-website-template/
 ├── specs/                           # Especificações executáveis de funcionalidades (SDD)
 │   ├── 001-project-bootstrap/       # Artefatos da Feature 001 (spec.md, plan.md, tasks.md)
 │   ├── 002-design-system-and-layout/# Artefatos da Feature 002 (spec.md, plan.md, tasks.md)
-│   └── 003-environment-and-contact-form/ # Artefatos da Feature 003 (spec.md, plan.md, tasks.md)
+│   ├── 003-environment-and-contact-form/ # Artefatos da Feature 003 (spec.md, plan.md, tasks.md)
+│   └── 004-keystatic-cms/           # Artefatos da Feature 004 (spec.md, plan.md, tasks.md)
 │
 ├── scripts/                         # Scripts utilitários de automação e auditoria
 │   └── audit-docs.mjs               # Validador de integridade documental e Anti-Doc Rot
