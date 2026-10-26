@@ -25,7 +25,7 @@
   * [ ] 🟢 **Green:** Atualizar `.github/workflows/ci.yml` com `RATE_LIMIT_SECRET` e `NEXT_PUBLIC_ENABLE_TURNSTILE: "false"` para o build de produção do CI.
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos, relatório de erros sanitizado e proteção contra vazamento acidental para o cliente.
 
-* [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**
+* [ ] **3. Schema Canônico de Contato & Rate Limiting com Pseudonimização de IP — TDD:**
   * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando:
     * Encadeamento rigoroso no Zod 3 (strings com apenas espaços em branco sofrem `.trim()` prévio e falham no `.min(2)` ou `.min(10)`).
     * Normalização prévia de e-mail com `.trim().toLowerCase()` antes da validação de formato `.email()`.
@@ -64,8 +64,14 @@
   * [ ] 🔵 **Refactor:** Otimizar SVG inline do WhatsApp e assegurar foco visível por teclado (`focus-visible:ring-2`).
 
 * [ ] **7. Páginas Legais Estáticas Fidedignas (`src/app/(legal)/`) — TDD:**
-  * [ ] 🔴 **Red:** Criar testes em `tests/legal-pages.test.tsx` validando que a Política de Privacidade e os Termos de Uso exibem a Razão Social, CNPJ, canal do DPO e serviços ativos com conformidade WCAG 2.1 AA (`axe`).
-  * [ ] 🟢 **Green:** Implementar `src/app/(legal)/politica-de-privacidade/page.tsx` (RSC).
+  * [ ] 🔴 **Red:** Criar testes em `tests/legal-pages.test.tsx` validando que:
+    * A Política de Privacidade e os Termos de Uso exibem a Razão Social, CNPJ e canal do DPO.
+    * A Política de Privacidade descreve com transparência os provedores reais (Vercel, Resend e Upstash com IP pseudonimizado) e a cláusula de Transferência Internacional de Dados (Art. 33 da LGPD).
+    * Fidelidade aos serviços ativos (ADR 0007): com `plausible: false` (padrão da Feature 003), nenhuma menção ao Plausible é renderizada no DOM.
+    * A seção do Cloudflare Turnstile é renderizada condicionalmente conforme configuração (`siteConfig.legal.services.turnstile`).
+    * Ambas as páginas possuem conformidade WCAG 2.1 AA (`axe`).
+  * [ ] 🟢 **Green:** Adicionar tipagem e valores de `services?: { turnstile?: boolean; plausible?: boolean; googleAnalytics?: boolean; }` em `src/config/site.ts`.
+  * [ ] 🟢 **Green:** Implementar `src/app/(legal)/politica-de-privacidade/page.tsx` (RSC) com seções condicionais e cláusula do Art. 33.
   * [ ] 🟢 **Green:** Implementar `src/app/(legal)/termos-de-uso/page.tsx` (RSC).
   * [ ] 🔵 **Refactor:** Alinhamento estrito aos dados reais do cliente em `siteConfig`.
 

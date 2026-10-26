@@ -43,9 +43,9 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - Campos: `name` (mínimo 2 caracteres), `email` (e-mail válido), `phone` (opcional ou formatado), `message` (mínimo 10 e máximo 1000 caracteres), `website` (honeypot oculto, deve ser vazio), `turnstileToken` (token do Turnstile, opcional se Turnstile não estiver configurado) e `privacyConsent` (salvaguarda de consentimento configurável com valor padrão `true`).
    - Mensagens de erro amigáveis em português (pt-BR).
 
-3. **Rate Limiting Anônimo por Hash de IP (`src/lib/rate-limit.ts`):**
+3. **Rate Limiting com Pseudonimização de IP por Hash HMAC (`src/lib/rate-limit.ts`):**
    - Extração segura do IP via headers confiáveis (`x-real-ip`, `cf-connecting-ip`, fallback `x-forwarded-for`).
-   - Anonimização criptográfica irreversível via `HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` garantindo consistência entre lambdas serverless sem persistir IPs brutos (LGPD por design).
+   - Pseudonimização técnica do endereço IP via `HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` (conforme Art. 13, § 4º da LGPD), garantindo consistência determinística entre lambdas serverless sem armazenar ou expor endereços IP brutos em texto claro.
    - **Algoritmo de Janela Fixa com TTL Relativo (Fixed Window):** Limite de até 5 submissões por janela de 3.600 segundos (1 hora). O TTL é estabelecido na primeira requisição e expira naturalmente após 1 hora de inatividade, eliminando o registro da memória/Redis sem resíduos de dados e sem anomalias na virada da meia-noite.
    - **Armazenamento Híbrido com Fallback Gracioso (Modo Robusto vs. Modo Lite):** Integração nativa com Upstash Redis REST (`INCR` + `EXPIRE 3600`) quando as variáveis de ambiente estiverem configuradas em produção (Modo Robusto); e fallback para `Map` nativo em memória com timestamp de expiração no Modo Lite ([ADR 0012](../../docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)). Registra-se formalmente que, em ambiente serverless sem Redis, o armazenamento em memória opera em regime de **"melhor esforço" (*best-effort*)**, contendo rajadas por container sem coordenação global entre lambdas concorrentes.
 
@@ -70,7 +70,7 @@ Com o Design System e o Layout Shell Demo estabelecidos na Feature 002, a **Feat
    - Acessibilidade WCAG 2.1 AA (`aria-describedby`, `aria-invalid`, `role="alert"`).
 
 6. **Páginas Legais Estáticas (`src/app/(legal)/`):**
-   - `src/app/(legal)/politica-de-privacidade/page.tsx`: Declaração transparente dos serviços ativos (Resend, Cloudflare Turnstile, Plausible), base legal, direitos dos titulares e contato do DPO (`siteConfig.legal.dpoEmail`).
+   - `src/app/(legal)/politica-de-privacidade/page.tsx`: Declaração transparente dos serviços reais de infraestrutura (Vercel para hospedagem/borda, Resend para envio efêmero e Upstash para rate limiting com IP pseudonimizado), base legal, direitos dos titulares, contato do DPO (`siteConfig.legal.dpoEmail`) e cláusula de Transferência Internacional de Dados (Art. 33 da LGPD). A exibição de serviços opcionais (como Cloudflare Turnstile, Plausible Analytics ou Google Analytics) é estritamente condicional à configuração (`siteConfig.legal.services`), assegurando fidelidade aos serviços ativos (ADR 0007) sem listar ferramentas inativas.
    - `src/app/(legal)/termos-de-uso/page.tsx`: Termos gerais de uso do site institucional consumindo Razão Social e CNPJ de `siteConfig`.
    - Renderizadas como Server Components (RSC) com container de leitura `max-w-4xl mx-auto py-16 px-4`.
 

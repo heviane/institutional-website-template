@@ -197,10 +197,10 @@ export interface ActionResponse {
 
 ---
 
-### 1.4. Rate Limiting com Hash Anônimo de IP (`src/lib/rate-limit.ts`)
+### 1.4. Rate Limiting com Pseudonimização de IP por Hash HMAC (`src/lib/rate-limit.ts`)
 
 Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md) e [ADR 0012](../../docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md):
-- **Cálculo da Chave:** `key = "rate-limit:" + HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` gerado via módulo nativo `node:crypto`. O IP nunca trafega nem é persistido em texto claro (LGPD e privacidade por design).
+- **Cálculo da Chave:** `key = "rate-limit:" + HMAC-SHA256(ip, serverEnv.RATE_LIMIT_SECRET)` gerado via módulo nativo `node:crypto`. O endereço IP passa por pseudonimização técnica estrita (Art. 13, § 4º da LGPD) e nunca trafega nem é persistido em texto claro (privacidade por design).
 - **Algoritmo Escolhido: Janela Fixa com TTL Relativo (Fixed Window with 1-hour TTL):**
   - **Trade-off Deliberado:** Prioriza simplicidade, determinismo e baixíssima sobrecarga de rede sobre a complexidade de algoritmos de janelas deslizantes (que demandariam sorted sets e múltiplas operações Redis por request). Para a mitigação de robôs de spam e preservação da cota de 100 e-mails/dia do Resend, a janela fixa de 5 envios por hora oferece proteção robusta e custo computacional mínimo.
   - **Eliminação da Data no Salt:** Ao fixar a expiração via TTL atômico de 3.600s, o registro se auto-destrói da memória/Redis após 1 hora de inatividade, eliminando a chave sem resíduos e sem a anomalia de reset artificial na virada da meia-noite (`YYYY-MM-DD`).
@@ -261,7 +261,16 @@ A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Da
 
 * `src/app/(legal)/politica-de-privacidade/page.tsx`:
   - Consome dinamicamente `siteConfig.legal.companyName`, `siteConfig.legal.cnpj`, `siteConfig.legal.dpoEmail` e canais de contato.
-  - Descreve com exatidão a arquitetura de dados sem banco (*Zero-Database*), encaminhamento direto via Resend e uso do Cloudflare Turnstile com finalidade exclusiva de segurança.
+  - **Serviços de Infraestrutura Sempre Declarados:**
+    - Vercel Inc. (hospedagem serverless e roteamento de borda).
+    - Resend Inc. / AWS (encaminhamento efêmero de e-mails para a caixa corporativa, sem armazenamento de mensagens em banco de dados).
+    - Upstash Inc. (armazenamento temporário de hash pseudonimizado de IP via HMAC com auto-expiração atômica de 1 hora para contenção de abusos no Modo Robusto).
+  - **Cláusula de Transferência Internacional de Dados (Art. 33 da LGPD):**
+    - Declaração transparente informando que os servidores de nuvem dos parceiros tecnológicos (Vercel, AWS/Resend, Cloudflare) residem em território internacional, operando sob salvaguardas contratuais e criptografia de ponta a ponta (TLS 1.3).
+  - **Renderização Condicional por Configuração (Fidelidade aos Serviços Ativos - ADR 0007):**
+    - Cloudflare Turnstile: renderizado apenas se `siteConfig.legal.services?.turnstile !== false` e `clientEnv.NEXT_PUBLIC_ENABLE_TURNSTILE !== false`.
+    - Plausible Analytics: renderizado apenas se `siteConfig.legal.services?.plausible === true` (na Feature 003, o valor padrão é `false` e a ferramenta **não é mencionada**, sendo ativada apenas na Feature 005).
+    - Google Analytics / Pixels: renderizado apenas se `siteConfig.legal.services?.googleAnalytics === true`.
 * `src/app/(legal)/termos-de-uso/page.tsx`:
   - Termos padrão de uso do website institucional com base nas leis brasileiras e dados da empresa.
 * Ambas páginas contam com container de leitura otimizado (`max-w-4xl mx-auto py-16 md:py-24 px-4 sm:px-6 lg:px-8`) e conformidade WCAG 2.1 AA.
