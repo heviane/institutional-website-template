@@ -38,7 +38,7 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001 e 002 Concluídas)
+### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001, 002 e 003 Concluídas)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
@@ -55,15 +55,15 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [x] Implementar abstração centralizada de dados do cliente (`src/config/site.ts` - Feature 002 Concluída).
   * [x] Configurar variáveis de tema CSS no Tailwind (`globals.css` via `@theme` - Feature 001/002 Concluída).
   * [x] Construir layout raiz (`src/app/layout.tsx`) com metadados dinâmicos e componentes acessíveis (`Header`, `Hero`, `Footer` - Feature 002 Concluída).
-* [ ] **Formulários Transacionais & Anti-Spam (Feature 003 Em Andamento):**
-  * [ ] Validação segregada de variáveis de ambiente (`src/env/server.ts` e `src/env/client.ts`).
-  * [ ] Criar schema de validação com Zod (`src/lib/schemas/contact.ts`) com salvaguarda configurável de privacidade.
-  * [ ] Implementar política de Rate Limiting anônimo por hash de IP (Upstash Redis em produção / Map nativo em desenvolvimento e testes).
-  * [ ] Implementar componente de formulário acessível com React Hook Form.
-  * [ ] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Cloudflare Turnstile + Resend API), isolando serviço de disparo para testes.
-  * [ ] Implementar botão flutuante de WhatsApp global acessível (`src/components/shared/floating-whatsapp/`) com alvo de 56px e WCAG 2.1 AA.
-  * [ ] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`.
-* [ ] **Gestão de Conteúdo (Headless CMS):**
+* [x] **Formulários Transacionais & Anti-Spam (Feature 003 Concluída):**
+  * [x] Validação segregada de variáveis de ambiente (`src/env/server.ts` e `src/env/client.ts`).
+  * [x] Criar schema de validação com Zod (`src/lib/schemas/contact.ts`) com salvaguarda configurável de privacidade e opt-in explícito (LGPD Art. 5º, XII).
+  * [x] Implementar política de Rate Limiting anônimo por hash de IP via script Lua atômico (Upstash Redis em produção / Map nativo em desenvolvimento e testes com Fail-Closed).
+  * [x] Implementar componente de formulário acessível com React Hook Form (`src/components/shared/contact-form/contact-form.tsx`).
+  * [x] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Rate Limit + Cloudflare Turnstile + Resend API), proteção de tamanho de payload (`bodySizeLimit = "64kb"`) e mascaramento de erros.
+  * [x] Implementar botão flutuante de WhatsApp global acessível (`src/components/shared/floating-whatsapp/`) com alvo de 56px e WCAG 2.1 AA.
+  * [x] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`, com cláusula de transferência internacional (Art. 33) e declaração condicional de serviços ativos.
+* [ ] **Gestão de Conteúdo (Headless CMS - Feature 004 Próxima):**
   * [ ] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
   * [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
   * [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.

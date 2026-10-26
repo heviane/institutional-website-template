@@ -13,11 +13,22 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 * [x] **Feature 001: Project Bootstrap & Quality Gates** (Concluída — Commit [`277a96a`](https://github.com/heviane/institutional-website-template/commit/277a96a) / Spec: [`specs/001-project-bootstrap/`](specs/001-project-bootstrap/))
 * [x] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Concluída — Spec: [`specs/002-design-system-and-layout/`](specs/002-design-system-and-layout/))
-* [ ] **Feature 003: Validação de Ambiente & Formulário Transacional** (Próxima / Em Especificação)
-* [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Pendente)
+* [x] **Feature 003: Validação de Ambiente & Formulário Transacional** (Concluída — Spec: [`specs/003-environment-and-contact-form/`](specs/003-environment-and-contact-form/))
+* [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Próxima / Em Especificação)
 * [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Pendente)
 
 ### Adicionado (Unreleased)
+
+* **Feature 003 (Validação de Ambiente, Formulário Transacional & Conformidade Legal):**
+  * Validação segregada de variáveis de ambiente no build via Zod (`src/env/client.ts` e `src/env/server.ts` blindado com `import "server-only"`).
+  * Proteção no build do Next.js com `experimental.serverActions.bodySizeLimit = "64kb"` e guarda de payload de 5.000 caracteres contra ataques de DoS.
+  * Schema canônico de formulário (`src/lib/schemas/contact.ts`) com encadeamento estrito no Zod 3 (`.trim()` prévio) e consentimento explícito sob LGPD Art. 5º, XII.
+  * Rate limiting resiliente com pseudonimização técnica de IP via hash HMAC-SHA256 (`src/lib/rate-limit.ts`) utilizando script Lua atômico no Upstash Redis e fallback in-memory com semântica Fail-Closed.
+  * Server Action transacional com defesa em 3 camadas (`src/app/actions/contact.ts`): Honeypot silencioso, Rate Limit por IP, validação Cloudflare Turnstile e despacho via Resend API com mascaramento e sanitização absoluta de erros internos.
+  * Componente reativo e acessível `<ContactForm />` com React Hook Form, Shadcn/ui e integração condicional do Cloudflare Turnstile.
+  * Componente global acessível `<FloatingWhatsApp />` (alvo de toque de 56x56px) integrado ao layout raiz (`src/app/layout.tsx`).
+  * Páginas legais fidedignas (`src/app/(legal)/politica-de-privacidade/page.tsx` e `termos-de-uso/page.tsx`) com cláusula de Transferência Internacional de Dados (Art. 33 da LGPD) e declaração condicional de serviços ativos (ADR 0007).
+  * Integração completa na Home Page (`src/app/page.tsx`) e suíte de testes unitários, funcionais e de acessibilidade WCAG 2.1 AA (`vitest-axe`).
 
 * **Governança & Decisões Arquiteturais (ADR 0012 & Spec-to-Docs Parity Gate):**
   * Formalização do [ADR 0012](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) estabelecendo a estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e documentando o Rate Limiting em memória serverless como de melhor esforço.

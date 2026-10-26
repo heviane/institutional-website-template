@@ -67,6 +67,7 @@ institutional-website-template/
 ├── src/                             # Código-fonte principal da aplicação
 │   ├── app/                         # Rotas e layouts (Next.js App Router)
 │   │   ├── (legal)/                 # Grupo de rotas legais
+│   │   │   ├── layout.tsx           # Layout do grupo legal com Header e Footer
 │   │   │   ├── politica-de-privacidade/
 │   │   │   │   └── page.tsx         # Página estática de Política de Privacidade
 │   │   │   └── termos-de-uso/
@@ -93,7 +94,10 @@ institutional-website-template/
 │   │   │   │   └── footer.tsx       # RSC: Rodapé institucional com links legais e contato
 │   │   │   ├── hero/                # Seção Hero com CTA principal
 │   │   │   │   └── hero.tsx         # RSC: Hero agnóstico de template com HeroProps
-│   │   │   └── contact-form/        # Formulário de contato acessível
+│   │   │   ├── contact-form/        # Formulário de contato acessível
+│   │   │   │   └── contact-form.tsx # 'use client': Formulário reativo com RHF, Zod e Turnstile
+│   │   │   └── floating-whatsapp/   # Botão flutuante de atendimento WhatsApp
+│   │   │       └── floating-whatsapp.tsx # Botão FAB flutuante acessível (56x56px)
 │   │   └── ui/                      # Primitivos atômicos do Shadcn/ui (Radix UI)
 │   │       ├── button.tsx
 │   │       ├── card.tsx
@@ -124,9 +128,16 @@ institutional-website-template/
 │   ├── components/                  # Testes unitários de componentes e acessibilidade (WCAG 2.1 AA)
 │   │   ├── button.test.tsx          # Teste de variantes do Button, asChild e conformidade WCAG
 │   │   ├── card.test.tsx            # Teste de composição do Card e conformidade WCAG
+│   │   ├── contact-form.test.tsx    # Teste de validação reativa e acessibilidade do formulário
 │   │   ├── dialog.test.tsx          # Teste de ciclo de foco do Dialog (foco, Escape e WCAG)
+│   │   ├── floating-whatsapp.test.tsx # Teste do botão flutuante FAB de WhatsApp
 │   │   ├── home.test.tsx            # Teste de integração do Layout Shell Demo e acessibilidade WCAG
 │   │   └── layout.test.tsx          # Matriz de testes funcionais (Casos 1, 2, 4, 5) e acessibilidade WCAG
+│   ├── contact-action.test.ts       # Teste da Server Action em 3 camadas e Fail-Closed
+│   ├── contact-schema.test.ts       # Teste de encadeamento do Zod 3 e regras de campos
+│   ├── env.test.ts                  # Teste de validação segregada de variáveis de ambiente
+│   ├── legal-pages.test.tsx         # Teste de fidelidade e acessibilidade das páginas legais
+│   ├── rate-limit.test.ts           # Teste de rate limit atômico por Lua script e hash de IP
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe
 │   ├── site-config.test.ts          # Validação do contrato do objeto de marca siteConfig

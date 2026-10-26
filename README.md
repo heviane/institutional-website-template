@@ -11,8 +11,8 @@
 [![Status](https://img.shields.io/badge/Status-Fase_2_Em_Andamento-yellow?style=for-the-badge&logo=git)](docs/03-project-roadmap.md)
 
 > [!NOTE]
-> **Status do Projeto: Fase 2 (Core & MVP) em Andamento — Features 001 e 002 Concluídas**  
-> Este template concluiu a fundação documental (Fase 1) e avança na materialização da Fase 2. Estão entregues a **Feature 001 (Project Bootstrap & Quality Gates)** e a **Feature 002 (Design System, Tokens e Layout Base)** com Next.js 16, React 19, Tailwind CSS v4, Shadcn/ui, Radix UI, componentes atômicos acessíveis, layout responsivo Server-First e testes automatizados com `vitest-axe` (WCAG 2.1 AA). A **Feature 003 (Validação de Ambiente, Formulário Transacional & Conformidade Legal)** está em fase de especificação inicial. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
+> **Status do Projeto: Fase 2 (Core & MVP) em Andamento — Features 001, 002 e 003 Concluídas**  
+> Este template concluiu a fundação documental (Fase 1) e avança na materialização da Fase 2. Estão entregues a **Feature 001 (Project Bootstrap & Quality Gates)**, a **Feature 002 (Design System, Tokens e Layout Base)** e a **Feature 003 (Validação de Ambiente, Formulário Transacional & Conformidade Legal)** com Next.js 16, React 19, Tailwind CSS v4, Server Actions defensivas em 3 camadas, Rate Limiting atômico, Resend API, Cloudflare Turnstile e páginas legais estáticas com conformidade WCAG 2.1 AA. A **Feature 004 (Gestão de Conteúdo via Keystatic CMS)** é a próxima funcionalidade planejada. Acompanhe o status detalhado de cada componente no [Roadmap do Projeto](docs/03-project-roadmap.md).
 
 ---
 

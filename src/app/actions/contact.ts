@@ -7,7 +7,7 @@ import { resend } from "@/lib/resend";
 import { serverEnv } from "@/env/server";
 import { clientEnv } from "@/env/client";
 
-export const MAX_RAW_PAYLOAD_SIZE = 5120; // ~5 KB
+const MAX_RAW_PAYLOAD_SIZE = 5120; // ~5 KB
 
 /**
  * Verifies Cloudflare Turnstile token via Cloudflare Siteverify API.
