@@ -237,6 +237,7 @@ export async function getFaqs() {
 ## 📁 4. Estrutura do *Seed Data* Inicial
 
 Os seguintes arquivos devem ser criados e mantidos no Git:
+
 * `content/singletons/home.json`: Conteúdo padrão do banner hero e configurações da home.
 * `content/singletons/about.json`: Missão, visão e valores corporativos padrão.
 * `content/services/consultoria-estrategica.json`: Serviço modelo 1.
@@ -253,10 +254,13 @@ Os seguintes arquivos devem ser criados e mantidos no Git:
 ## 🧪 5. Estratégia de Testes Automatizados (Vitest)
 
 1. `tests/keystatic-reader.test.ts`:
+
    - Validação da inicialização do `reader`.
    - Leitura do singleton `homePage` e asserção de schema.
    - Leitura da coleção `services` e checagem de integridade dos 3 itens semeados.
    - Leitura da coleção `faqs` e validação da ordenação numérica por `order`.
    - Teste unitário da função `getPublishedPosts()`: comprova que posts com `status: 'draft'` são excluídos do resultado público e que posts `published` são ordenados por data decrescente.
+
 2. `tests/keystatic-routes.test.ts`:
+
    - Validação das rotas `/keystatic` e `/api/keystatic` quanto à exportação e isolamento de layout.
