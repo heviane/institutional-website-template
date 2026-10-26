@@ -1,7 +1,7 @@
 # Feature 004: Gestão de Conteúdo Baseada em Git (Keystatic CMS) — Plano Técnico
 
 - **Data de Criação:** 2026-10-26
-- **Status:** Aprovada (Pronta para Execução)
+- **Status:** Concluída
 - **Spec de Referência:** [`spec.md`](spec.md)
 - **Documento Canônico:** [`docs/05-keystatic-content-model.md`](../../docs/05-keystatic-content-model.md)
 

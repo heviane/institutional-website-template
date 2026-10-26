@@ -14,10 +14,20 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - [x] **Feature 001: Project Bootstrap & Quality Gates** (Concluída — Commit [`277a96a`](https://github.com/heviane/institutional-website-template/commit/277a96a) / Spec: [`specs/001-project-bootstrap/`](specs/001-project-bootstrap/))
 - [x] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Concluída — Spec: [`specs/002-design-system-and-layout/`](specs/002-design-system-and-layout/))
 - [x] **Feature 003: Validação de Ambiente & Formulário Transacional** (Concluída — Spec: [`specs/003-environment-and-contact-form/`](specs/003-environment-and-contact-form/))
-- [ ] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Próxima / Em Especificação)
-- [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Pendente)
+- [x] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Concluída — Spec: [`specs/004-keystatic-cms/`](specs/004-keystatic-cms/))
+- [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Próxima / Em Especificação)
 
 ### Adicionado (Unreleased)
+
+- **Feature 004 (Gestão de Conteúdo Baseada em Git via Keystatic CMS):**
+  - Configuração centralizada e tipada do Keystatic CMS (`keystatic.config.ts`) com suporte a Dual Mode (`local` no desenvolvimento/testes e `cloud` em produção).
+  - Modelagem e registro de coleções estruturadas: `posts` (com Markdoc, `coverImage` e status `draft`/`published`), `services` (com ícones Lucide e diferenciais), `testimonials` e `faqs` (com ordenação).
+  - Modelagem de singletons institucionais para páginas fixas: `homePage` e `aboutPage`.
+  - Seeding de conteúdo inicial completo no repositório (`content/`): singletons (`home.json`, `about.json`), serviços (`consultoria-estrategica.json`, `seguranca-e-conformidade.json`, `transformacao-e-escala.json`), perguntas frequentes (`faqs/*.json`), artigos de blog (`posts/bem-vindo-ao-novo-site/` publicado e `governanca-e-seguranca-digital/` rascunho) e depoimento de cliente (`testimonials/mariana-silva.json`).
+  - Camada desacoplada e assíncrona de consumo via Reader API (`src/lib/keystatic.ts`) com ordenação de FAQs por prioridade e filtro inteligente de rascunhos para posts (`getPublishedPosts()`).
+  - Rotas administrativas do Next.js 16 App Router: endpoint de API (`src/app/api/keystatic/[...params]/route.ts`) e interface de administração (`src/app/keystatic/[[...params]]/page.tsx`) com layout isolado (`src/app/keystatic/layout.tsx`) ocultando o Header, Footer e botão flutuante de WhatsApp.
+  - Consumo dinâmico de serviços na Home Page (`src/app/page.tsx`) com mapeamento de ícones Lucide e lista de diferenciais, com fallback resiliente.
+  - Suíte completa de testes automatizados com Vitest (`tests/keystatic-reader.test.ts` e `tests/keystatic-routes.test.tsx`), mantendo 100% de aprovação e zero violações no `vitest-axe`.
 
 - **Sincronização Rigorosa Documentação × Scripts (`package.json`) × CI:**
   - Alinhamento em `.github/PULL_REQUEST_TEMPLATE.md`, `CONTRIBUTING.md`, `AGENTS.md`, `docs/02-environment-setup.md` e `docs/07-client-onboarding-checklist.md` consolidando a execução de `npm run verify` e documentando explicitamente os 6 Quality Gates (incluindo `npm run format:check` e `npm run format`).

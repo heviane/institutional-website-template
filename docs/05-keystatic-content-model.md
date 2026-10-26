@@ -114,40 +114,11 @@ Os _singletons_ representam documentos únicos, ideais para páginas institucion
 
 ## ⚡ Como Consumir os Dados no Next.js (Reader API)
 
-O Keystatic fornece uma biblioteca de leitura direta em tempo de compilação (`@keystatic/core/reader`). Como os dados residem no próprio sistema de arquivos em produção, **não existem chamadas de rede lentas para APIs externas**, garantindo renderização instantânea em _React Server Components_:
+O Keystatic fornece uma biblioteca de leitura direta em tempo de compilação (`@keystatic/core/reader`). Como os dados residem no próprio sistema de arquivos em produção, **não existem chamadas de rede lentas para APIs externas**, garantindo renderização instantânea em _React Server Components_.
 
-```typescript
-// src/lib/keystatic.ts
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "@/../keystatic.config";
+A camada de leitura e filtros utilitários está implementada e tipada em [`src/lib/keystatic.ts`](../src/lib/keystatic.ts), expondo helpers como `getHomePage()`, `getAboutPage()`, `getServices()`, `getFaqs()` e `getPublishedPosts()`.
 
-export const reader = createReader(process.cwd(), keystaticConfig);
-```
-
-```tsx
-// Exemplo de uso em um Server Component (ex: src/app/page.tsx)
-import { reader } from "@/lib/keystatic";
-
-export default async function HomePage() {
-  // Leitura assíncrona instantânea de arquivos locais
-  const homeData = await reader.singletons.homePage.read();
-  const services = await reader.collections.services.all();
-
-  return (
-    <main>
-      <h1>{homeData?.heroHeadline}</h1>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {services.map((service) => (
-          <div key={service.slug} className="rounded-lg border p-6">
-            <h3>{service.entry.title}</h3>
-            <p>{service.entry.shortDescription}</p>
-          </div>
-        ))}
-      </div>
-    </main>
-  );
-}
-```
+O consumo em produção por React Server Components (RSC) ocorre de forma assíncrona com fallback resiliente, conforme implementado na página inicial em [`src/app/page.tsx`](../src/app/page.tsx).
 
 ---
 

@@ -1,45 +1,23 @@
-import type { ReactNode } from "react";
-import { Briefcase, ShieldCheck, TrendingUp } from "lucide-react";
+import type { JSX } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Briefcase, ShieldCheck, TrendingUp, CheckCircle2 } from "lucide-react";
 import { Header } from "@/components/shared/header/header";
 import { Hero } from "@/components/shared/hero/hero";
 import { Footer } from "@/components/shared/footer/footer";
 import { ContactForm } from "@/components/shared/contact-form/contact-form";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
-import { formatWhatsAppUrl } from "@/lib/utils";
+import { getServices } from "@/lib/keystatic";
 
-/**
- * ⚠️ DEMO PLACEHOLDER CONTENT:
- * The services array below is strictly for layout demonstration, design system verification,
- * and automated accessibility testing (vitest-axe). Replace with the client's actual services
- * during client onboarding (docs/07-client-onboarding-checklist.md) or manage via Keystatic CMS (Feature 004).
- */
-const services = [
-  {
-    icon: Briefcase,
-    title: "Consultoria Estratégica",
-    description: "Planejamento e governança sob medida para sua operação.",
-    content:
-      "Mapeamento detalhado de processos e implementação de práticas ágeis de gestão com métricas objetivas.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Segurança & Conformidade",
-    description: "Privacidade por padrão e conformidade legal e regulatória.",
-    content:
-      "Adequação integral às diretrizes da LGPD, boas práticas de segurança e mitigação estruturada de riscos.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Transformação & Escala",
-    description: "Tecnologia e performance para crescimento consistente.",
-    content:
-      "Arquitetura moderna, alta disponibilidade e processos otimizados para acompanhar o ritmo da sua empresa.",
-  },
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  Briefcase,
+  ShieldCheck,
+  TrendingUp,
+};
 
-export default function HomePage(): ReactNode {
+export default async function HomePage(): Promise<JSX.Element> {
+  const servicesData = await getServices();
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -65,21 +43,33 @@ export default function HomePage(): ReactNode {
             </div>
 
             <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
-              {services.map((service) => {
-                const IconComponent = service.icon;
+              {servicesData.map((service) => {
+                const IconComponent = ICON_MAP[service.entry.icon] ?? CheckCircle2;
                 return (
-                  <Card key={service.title} className="flex flex-col justify-between">
+                  <Card key={service.slug} className="flex flex-col justify-between">
                     <CardHeader className="space-y-4">
                       <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-lg">
-                        <IconComponent className="h-6 w-6" />
+                        <IconComponent className="h-6 w-6" aria-hidden="true" />
                       </div>
-                      <CardTitle className="text-xl font-bold">{service.title}</CardTitle>
-                      <CardDescription className="text-sm">{service.description}</CardDescription>
+                      <CardTitle className="text-xl font-bold">{service.entry.title}</CardTitle>
+                      <CardDescription className="text-sm">
+                        {service.entry.shortDescription}
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {service.content}
-                      </p>
+                      {service.entry.features && service.entry.features.length > 0 && (
+                        <ul className="space-y-2">
+                          {service.entry.features.map((feature) => (
+                            <li
+                              key={feature}
+                              className="text-muted-foreground flex items-center gap-2 text-sm"
+                            >
+                              <span className="bg-primary h-1.5 w-1.5 shrink-0 rounded-full" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </CardContent>
                   </Card>
                 );

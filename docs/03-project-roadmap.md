@@ -38,7 +38,7 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001, 002 e 003 Concluídas)
+### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001, 002, 003 e 004 Concluídas)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
@@ -63,13 +63,13 @@ Esta fase representa a materialização do template em código, dividida entre a
   - [x] Construir Server Action (`src/app/actions/contact.ts`) com defesa em 3 camadas (Honeypot + Rate Limit + Cloudflare Turnstile + Resend API), proteção de tamanho de payload (`bodySizeLimit = "64kb"`) e mascaramento de erros.
   - [x] Implementar botão flutuante de WhatsApp global acessível (`src/components/shared/floating-whatsapp/`) com alvo de 56px e WCAG 2.1 AA.
   - [x] Construir páginas legais estáticas (`/politica-de-privacidade` e `/termos-de-uso`) consumindo `siteConfig`, com cláusula de transferência internacional (Art. 33) e declaração condicional de serviços ativos.
-- [ ] **Gestão de Conteúdo (Headless CMS - Feature 004 Próxima):**
-  - [ ] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
-  - [ ] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
-  - [ ] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
-  - [ ] Padronizar seeding de conteúdo inicial (_seed data_) com arquivos Markdown/JSON pré-populados de exemplo (Home, Sobre, 2 serviços, 3 FAQs e 2 posts) para que o repositório já nasça 100% preenchido e funcional ao ser clonado.
-  - [ ] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
-- [ ] **SEO Técnico Essencial:**
+- [x] **Gestão de Conteúdo (Headless CMS - Feature 004 Concluída):**
+  - [x] Executar spike técnico prévio de compatibilidade do Keystatic com Next.js 16 e React 19 (validando rotas de API, Admin UI e GitHub mode antes do desenvolvimento de coleções).
+  - [x] Configurar Keystatic CMS (`@keystatic/next`) para modo local e Keystatic Cloud.
+  - [x] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
+  - [x] Padronizar seeding de conteúdo inicial (_seed data_) com arquivos Markdown/JSON pré-populados de exemplo (Home, Sobre, 3 serviços, 3 FAQs e 2 posts) para que o repositório já nasça 100% preenchido e funcional ao ser clonado.
+  - [x] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
+- [ ] **SEO Técnico Essencial (Feature 005 Próxima):**
   - [ ] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
   - [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
   - [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).

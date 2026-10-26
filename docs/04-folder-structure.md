@@ -79,8 +79,9 @@ institutional-website-template/
 │   │   │       └── [...params]/
 │   │   │           └── route.ts
 │   │   ├── keystatic/               # Painel administrativo do CMS em /keystatic
-│   │   │   └── [[...params]]/
-│   │   │       └── page.tsx
+│   │   │   ├── [[...params]]/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx           # Layout isolado do CMS ocultando Header, Footer e WhatsApp
 │   │   ├── globals.css              # Estilos globais e tema Tailwind v4 (@theme)
 │   │   ├── layout.tsx               # Layout raiz com fontes, metadados e scripts
 │   │   ├── page.tsx                 # Página Inicial (Home Page institucional)
@@ -137,6 +138,8 @@ institutional-website-template/
 │   ├── contact-action.test.ts       # Teste da Server Action em 3 camadas e Fail-Closed
 │   ├── contact-schema.test.ts       # Teste de encadeamento do Zod 3 e regras de campos
 │   ├── env.test.ts                  # Teste de validação segregada de variáveis de ambiente
+│   ├── keystatic-reader.test.ts     # Validação de leitura da Reader API e filtros do Keystatic
+│   ├── keystatic-routes.test.tsx    # Validação de rotas App Router e layout do Keystatic
 │   ├── legal-pages.test.tsx         # Teste de fidelidade e acessibilidade das páginas legais
 │   ├── rate-limit.test.ts           # Teste de rate limit atômico por Lua script e hash de IP
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes

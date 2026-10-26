@@ -1,0 +1,10 @@
+{
+  "title": "Transformação & Escala",
+  "icon": "TrendingUp",
+  "shortDescription": "Desenvolvimento de aplicações web modernas, acessíveis e com arquitetura serverless de alta performance.",
+  "features": [
+    "Desenvolvimento em Next.js e TypeScript",
+    "Conformidade WCAG 2.1 AA",
+    "Deploy contínuo e escalabilidade sob demanda"
+  ]
+}

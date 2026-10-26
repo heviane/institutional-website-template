@@ -1,0 +1,10 @@
+{
+  "title": "Segurança & Conformidade",
+  "icon": "ShieldCheck",
+  "shortDescription": "Estruturação de governança de dados, conformidade com a LGPD e blindagem defensiva de sistemas corporativos.",
+  "features": [
+    "Adequação técnica à LGPD",
+    "Auditoria de vulnerabilidades e cabeçalhos HTTP",
+    "Gestão segura de credenciais e privacidade"
+  ]
+}

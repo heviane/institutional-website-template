@@ -5,8 +5,9 @@ import HomePage from "@/app/page";
 import { siteConfig } from "@/config/site";
 
 describe("HomePage (Layout Shell Demo)", () => {
-  it("renders complete landing page shell with Header, Hero, Services, About, and Footer", () => {
-    render(<HomePage />);
+  it("renders complete landing page shell with Header, Hero, Services, About, and Footer", async () => {
+    const Component = await HomePage();
+    render(Component);
 
     // Header & Brand (appears in Header and Footer)
     const brandElements = screen.getAllByText(siteConfig.name);
@@ -16,7 +17,7 @@ describe("HomePage (Layout Shell Demo)", () => {
     const sloganElements = screen.getAllByText(siteConfig.slogan);
     expect(sloganElements.length).toBeGreaterThan(0);
 
-    // Services Section
+    // Services Section loaded dynamically from Keystatic CMS
     expect(screen.getByText("Nossas Soluções")).toBeDefined();
     expect(screen.getByText("Consultoria Estratégica")).toBeDefined();
     expect(screen.getByText("Segurança & Conformidade")).toBeDefined();
@@ -37,7 +38,8 @@ describe("HomePage (Layout Shell Demo)", () => {
   });
 
   it("has zero accessibility violations across the entire home layout shell", async () => {
-    const { container } = render(<HomePage />);
+    const Component = await HomePage();
+    const { container } = render(Component);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
