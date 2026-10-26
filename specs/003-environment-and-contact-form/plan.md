@@ -156,32 +156,34 @@ import { z } from "zod";
 export const contactFormSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(2, "O nome deve conter pelo menos 2 caracteres.")
-    .max(100, "O nome deve conter no máximo 100 caracteres.")
-    .trim(),
+    .max(100, "O nome deve conter no máximo 100 caracteres."),
   email: z
     .string()
-    .email("Informe um endereço de e-mail corporativo ou pessoal válido.")
-    .max(150, "O e-mail deve conter no máximo 150 caracteres.")
+    .trim()
     .toLowerCase()
-    .trim(),
+    .email("Informe um endereço de e-mail corporativo ou pessoal válido.")
+    .max(150, "O e-mail deve conter no máximo 150 caracteres."),
   phone: z
     .string()
+    .trim()
     .max(20, "O telefone deve conter no máximo 20 caracteres.")
     .optional()
     .or(z.literal("")),
   message: z
     .string()
+    .trim()
     .min(10, "A mensagem deve conter pelo menos 10 caracteres.")
-    .max(1000, "A mensagem deve conter no máximo 1000 caracteres.")
-    .trim(),
+    .max(1000, "A mensagem deve conter no máximo 1000 caracteres."),
   website: z
     .string()
     .max(0, "Spam detectado pelo campo honeypot.")
     .optional()
     .or(z.literal("")),
   turnstileToken: z.string().optional().or(z.literal("")),
-  privacyConsent: z.boolean().default(true),
+  // Conforme ADR 0007: opt-in explícito sem consentimento presumido (.default(true) proibido por LGPD Art. 5º, XII)
+  privacyConsent: z.boolean().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;

@@ -26,7 +26,12 @@
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos, relatório de erros sanitizado e proteção contra vazamento acidental para o cliente.
 
 * [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**
-  * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando campos obrigatórios, regras de tamanho funcional (aceitando até 1.000 caracteres e rejeitando a partir de 1.001 caracteres no campo `message`), e-mail, campo honeypot (`website`) e consentimento de privacidade.
+  * [ ] 🔴 **Red:** Criar testes em `tests/contact-schema.test.ts` validando:
+    * Encadeamento rigoroso no Zod 3 (strings com apenas espaços em branco sofrem `.trim()` prévio e falham no `.min(2)` ou `.min(10)`).
+    * Normalização prévia de e-mail com `.trim().toLowerCase()` antes da validação de formato `.email()`.
+    * Regras de tamanho funcional (aceitando até 1.000 caracteres e rejeitando a partir de 1.001 caracteres no campo `message`).
+    * Detecção de automação pelo campo honeypot (`website`).
+    * Conformidade LGPD: `privacyConsent` opcional sem injeção de consentimento presumido (`.default(true)` proibido por LGPD Art. 5º, XII).
   * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando cálculo determinístico de hash HMAC de IP com `RATE_LIMIT_SECRET`, algoritmo de janela fixa de 1 hora com TTL de 3.600s, bloqueio na 6ª requisição e liberação após expiração (cobrindo tanto o Map local quanto a simulação com Upstash Redis).
   * [ ] 🟢 **Green:** Implementar `src/lib/schemas/contact.ts` exportando `contactFormSchema` e tipos TypeScript.
   * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis quando configurado).
