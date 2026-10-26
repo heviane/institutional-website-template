@@ -10,9 +10,13 @@ describe("Legal Pages (src/app/(legal)/)", () => {
     it("renders corporate identification and DPO contact channel", () => {
       render(<PrivacyPolicyPage />);
 
-      expect(screen.getAllByText(new RegExp(siteConfig.legal.companyName, "i")).length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByText(new RegExp(siteConfig.legal.companyName, "i")).length
+      ).toBeGreaterThan(0);
       expect(screen.getAllByText(new RegExp(siteConfig.legal.cnpj, "i")).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(new RegExp(siteConfig.legal.dpoEmail, "i")).length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByText(new RegExp(siteConfig.legal.dpoEmail, "i")).length
+      ).toBeGreaterThan(0);
     });
 
     it("transparently describes active cloud infrastructure and HMAC IP pseudonymization", () => {
@@ -65,7 +69,9 @@ describe("Legal Pages (src/app/(legal)/)", () => {
       render(<TermsOfUsePage />);
 
       expect(screen.getByRole("heading", { level: 1, name: /Termos de Uso/i })).toBeDefined();
-      expect(screen.getAllByText(new RegExp(siteConfig.legal.companyName, "i")).length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByText(new RegExp(siteConfig.legal.companyName, "i")).length
+      ).toBeGreaterThan(0);
       expect(screen.getAllByText(new RegExp(siteConfig.legal.cnpj, "i")).length).toBeGreaterThan(0);
     });
 
@@ -77,4 +83,3 @@ describe("Legal Pages (src/app/(legal)/)", () => {
     });
   });
 });
-

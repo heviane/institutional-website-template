@@ -118,7 +118,8 @@ institutional-website-template/
 │   │   └── utils.ts                 # Função utilitária cn() do Shadcn/ui
 │   │
 │   ├── types/                       # Declarações de tipos globais do TypeScript
-│   │   └── index.d.ts
+│   │   ├── index.d.ts
+│   │   └── site.ts                  # Interfaces e contratos do objeto siteConfig (Zona do Template)
 │   │
 │   └── env/                         # Validação segregada de variáveis de ambiente no build via Zod
 │       ├── client.ts                # Schema e exportação de clientEnv (NEXT_PUBLIC_*)
@@ -149,6 +150,7 @@ institutional-website-template/
 ├── .gitignore                       # Arquivos e pastas excluídos do Git
 ├── .nvmrc                           # Versão LTS travada do Node.js (24)
 ├── .prettierrc                      # Configuração de formatação e ordenação do Tailwind
+├── .prettierignore                  # Arquivos e diretórios ignorados pelo Prettier
 ├── AGENTS.md                        # Hub central de diretrizes canônicas para agentes de IA (SDD)
 ├── CHANGELOG.md                     # Histórico estruturado de mudanças (Keep a Changelog)
 ├── CLAUDE.md                        # Diretrizes para Claude Code (@AGENTS.md)
@@ -175,19 +177,23 @@ institutional-website-template/
 Conforme formalizado na **ADR 0010**, os arquivos do repositório são estrategicamente categorizados em duas zonas para permitir sincronização de melhorias do template sem gerar conflitos de código com personalizações de clientes:
 
 ### 1. Zona Imune do Cliente (Preservada em Atualizações)
+
 São os arquivos que contêm informações de marca, textos de negócio e imagens específicas do cliente atendido. **Nunca devem ser sobrescritos por atualizações do template**:
-* `src/config/site.ts`: Nome da empresa, telefones, redes sociais, endereço, CNPJ e e-mail do DPO.
-* `content/**`: Artigos de blog, serviços cadastrados, depoimentos e textos em Markdown.
-* `public/images/content/**`: Fotografias e banners institucionais do cliente.
-* `.env.local`: Chaves de API e segredos de produção específicos da conta do cliente.
+
+- `src/config/site.ts`: Nome da empresa, telefones, redes sociais, endereço, CNPJ e e-mail do DPO.
+- `content/**`: Artigos de blog, serviços cadastrados, depoimentos e textos em Markdown.
+- `public/images/content/**`: Fotografias e banners institucionais do cliente.
+- `.env.local`: Chaves de API e segredos de produção específicos da conta do cliente.
 
 ### 2. Zona de Engenharia do Template (Atualizável via Upstream)
+
 São os arquivos que representam a arquitetura, segurança, performance e esteira de automação do projeto:
-* `src/app/actions/**`: Server Actions e lógica de envio de e-mails.
-* `src/components/ui/**`: Primitivos do Shadcn/ui e regras de acessibilidade.
-* `src/env/**` e `next.config.ts`: Validações de ambiente e cabeçalhos de segurança HTTP.
-* `.github/**`: Workflows de CI/CD e configuração do Dependabot.
-* `package.json`: Dependências e scripts de automação.
+
+- `src/app/actions/**`: Server Actions e lógica de envio de e-mails.
+- `src/components/ui/**`: Primitivos do Shadcn/ui e regras de acessibilidade.
+- `src/env/**` e `next.config.ts`: Validações de ambiente e cabeçalhos de segurança HTTP.
+- `.github/**`: Workflows de CI/CD e configuração do Dependabot.
+- `package.json`: Dependências e scripts de automação.
 
 ---
 
@@ -212,15 +218,15 @@ A resposta técnica e os trade-offs estão deliberados formalmente no [**ADR 001
 
 Em vez de separação física de pastas, o isolamento e a segurança são garantidos por **fronteiras lógicas estritas** asseguradas pelo compilador do Next.js e TypeScript:
 
-| Fronteira Lógica | Papel Arquitetural | Onde Fica no Código | Garantia de Isolamento |
-| :--- | :--- | :--- | :--- |
-| **Backend (Segredos)** | Chaves de API privadas e segredos de ambiente | [`src/env/server.ts`](../src/env/server.ts) | Blindado com `import "server-only"`; quebra o build se importado no bundle do cliente ([ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md)). |
-| **Backend (Transacional)** | Processamento de formulários e envio de e-mails | [`src/app/actions/contact.ts`](../src/app/actions/contact.ts) | Diretiva `'use server'`; executado puramente no servidor Next.js sem expor credenciais ([ADR 0003](adr/0003-estrategia-de-formularios.md)). |
-| **Backend (Defesa & Cache)** | Rate Limiting e cálculo de hash HMAC de IP | [`src/lib/rate-limit.ts`](../src/lib/rate-limit.ts) | Execução serverless no runtime de borda/servidor sem persistência relacional. |
-| **Backend (CMS Reader)** | Leitura de Markdown e dados estáticos no build | [`src/lib/keystatic.ts`](../src/lib/keystatic.ts) | Keystatic Reader API acessando o sistema de arquivos apenas durante o build estático (SSG/ISR). |
-| **Contrato Compartilhado** | Validação de tipos e schemas de entrada | [`src/lib/schemas/`](../src/lib/schemas/) | Tipos Zod consumidos simultaneamente pelo formulário reativo (UI) e pela Server Action (Server). |
-| **Frontend (UI & Layout)** | Componentes visuais, páginas e acessibilidade | [`src/components/`](../src/components/) e `src/app/` | React Server Components por padrão; `'use client'` isolado exclusivamente nos componentes com interatividade. |
-| **Frontend (Público)** | Variáveis e chaves públicas de widgets | [`src/env/client.ts`](../src/env/client.ts) | Prefixadas obrigatoriamente com `NEXT_PUBLIC_*`. |
+| Fronteira Lógica             | Papel Arquitetural                              | Onde Fica no Código                                           | Garantia de Isolamento                                                                                                                                     |
+| :--------------------------- | :---------------------------------------------- | :------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Backend (Segredos)**       | Chaves de API privadas e segredos de ambiente   | [`src/env/server.ts`](../src/env/server.ts)                   | Blindado com `import "server-only"`; quebra o build se importado no bundle do cliente ([ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md)). |
+| **Backend (Transacional)**   | Processamento de formulários e envio de e-mails | [`src/app/actions/contact.ts`](../src/app/actions/contact.ts) | Diretiva `'use server'`; executado puramente no servidor Next.js sem expor credenciais ([ADR 0003](adr/0003-estrategia-de-formularios.md)).                |
+| **Backend (Defesa & Cache)** | Rate Limiting e cálculo de hash HMAC de IP      | [`src/lib/rate-limit.ts`](../src/lib/rate-limit.ts)           | Execução serverless no runtime de borda/servidor sem persistência relacional.                                                                              |
+| **Backend (CMS Reader)**     | Leitura de Markdown e dados estáticos no build  | [`src/lib/keystatic.ts`](../src/lib/keystatic.ts)             | Keystatic Reader API acessando o sistema de arquivos apenas durante o build estático (SSG/ISR).                                                            |
+| **Contrato Compartilhado**   | Validação de tipos e schemas de entrada         | [`src/lib/schemas/`](../src/lib/schemas/)                     | Tipos Zod consumidos simultaneamente pelo formulário reativo (UI) e pela Server Action (Server).                                                           |
+| **Frontend (UI & Layout)**   | Componentes visuais, páginas e acessibilidade   | [`src/components/`](../src/components/) e `src/app/`          | React Server Components por padrão; `'use client'` isolado exclusivamente nos componentes com interatividade.                                              |
+| **Frontend (Público)**       | Variáveis e chaves públicas de widgets          | [`src/env/client.ts`](../src/env/client.ts)                   | Prefixadas obrigatoriamente com `NEXT_PUBLIC_*`.                                                                                                           |
 
 Para detalhes aprofundados sobre exceções (ex.: quando criar uma pasta separada caso surja um app móvel nativo ou microserviços persistentes), consulte o [**ADR 0013**](adr/0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md).
 
@@ -228,9 +234,8 @@ Para detalhes aprofundados sobre exceções (ex.: quando criar uma pasta separad
 
 ## 🏷️ Convenções de Nomenclatura do Projeto
 
-* **Rotas e Pastas do App Router (`src/app/`):** Nomes em `kebab-case` minúsculo (ex.: `politica-de-privacidade/page.tsx`).
-* **Componentes React (`src/components/`):** Arquivos em `kebab-case` e componentes internos nomeados em `PascalCase` (ex.: arquivo `contact-form.tsx` exportando `export function ContactForm()`).
-* **Funções Utilitárias e Hooks:** Nomes em `camelCase` (ex.: `cn()`, `useReducedMotion()`).
-* **Schemas do Zod:** Sufixados com `Schema` em `camelCase` (ex.: `contactFormSchema`).
-* **Path Aliases:** Sempre utilizar o prefixo `@/` mapeado para a pasta `src/` (ex.: `@/components/ui/button`, `@/config/site`), evitando caminhos relativos profundos (`../../`).
-
+- **Rotas e Pastas do App Router (`src/app/`):** Nomes em `kebab-case` minúsculo (ex.: `politica-de-privacidade/page.tsx`).
+- **Componentes React (`src/components/`):** Arquivos em `kebab-case` e componentes internos nomeados em `PascalCase` (ex.: arquivo `contact-form.tsx` exportando `export function ContactForm()`).
+- **Funções Utilitárias e Hooks:** Nomes em `camelCase` (ex.: `cn()`, `useReducedMotion()`).
+- **Schemas do Zod:** Sufixados com `Schema` em `camelCase` (ex.: `contactFormSchema`).
+- **Path Aliases:** Sempre utilizar o prefixo `@/` mapeado para a pasta `src/` (ex.: `@/components/ui/button`, `@/config/site`), evitando caminhos relativos profundos (`../../`).

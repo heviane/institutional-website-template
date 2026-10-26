@@ -82,10 +82,7 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
 
   // 3. Layer 1: Honeypot (silent discard to mislead automated spam bots)
   const rawRecord = rawInput as Record<string, unknown>;
-  if (
-    typeof rawRecord.website === "string" &&
-    rawRecord.website.length > 0
-  ) {
+  if (typeof rawRecord.website === "string" && rawRecord.website.length > 0) {
     return { success: true, message: "Mensagem enviada com sucesso!" };
   }
 
@@ -164,4 +161,3 @@ export async function sendContactEmail(rawInput: unknown): Promise<ActionRespons
     };
   }
 }
-

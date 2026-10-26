@@ -17,13 +17,14 @@ jobs:
   quality-gates:
     name: Lint, Typecheck, Test & Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -33,6 +34,9 @@ jobs:
 
       - name: Run Documentation Audit (Strict Quality Gate)
         run: npm run audit:docs
+
+      - name: Check code formatting (Prettier)
+        run: npm run format:check
 
       - name: Run ESLint (Strict Quality Gate)
         run: npm run lint

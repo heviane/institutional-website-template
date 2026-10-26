@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  cn,
-  formatPhoneDisplay,
-  formatTelUrl,
-  formatWhatsAppUrl,
-} from "@/lib/utils";
+import { cn, formatPhoneDisplay, formatTelUrl, formatWhatsAppUrl } from "@/lib/utils";
 
 describe("cn utility", () => {
   it("should merge class names correctly", () => {
@@ -39,7 +34,9 @@ describe("contact helper utilities", () => {
 
     it("should include encoded message parameter when text is provided", () => {
       const url = formatWhatsAppUrl("11999999999", "Olá! Gostaria de mais informações.");
-      expect(url).toBe("https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es.");
+      expect(url).toBe(
+        "https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
+      );
     });
   });
 

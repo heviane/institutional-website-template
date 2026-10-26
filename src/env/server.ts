@@ -9,9 +9,16 @@ export const serverEnvSchema = z
     RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY é obrigatória."),
     RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
     CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
-    RATE_LIMIT_SECRET: z.string().min(16, "RATE_LIMIT_SECRET deve ter no mínimo 16 caracteres.").optional(),
+    RATE_LIMIT_SECRET: z
+      .string()
+      .min(16, "RATE_LIMIT_SECRET deve ter no mínimo 16 caracteres.")
+      .optional(),
     TURNSTILE_SECRET_KEY: z.string().optional(),
-    UPSTASH_REDIS_REST_URL: z.string().url("UPSTASH_REDIS_REST_URL deve ser uma URL válida.").optional(),
+    NEXT_PUBLIC_ENABLE_TURNSTILE: z.string().optional(),
+    UPSTASH_REDIS_REST_URL: z
+      .string()
+      .url("UPSTASH_REDIS_REST_URL deve ser uma URL válida.")
+      .optional(),
     UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -21,7 +28,8 @@ export const serverEnvSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["RATE_LIMIT_SECRET"],
-          message: "RATE_LIMIT_SECRET é obrigatório em produção e não pode conter o valor padrão de desenvolvimento.",
+          message:
+            "RATE_LIMIT_SECRET é obrigatório em produção e não pode conter o valor padrão de desenvolvimento.",
         });
       }
     }
@@ -40,7 +48,7 @@ export const serverEnvSchema = z
     }
 
     // 3. Prevenção de Fail-Open no Turnstile: Se a flag estiver ativa em produção, a chave secreta é estritamente obrigatória
-    const isTurnstileEnabled = process.env.NEXT_PUBLIC_ENABLE_TURNSTILE !== "false";
+    const isTurnstileEnabled = data.NEXT_PUBLIC_ENABLE_TURNSTILE !== "false";
     if (data.NODE_ENV === "production" && isTurnstileEnabled) {
       if (!data.TURNSTILE_SECRET_KEY) {
         ctx.addIssue({
@@ -60,9 +68,13 @@ export const serverEnvSchema = z
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
 
+export function parseServerEnv(raw: unknown): ServerEnv {
+  return serverEnvSchema.parse(raw);
+}
+
 function resolveServerEnv(): ServerEnv {
   if (process.env.NODE_ENV === "test") {
-    return serverEnvSchema.parse({
+    return parseServerEnv({
       ...process.env,
       NODE_ENV: "test",
       RESEND_API_KEY: process.env.RESEND_API_KEY ?? "re_test_dummy_key",
@@ -71,8 +83,7 @@ function resolveServerEnv(): ServerEnv {
       RATE_LIMIT_SECRET: process.env.RATE_LIMIT_SECRET ?? DEFAULT_DEV_RATE_LIMIT_SECRET,
     });
   }
-  return serverEnvSchema.parse(process.env);
+  return parseServerEnv(process.env);
 }
 
 export const serverEnv: ServerEnv = resolveServerEnv();
-

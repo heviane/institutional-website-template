@@ -18,7 +18,7 @@
 
 ## 🎯 Sobre o Projeto
 
-Este repositório foi desenvolvido para servir como o **ponto de partida (*starter kit*) reutilizável** em projetos de desenvolvimento web freelance e de agência. Ele foi projetado para eliminar tarefas repetitivas de setup inicial, oferecendo uma arquitetura planejada para alta estabilidade, auditada tecnicamente e guiada por quatro pilares estratégicos:
+Este repositório foi desenvolvido para servir como o **ponto de partida (_starter kit_) reutilizável** em projetos de desenvolvimento web freelance e de agência. Ele foi projetado para eliminar tarefas repetitivas de setup inicial, oferecendo uma arquitetura planejada para alta estabilidade, auditada tecnicamente e guiada por quatro pilares estratégicos:
 
 1. ⚡ **Alta Performance (SEO & Core Web Vitals):** Páginas estáticas com metas planejadas de LCP < 2,5 s, INP < 200 ms e CLS < 0,1 em conexões móveis.
 2. 🛠️ **Produtividade & Reutilização:** Estrutura modular desacoplada com meta planejada de configuração de novo cliente em menos de 2 horas (a ser validada em projeto piloto).
@@ -29,42 +29,42 @@ Este repositório foi desenvolvido para servir como o **ponto de partida (*start
 
 ## 🛠️ Tech Stack & Arquitetura
 
-* **Framework Principal:** [Next.js](https://nextjs.org/) (React / App Router com SSG/ISR).
-* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (Tipagem estrita end-to-end).
-* **Estilização & UI System:** [Tailwind CSS](https://tailwindcss.com/) + [Shadcn/ui](https://ui.shadcn.com/) (baseado nos primitivos do Radix UI).
-* **Gestão de Conteúdo (Headless CMS):** [Keystatic](https://keystatic.com/) (Git-based CMS em Markdown/JSON).
-* **Formulários & Validação:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/).
-* **E-mails Transacionais:** [Resend API](https://resend.com/).
-* **Animações & Ícones:** [Motion](https://motion.dev/) (`motion/react`) + [Lucide Icons](https://lucide.dev/).
-* **Hospedagem & CI/CD:** [Vercel](https://vercel.com/).
+- **Framework Principal:** [Next.js](https://nextjs.org/) (React / App Router com SSG/ISR).
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (Tipagem estrita end-to-end).
+- **Estilização & UI System:** [Tailwind CSS](https://tailwindcss.com/) + [Shadcn/ui](https://ui.shadcn.com/) (baseado nos primitivos do Radix UI).
+- **Gestão de Conteúdo (Headless CMS):** [Keystatic](https://keystatic.com/) (Git-based CMS em Markdown/JSON).
+- **Formulários & Validação:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/).
+- **E-mails Transacionais:** [Resend API](https://resend.com/).
+- **Animações & Ícones:** [Motion](https://motion.dev/) (`motion/react`) + [Lucide Icons](https://lucide.dev/).
+- **Hospedagem & CI/CD:** [Vercel](https://vercel.com/).
 
 ---
 
 ## 📚 Documentação Técnica do Projeto
 
-Para garantir governança, rastreabilidade e facilidade de *onboarding*, o projeto conta com uma documentação técnica completa dividida por etapas dentro do diretório `/docs`:
+Para garantir governança, rastreabilidade e facilidade de _onboarding_, o projeto conta com uma documentação técnica completa dividida por etapas dentro do diretório `/docs`:
 
-* 🏗️ **[Visão Geral da Arquitetura](docs/01-architecture-overview.md):** Especificação de requisitos, decisões de stack e mapeamento das camadas do sistema.
-* ⚙️ **[Guia de Setup e Inicialização](docs/02-environment-setup.md):** Passo a passo prático para instalação do ambiente, padrões de código e estruturação de dados globais.
-* 🗺️ **[Roadmap do Projeto](docs/03-project-roadmap.md):** Planejamento estratégico, fases de desenvolvimento (MVP e pós-MVP) e critérios de sucesso.
-* 📁 **[Estrutura de Pastas e Padrões de Projeto](docs/04-folder-structure.md):** Organização do diretório `src/`, convenções de nomenclatura e fronteiras de customização.
-* 📦 **[Modelo de Conteúdo do Keystatic](docs/05-keystatic-content-model.md):** Especificação de coleções, singletons, schema de blog/serviços e Reader API.
-* 🎨 **[Guia de Tema por Marca](docs/06-brand-theming-guide.md):** Passo a passo de 10 minutos para trocar cores, tipografia e assets por cliente com Tailwind v4.
-* 📋 **[Checklist de Onboarding de Cliente](docs/07-client-onboarding-checklist.md):** Checklist operacional completo de 8 etapas do repositório ao deploy, DNS, Resend e entrega.
-* 🔍 **[Revisão Arquitetural da Fase 1](docs/08-architecture-review-phase1.md):** Relatório técnico de auditoria, limites operacionais e validação de requisitos da fundação documental.
-* 📌 **[Registros de Decisão Arquitetural (ADRs)](docs/adr/README.md):**
-  * [ADR 0001: Escolha do Framework Base - Next.js](docs/adr/0001-escolha-do-framework-next.md)
-  * [ADR 0002: Escolha da Camada de Gestão de Conteúdo - Keystatic](docs/adr/0002-escolha-do-cms-keystatic.md)
-  * [ADR 0003: Estratégia de Formulários e Comunicação Transacional](docs/adr/0003-estrategia-de-formularios.md)
-  * [ADR 0004: Design System, Estilização e Acessibilidade](docs/adr/0004-design-system-e-estilizacao.md)
-  * [ADR 0005: Estratégia de Hospedagem, Infraestrutura e CI/CD](docs/adr/0005-estrategia-de-hospedagem-e-cicd.md)
-  * [ADR 0006: Autenticação do CMS em Produção e Gestão de Mídia](docs/adr/0006-autenticacao-cms-e-gestao-de-midia.md)
-  * [ADR 0007: Conformidade com a LGPD e Privacidade por Design](docs/adr/0007-conformidade-lgpd-e-privacidade.md)
-  * [ADR 0008: Qualidade Automatizada, Testes e Acessibilidade Contínua](docs/adr/0008-qualidade-automatizada-e-testes.md)
-  * [ADR 0009: Política de Segurança, Headers HTTP e Validação de Ambiente](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)
-  * [ADR 0010: Estratégia de Versionamento do Template e Propagação de Atualizações para Clientes](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)
-  * [ADR 0011: Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md)
-  * [ADR 0012: Estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e Rate Limiting Serverless de Melhor Esforço](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)
+- 🏗️ **[Visão Geral da Arquitetura](docs/01-architecture-overview.md):** Especificação de requisitos, decisões de stack e mapeamento das camadas do sistema.
+- ⚙️ **[Guia de Setup e Inicialização](docs/02-environment-setup.md):** Passo a passo prático para instalação do ambiente, padrões de código e estruturação de dados globais.
+- 🗺️ **[Roadmap do Projeto](docs/03-project-roadmap.md):** Planejamento estratégico, fases de desenvolvimento (MVP e pós-MVP) e critérios de sucesso.
+- 📁 **[Estrutura de Pastas e Padrões de Projeto](docs/04-folder-structure.md):** Organização do diretório `src/`, convenções de nomenclatura e fronteiras de customização.
+- 📦 **[Modelo de Conteúdo do Keystatic](docs/05-keystatic-content-model.md):** Especificação de coleções, singletons, schema de blog/serviços e Reader API.
+- 🎨 **[Guia de Tema por Marca](docs/06-brand-theming-guide.md):** Passo a passo de 10 minutos para trocar cores, tipografia e assets por cliente com Tailwind v4.
+- 📋 **[Checklist de Onboarding de Cliente](docs/07-client-onboarding-checklist.md):** Checklist operacional completo de 8 etapas do repositório ao deploy, DNS, Resend e entrega.
+- 🔍 **[Revisão Arquitetural da Fase 1](docs/08-architecture-review-phase1.md):** Relatório técnico de auditoria, limites operacionais e validação de requisitos da fundação documental.
+- 📌 **[Registros de Decisão Arquitetural (ADRs)](docs/adr/README.md):**
+  - [ADR 0001: Escolha do Framework Base - Next.js](docs/adr/0001-escolha-do-framework-next.md)
+  - [ADR 0002: Escolha da Camada de Gestão de Conteúdo - Keystatic](docs/adr/0002-escolha-do-cms-keystatic.md)
+  - [ADR 0003: Estratégia de Formulários e Comunicação Transacional](docs/adr/0003-estrategia-de-formularios.md)
+  - [ADR 0004: Design System, Estilização e Acessibilidade](docs/adr/0004-design-system-e-estilizacao.md)
+  - [ADR 0005: Estratégia de Hospedagem, Infraestrutura e CI/CD](docs/adr/0005-estrategia-de-hospedagem-e-cicd.md)
+  - [ADR 0006: Autenticação do CMS em Produção e Gestão de Mídia](docs/adr/0006-autenticacao-cms-e-gestao-de-midia.md)
+  - [ADR 0007: Conformidade com a LGPD e Privacidade por Design](docs/adr/0007-conformidade-lgpd-e-privacidade.md)
+  - [ADR 0008: Qualidade Automatizada, Testes e Acessibilidade Contínua](docs/adr/0008-qualidade-automatizada-e-testes.md)
+  - [ADR 0009: Política de Segurança, Headers HTTP e Validação de Ambiente](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)
+  - [ADR 0010: Estratégia de Versionamento do Template e Propagação de Atualizações para Clientes](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)
+  - [ADR 0011: Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md)
+  - [ADR 0012: Estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e Rate Limiting Serverless de Melhor Esforço](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)
 
 ---
 
@@ -93,9 +93,10 @@ cd nome-do-projeto
 npm ci
 ```
 
-> 💡 **Nota de Engenharia (Reprodutibilidade Estrita):**  
-> * Utilize **`npm ci`** em clones limpos, rotinas de CI e deploys de produção para reproduzir com exatidão matemática as versões congeladas no `package-lock.json`.
-> * Utilize **`npm install`** exclusivamente durante o desenvolvimento ativo ao adicionar novos pacotes (`npm install <pacote>`) ou atualizar intencionalmente o lockfile.
+> 💡 **Nota de Engenharia (Reprodutibilidade Estrita):**
+>
+> - Utilize **`npm ci`** em clones limpos, rotinas de CI e deploys de produção para reproduzir com exatidão matemática as versões congeladas no `package-lock.json`.
+> - Utilize **`npm install`** exclusivamente durante o desenvolvimento ativo ao adicionar novos pacotes (`npm install <pacote>`) ou atualizar intencionalmente o lockfile.
 
 ### 3. Variáveis de Ambiente
 
@@ -128,10 +129,11 @@ O template segue versionamento semântico ([SemVer](https://semver.org/)) formal
 
 > [!WARNING]
 > **Fluxo de Sincronização em Validação (Procedimento Experimental)**  
-> Repositórios criados a partir do botão *"Use this template"* possuem histórico Git desconectado do template original (*sem ancestral comum*). Conforme documentado no [ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md), a mesclagem direta de históricos (`--allow-unrelated-histories`) pode gerar falsos conflitos massivos e **não é recomendada como procedimento padrão até a conclusão dos testes na Fase 2**.
+> Repositórios criados a partir do botão _"Use this template"_ possuem histórico Git desconectado do template original (_sem ancestral comum_). Conforme documentado no [ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md), a mesclagem direta de históricos (`--allow-unrelated-histories`) pode gerar falsos conflitos massivos e **não é recomendada como procedimento padrão até a conclusão dos testes na Fase 2**.
 >
 > **Fluxo Recomendado para Atualizações e Hotfixes:**
-> 1. Consulte o *Changelog* detalhado na [Release oficial](https://github.com/heviane/institutional-website-template/releases) do template.
+>
+> 1. Consulte o _Changelog_ detalhado na [Release oficial](https://github.com/heviane/institutional-website-template/releases) do template.
 > 2. Para aplicar **correções pontuais de segurança (hotfixes)**, utilize cherry-pick ou patches cirúrgicos em uma branch de teste isolada:
 >    ```bash
 >    # 1. Vincular o template como remote secundário (apenas uma vez):

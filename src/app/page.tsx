@@ -5,13 +5,7 @@ import { Hero } from "@/components/shared/hero/hero";
 import { Footer } from "@/components/shared/footer/footer";
 import { ContactForm } from "@/components/shared/contact-form/contact-form";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { formatWhatsAppUrl } from "@/lib/utils";
 
@@ -55,36 +49,35 @@ export default function HomePage(): ReactNode {
         <Hero />
 
         {/* Services & Features Section */}
-        <section id="servicos" className="py-16 md:py-24 border-t border-border bg-muted/20 scroll-mt-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+        <section
+          id="servicos"
+          className="border-border bg-muted/20 scroll-mt-20 border-t py-16 md:py-24"
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl space-y-4 text-center">
+              <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
                 Nossas Soluções
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Metodologias consolidadas para impulsionar eficiência e
-                segurança para o seu negócio.
+                Metodologias consolidadas para impulsionar eficiência e segurança para o seu
+                negócio.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12">
+            <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
               {services.map((service) => {
                 const IconComponent = service.icon;
                 return (
                   <Card key={service.title} className="flex flex-col justify-between">
                     <CardHeader className="space-y-4">
-                      <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                      <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-lg">
                         <IconComponent className="h-6 w-6" />
                       </div>
-                      <CardTitle className="text-xl font-bold">
-                        {service.title}
-                      </CardTitle>
-                      <CardDescription className="text-sm">
-                        {service.description}
-                      </CardDescription>
+                      <CardTitle className="text-xl font-bold">{service.title}</CardTitle>
+                      <CardDescription className="text-sm">{service.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground text-sm leading-relaxed">
                         {service.content}
                       </p>
                     </CardContent>
@@ -96,17 +89,19 @@ export default function HomePage(): ReactNode {
         </section>
 
         {/* About Section */}
-        <section id="sobre" className="py-16 md:py-24 border-t border-border bg-background scroll-mt-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+        <section
+          id="sobre"
+          className="border-border bg-background scroll-mt-20 border-t py-16 md:py-24"
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-3xl space-y-6 text-center">
+              <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
                 Sobre a {siteConfig.name}
               </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Atuamos com foco inegociável em qualidade, conformidade técnica
-                e relacionamento de longo prazo. Nossa missão é entregar
-                soluções robustas e sustentáveis para que nossos clientes possam
-                operar com total tranquilidade.
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                Atuamos com foco inegociável em qualidade, conformidade técnica e relacionamento de
+                longo prazo. Nossa missão é entregar soluções robustas e sustentáveis para que
+                nossos clientes possam operar com total tranquilidade.
               </p>
             </div>
           </div>
@@ -115,16 +110,16 @@ export default function HomePage(): ReactNode {
         {/* Contact Section */}
         <section
           id="contato"
-          className="py-16 md:py-24 border-t border-border bg-muted/30 scroll-mt-20"
+          className="border-border bg-muted/30 scroll-mt-20 border-t py-16 md:py-24"
         >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="text-center space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <div className="mx-auto max-w-4xl space-y-12 px-4 sm:px-6 lg:px-8">
+            <div className="space-y-4 text-center">
+              <h2 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
                 Pronto para conversar sobre o seu projeto?
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Envie sua mensagem pelo formulário abaixo ou fale diretamente com a nossa
-                equipe pelos canais corporativos oficiais.
+              <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+                Envie sua mensagem pelo formulário abaixo ou fale diretamente com a nossa equipe
+                pelos canais corporativos oficiais.
               </p>
             </div>
             <ContactForm />

@@ -1,9 +1,9 @@
 # Feature 002: Design System, Layout Base & Componentes Essenciais (Plan)
 
-* **Status:** Concluído
-* **Spec de Referência:** [`spec.md`](spec.md)
-* **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
-* **ADRs Vinculados:** [ADR 0001: Next.js App Router](../../docs/adr/0001-escolha-do-framework-next.md), [ADR 0004: Design System](../../docs/adr/0004-design-system-e-estilizacao.md), [ADR 0008: Qualidade Automatizada](../../docs/adr/0008-qualidade-automatizada-e-testes.md)
+- **Status:** Concluído
+- **Spec de Referência:** [`spec.md`](spec.md)
+- **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
+- **ADRs Vinculados:** [ADR 0001: Next.js App Router](../../docs/adr/0001-escolha-do-framework-next.md), [ADR 0004: Design System](../../docs/adr/0004-design-system-e-estilizacao.md), [ADR 0008: Qualidade Automatizada](../../docs/adr/0008-qualidade-automatizada-e-testes.md)
 
 ---
 
@@ -13,31 +13,31 @@
 
 Para assegurar **Core Web Vitals excelentes (LCP < 2,5s, INP < 200ms)** e reduzir o pacote de JavaScript ao mínimo essencial, o layout adota o padrão de **Ilhas de Interatividade**:
 
-| Arquivo / Componente | Tipo de Componente | Justificativa Arquitetural |
-| :--- | :--- | :--- |
-| `src/app/layout.tsx` | **Server Component (RSC)** | Layout raiz com injeção de fontes e metadados no servidor. |
-| `src/app/page.tsx` | **Server Component (RSC)** | Composição estática da Home Page. |
-| `src/components/shared/header/header.tsx` | **Server Component (RSC)** | Renderiza marca e navegação desktop no servidor. |
+| Arquivo / Componente                          | Tipo de Componente                    | Justificativa Arquitetural                                                                                    |
+| :-------------------------------------------- | :------------------------------------ | :------------------------------------------------------------------------------------------------------------ |
+| `src/app/layout.tsx`                          | **Server Component (RSC)**            | Layout raiz com injeção de fontes e metadados no servidor.                                                    |
+| `src/app/page.tsx`                            | **Server Component (RSC)**            | Composição estática da Home Page.                                                                             |
+| `src/components/shared/header/header.tsx`     | **Server Component (RSC)**            | Renderiza marca e navegação desktop no servidor.                                                              |
 | `src/components/shared/header/mobile-nav.tsx` | **Client Component (`'use client'`)** | **Único Client Component do layout.** Gerencia o estado de abertura/fechamento da gaveta (`useState(false)`). |
-| `src/components/shared/hero/hero.tsx` | **Server Component (RSC)** | Renderização estática pura de tipografia e links de conversão. |
-| `src/components/shared/footer/footer.tsx` | **Server Component (RSC)** | Renderização estática pura de dados legais e contatos corporativos. |
+| `src/components/shared/hero/hero.tsx`         | **Server Component (RSC)**            | Renderização estática pura de tipografia e links de conversão.                                                |
+| `src/components/shared/footer/footer.tsx`     | **Server Component (RSC)**            | Renderização estática pura de dados legais e contatos corporativos.                                           |
 
 ### 1.2. Novas Dependências Necessárias
 
-| Pacote | Tipo | Finalidade Arquitetural |
-| :--- | :--- | :--- |
-| **`lucide-react`** | Produção | Biblioteca de ícones acessíveis em SVG para navegação, contatos e ações do usuário. |
-| **`class-variance-authority` (`cva`)** | Produção | Gerenciamento tipado de variantes visuais (tamanhos, cores e estados de botões e cards). |
-| **`@radix-ui/react-slot`** | Produção | Primitivo do Radix para composição polimórfica (`asChild`), permitindo que botões renderizem tags `<a>` ou `<Link>` mantendo a estilização e acessibilidade. |
-| **`@radix-ui/react-dialog`** | Produção | Primitivo do Radix para modais e o menu web responsivo, garantindo nativamente *focus trap*, *scroll lock*, *escape listener* e *focus restoration*. |
-| **`vitest-axe` & `axe-core`** | Desenvolvimento | Integração do motor oficial do axe-core com o Vitest para validação contínua e automatizada de WCAG 2.1 AA ([ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)). |
+| Pacote                                 | Tipo            | Finalidade Arquitetural                                                                                                                                                          |
+| :------------------------------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`lucide-react`**                     | Produção        | Biblioteca de ícones acessíveis em SVG para navegação, contatos e ações do usuário.                                                                                              |
+| **`class-variance-authority` (`cva`)** | Produção        | Gerenciamento tipado de variantes visuais (tamanhos, cores e estados de botões e cards).                                                                                         |
+| **`@radix-ui/react-slot`**             | Produção        | Primitivo do Radix para composição polimórfica (`asChild`), permitindo que botões renderizem tags `<a>` ou `<Link>` mantendo a estilização e acessibilidade.                     |
+| **`@radix-ui/react-dialog`**           | Produção        | Primitivo do Radix para modais e o menu web responsivo, garantindo nativamente _focus trap_, _scroll lock_, _escape listener_ e _focus restoration_.                             |
+| **`vitest-axe` & `axe-core`**          | Desenvolvimento | Integração do motor oficial do axe-core com o Vitest para validação contínua e automatizada de WCAG 2.1 AA ([ADR 0008](../../docs/adr/0008-qualidade-automatizada-e-testes.md)). |
 
 ### 1.3. Proteção de Arquivos Existentes (Anti-Sobrescrita do Shadcn)
 
 Para preservar integralmente os arquivos canônicos já configurados e validados na Feature 001 (`src/app/globals.css` com `@custom-variant dark` e tokens OKLCH, e `src/lib/utils.ts` com o helper `cn()`):
 
-* **Proibição de `npx shadcn init`:** O comando interativo de CLI não deve ser executado, pois tenta sobrescrever `globals.css` e `utils.ts`.
-* **Configuração Declarativa Direta (`components.json`):** O arquivo de configuração `components.json` é criado manualmente na raiz, e os componentes primitivos (`button.tsx`, `card.tsx`, `dialog.tsx`, `input.tsx`, `textarea.tsx`) são adicionados diretamente em `src/components/ui/` respeitando o Radix UI e o Tailwind CSS v4.
+- **Proibição de `npx shadcn init`:** O comando interativo de CLI não deve ser executado, pois tenta sobrescrever `globals.css` e `utils.ts`.
+- **Configuração Declarativa Direta (`components.json`):** O arquivo de configuração `components.json` é criado manualmente na raiz, e os componentes primitivos (`button.tsx`, `card.tsx`, `dialog.tsx`, `input.tsx`, `textarea.tsx`) são adicionados diretamente em `src/components/ui/` respeitando o Radix UI e o Tailwind CSS v4.
 
 ### 1.4. Contrato de Configuração do Cliente & Interfaces Tipadas (`src/config/site.ts`)
 
@@ -82,7 +82,8 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   name: "Empresa Exemplo",
   slogan: "Soluções corporativas modernas, ágeis e de alta performance.",
-  description: "Website institucional moderno, acessível e de alta performance com arquitetura serverless.",
+  description:
+    "Website institucional moderno, acessível e de alta performance com arquitetura serverless.",
   url: "https://www.empresaexemplo.com.br",
   ogImage: "https://www.empresaexemplo.com.br/og.jpg",
   nav: [
@@ -149,13 +150,13 @@ export function formatPhoneDisplay(phone: string): string {
 
 ### 1.5. Contrato do Componente Header (`src/components/shared/header/`)
 
-* **`header.tsx` (Server Component):**
-  * Consome `siteConfig.name` para a marca e `siteConfig.nav` para as rotas. Zero rotas chumbadas no JSX.
-  * Renderiza o container fixo (*sticky*), links desktop e inclui `<MobileNav items={siteConfig.nav} />`.
-* **`mobile-nav.tsx` (Client Component via Radix Dialog):**
-  * Gerencia o estado de abertura (`const [isOpen, setIsOpen] = useState(false)`).
-  * Auto-fechamento imediato (`setIsOpen(false)`) ao clicar em qualquer link de âncora interno.
-  * O Radix garante *focus trap*, *scroll lock* e restauração de foco ao fechar.
+- **`header.tsx` (Server Component):**
+  - Consome `siteConfig.name` para a marca e `siteConfig.nav` para as rotas. Zero rotas chumbadas no JSX.
+  - Renderiza o container fixo (_sticky_), links desktop e inclui `<MobileNav items={siteConfig.nav} />`.
+- **`mobile-nav.tsx` (Client Component via Radix Dialog):**
+  - Gerencia o estado de abertura (`const [isOpen, setIsOpen] = useState(false)`).
+  - Auto-fechamento imediato (`setIsOpen(false)`) ao clicar em qualquer link de âncora interno.
+  - O Radix garante _focus trap_, _scroll lock_ e restauração de foco ao fechar.
 
 ### 1.6. Contrato do Componente Hero (`src/components/shared/hero/hero.tsx` - RSC) — Template-Agnostic
 
@@ -175,7 +176,7 @@ export interface HeroProps {
 }
 ```
 
-* **Estética Neutra e Universal:** Textos padrão discretos que servem a qualquer nicho de mercado (tecnologia, advocacia, consultoria, saúde) sem parecer um produto hiper-específico.
+- **Estética Neutra e Universal:** Textos padrão discretos que servem a qualquer nicho de mercado (tecnologia, advocacia, consultoria, saúde) sem parecer um produto hiper-específico.
 
 ### 1.7. Variantes CVA do Button Focadas em Marketing (`src/components/ui/button.tsx`)
 
@@ -189,8 +190,10 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         cta: "bg-primary text-primary-foreground shadow-md hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-transform",
-        whatsapp: "bg-emerald-600 text-white shadow hover:bg-emerald-700 focus-visible:ring-emerald-500",
-        outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        whatsapp:
+          "bg-emerald-600 text-white shadow hover:bg-emerald-700 focus-visible:ring-emerald-500",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
@@ -275,13 +278,13 @@ A Home Page demonstrará a harmonia e responsividade de toda a estrutura:
 
 ### 📋 A Matriz de Testes Funcionais de UI
 
-| # | Teste Funcional | Arquivo | Asserção Principal |
-| :--- | :--- | :--- | :--- |
-| **1** | **`Header renders nav items`** | `tests/components/layout.test.tsx` | Verifica se os links declarados em `siteConfig.nav` são renderizados com texto e atributo `href` corretos. |
-| **2** | **`Mobile menu toggles correctly`** | `tests/components/layout.test.tsx` | Dispara clique no botão hambúrguer (dialog aberto) e clique em link ou botão fechar (dialog fechado). |
-| **3** | **`Dialog focus lifecycle`** | `tests/components/dialog.test.tsx` | Valida que o foco vai para o modal ao abrir, `Escape` fecha o diálogo e o foco retorna ao trigger original. |
-| **4** | **`CTA links point to correct anchors`** | `tests/components/layout.test.tsx` | Valida se a CTA principal aponta para a URL sanitizada de WhatsApp e a secundária para `#servicos`. |
-| **5** | **`Footer shows legal/contact info`** | `tests/components/layout.test.tsx` | Verifica a presença na tela da Razão Social, CNPJ formatado e canais de contato do `siteConfig`. |
+| #     | Teste Funcional                                  | Arquivo                            | Asserção Principal                                                                                                    |
+| :---- | :----------------------------------------------- | :--------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| **1** | **`Header renders nav items`**                   | `tests/components/layout.test.tsx` | Verifica se os links declarados em `siteConfig.nav` são renderizados com texto e atributo `href` corretos.            |
+| **2** | **`Mobile menu toggles correctly`**              | `tests/components/layout.test.tsx` | Dispara clique no botão hambúrguer (dialog aberto) e clique em link ou botão fechar (dialog fechado).                 |
+| **3** | **`Dialog focus lifecycle`**                     | `tests/components/dialog.test.tsx` | Valida que o foco vai para o modal ao abrir, `Escape` fecha o diálogo e o foco retorna ao trigger original.           |
+| **4** | **`CTA links point to correct anchors`**         | `tests/components/layout.test.tsx` | Valida se a CTA principal aponta para a URL sanitizada de WhatsApp e a secundária para `#servicos`.                   |
+| **5** | **`Footer shows legal/contact info`**            | `tests/components/layout.test.tsx` | Verifica a presença na tela da Razão Social, CNPJ formatado e canais de contato do `siteConfig`.                      |
 | **6** | **`Button variants render classes as expected`** | `tests/components/button.test.tsx` | Valida classes semânticas aplicadas em `cta` (escala/destaque), `whatsapp` (esmeralda) e `asChild` (renderiza `<a>`). |
 
 ### ♿ Teste de Acessibilidade (WCAG 2.1 AA)

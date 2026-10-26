@@ -26,33 +26,27 @@ export function MobileNav({ items }: MobileNavProps) {
     <div className="md:hidden">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Abrir menu de navegação"
-          >
+          <Button variant="ghost" size="icon" aria-label="Abrir menu de navegação">
             <Menu className="h-6 w-6" />
           </Button>
         </DialogTrigger>
         <DialogContent className="w-[320px] sm:w-[380px]">
           <DialogHeader>
             <DialogTitle>{siteConfig.name}</DialogTitle>
-            <DialogDescription className="sr-only">
-              Navegação institucional móvel
-            </DialogDescription>
+            <DialogDescription className="sr-only">Navegação institucional móvel</DialogDescription>
           </DialogHeader>
-          <nav className="flex flex-col gap-2 mt-4" aria-label="Navegação móvel">
+          <nav className="mt-4 flex flex-col gap-2" aria-label="Navegação móvel">
             {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center min-h-[44px] px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-accent rounded-md transition-colors"
+                className="text-foreground/80 hover:text-foreground hover:bg-accent flex min-h-[44px] items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
               >
                 {item.title}
               </Link>
             ))}
-            <div className="pt-4 mt-2 border-t border-border">
+            <div className="border-border mt-2 border-t pt-4">
               <Button asChild variant="whatsapp" className="w-full">
                 <a
                   href={formatWhatsAppUrl(siteConfig.contact.whatsapp)}
@@ -68,4 +62,3 @@ export function MobileNav({ items }: MobileNavProps) {
     </div>
   );
 }
-

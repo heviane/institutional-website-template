@@ -48,4 +48,3 @@ describe("FloatingWhatsApp Component (src/components/shared/floating-whatsapp/)"
     expect(results).toHaveNoViolations();
   });
 });
-

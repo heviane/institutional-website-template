@@ -1,31 +1,30 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { clientEnvSchema } from "@/env/client";
-import { serverEnvSchema, DEFAULT_DEV_RATE_LIMIT_SECRET } from "@/env/server";
+import { describe, it, expect } from "vitest";
+import { parseClientEnv, clientEnvSchema } from "@/env/client";
+import { parseServerEnv, serverEnvSchema, DEFAULT_DEV_RATE_LIMIT_SECRET } from "@/env/server";
 
 describe("Environment Validation Schemas (src/env/)", () => {
-  const originalEnv = process.env;
-
-  beforeEach(() => {
-    process.env = { ...originalEnv };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
-  });
-
-  describe("Client Environment Schema (clientEnvSchema)", () => {
-    it("parses valid development configuration with defaults", () => {
-      const parsed = clientEnvSchema.parse({
+  describe("Client Environment Schema (clientEnvSchema & parseClientEnv)", () => {
+    it("parses valid development configuration with defaults and undefined NEXT_PUBLIC_SITE_URL", () => {
+      const parsed = parseClientEnv({
         NODE_ENV: "development",
       });
 
-      expect(parsed.NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
+      expect(parsed.NEXT_PUBLIC_SITE_URL).toBeUndefined();
       expect(parsed.NEXT_PUBLIC_ENABLE_TURNSTILE).toBe(true);
       expect(parsed.NEXT_PUBLIC_TURNSTILE_SITE_KEY).toBeUndefined();
     });
 
+    it("parses valid NEXT_PUBLIC_SITE_URL when provided", () => {
+      const parsed = parseClientEnv({
+        NODE_ENV: "development",
+        NEXT_PUBLIC_SITE_URL: "https://example.com",
+      });
+
+      expect(parsed.NEXT_PUBLIC_SITE_URL).toBe("https://example.com");
+    });
+
     it("parses NEXT_PUBLIC_ENABLE_TURNSTILE='false' into boolean false (Lite Mode)", () => {
-      const parsed = clientEnvSchema.parse({
+      const parsed = parseClientEnv({
         NODE_ENV: "development",
         NEXT_PUBLIC_ENABLE_TURNSTILE: "false",
       });
@@ -35,7 +34,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects invalid NEXT_PUBLIC_SITE_URL", () => {
       expect(() =>
-        clientEnvSchema.parse({
+        parseClientEnv({
           NODE_ENV: "development",
           NEXT_PUBLIC_SITE_URL: "not-a-valid-url",
         })
@@ -44,7 +43,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("requires NEXT_PUBLIC_TURNSTILE_SITE_KEY in production when Turnstile is active", () => {
       expect(() =>
-        clientEnvSchema.parse({
+        parseClientEnv({
           NODE_ENV: "production",
           NEXT_PUBLIC_SITE_URL: "https://example.com",
           NEXT_PUBLIC_ENABLE_TURNSTILE: "true",
@@ -53,7 +52,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
     });
 
     it("allows missing NEXT_PUBLIC_TURNSTILE_SITE_KEY in production if Turnstile is disabled (Lite Mode)", () => {
-      const parsed = clientEnvSchema.parse({
+      const parsed = parseClientEnv({
         NODE_ENV: "production",
         NEXT_PUBLIC_SITE_URL: "https://example.com",
         NEXT_PUBLIC_ENABLE_TURNSTILE: "false",
@@ -64,16 +63,16 @@ describe("Environment Validation Schemas (src/env/)", () => {
     });
   });
 
-  describe("Server Environment Schema (serverEnvSchema)", () => {
+  describe("Server Environment Schema (serverEnvSchema & parseServerEnv)", () => {
     const validDevConfig = {
-      NODE_ENV: "development",
+      NODE_ENV: "development" as const,
       RESEND_API_KEY: "re_123456789",
       RESEND_FROM_EMAIL: "Contato <contato@example.com>",
       CONTACT_EMAIL_TO: "leads@example.com",
     };
 
     it("parses minimal valid configuration in development with default dev RATE_LIMIT_SECRET", () => {
-      const parsed = serverEnvSchema.parse(validDevConfig);
+      const parsed = parseServerEnv(validDevConfig);
 
       expect(parsed.RESEND_API_KEY).toBe("re_123456789");
       expect(parsed.RESEND_FROM_EMAIL).toBe("Contato <contato@example.com>");
@@ -83,7 +82,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects missing core email variables", () => {
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           NODE_ENV: "development",
           RESEND_FROM_EMAIL: "contato@example.com",
           CONTACT_EMAIL_TO: "leads@example.com",
@@ -91,7 +90,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
       ).toThrow(/RESEND_API_KEY/);
 
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           NODE_ENV: "development",
           RESEND_API_KEY: "re_123",
           CONTACT_EMAIL_TO: "invalid-email",
@@ -101,7 +100,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects production deployment if RATE_LIMIT_SECRET is missing", () => {
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           ...validDevConfig,
           NODE_ENV: "production",
           TURNSTILE_SECRET_KEY: "0x4AAAAAA",
@@ -111,7 +110,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects production deployment if RATE_LIMIT_SECRET is set to dev placeholder", () => {
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           ...validDevConfig,
           NODE_ENV: "production",
           RATE_LIMIT_SECRET: DEFAULT_DEV_RATE_LIMIT_SECRET,
@@ -122,7 +121,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects Upstash credentials mismatch (URL provided without Token)", () => {
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           ...validDevConfig,
           UPSTASH_REDIS_REST_URL: "https://upstash.io",
         })
@@ -131,7 +130,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
 
     it("rejects Upstash credentials mismatch (Token provided without URL)", () => {
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           ...validDevConfig,
           UPSTASH_REDIS_REST_TOKEN: "some-token",
         })
@@ -139,7 +138,7 @@ describe("Environment Validation Schemas (src/env/)", () => {
     });
 
     it("accepts valid Upstash credentials when both are provided", () => {
-      const parsed = serverEnvSchema.parse({
+      const parsed = parseServerEnv({
         ...validDevConfig,
         UPSTASH_REDIS_REST_URL: "https://example-redis.upstash.io",
         UPSTASH_REDIS_REST_TOKEN: "secret-token",
@@ -150,28 +149,25 @@ describe("Environment Validation Schemas (src/env/)", () => {
     });
 
     it("rejects in production if Turnstile is enabled but TURNSTILE_SECRET_KEY is missing", () => {
-      process.env.NEXT_PUBLIC_ENABLE_TURNSTILE = "true";
-
       expect(() =>
-        serverEnvSchema.parse({
+        parseServerEnv({
           ...validDevConfig,
           NODE_ENV: "production",
           RATE_LIMIT_SECRET: "strong-secret-key-at-least-16-chars",
+          NEXT_PUBLIC_ENABLE_TURNSTILE: "true",
         })
       ).toThrow(/TURNSTILE_SECRET_KEY é obrigatória em produção/);
     });
 
     it("accepts in production if Turnstile is disabled (Lite Mode) without TURNSTILE_SECRET_KEY", () => {
-      process.env.NEXT_PUBLIC_ENABLE_TURNSTILE = "false";
-
-      const parsed = serverEnvSchema.parse({
+      const parsed = parseServerEnv({
         ...validDevConfig,
         NODE_ENV: "production",
         RATE_LIMIT_SECRET: "strong-secret-key-at-least-16-chars",
+        NEXT_PUBLIC_ENABLE_TURNSTILE: "false",
       });
 
       expect(parsed.TURNSTILE_SECRET_KEY).toBeUndefined();
     });
   });
 });
-

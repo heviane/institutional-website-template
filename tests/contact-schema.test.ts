@@ -22,7 +22,9 @@ describe("Contact Form Schema (contactFormSchema)", () => {
     if (result.success) {
       expect(result.data.name).toBe("Ana Silva");
       expect(result.data.email).toBe("ana.silva@empresa.com.br");
-      expect(result.data.message).toBe("Gostaria de solicitar uma proposta comercial para desenvolvimento.");
+      expect(result.data.message).toBe(
+        "Gostaria de solicitar uma proposta comercial para desenvolvimento."
+      );
     }
   });
 
@@ -145,4 +147,3 @@ describe("Contact Form Schema (contactFormSchema)", () => {
     }
   });
 });
-

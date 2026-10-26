@@ -45,7 +45,9 @@ export function hashIp(ip: string, secret: string): string {
  * Extracts client IP from edge headers in order of trust.
  * In production, returns null if no trusted headers exist to prevent shared-bucket denial of service.
  */
-export function getClientIp(headers: Headers | { get(name: string): string | null }): string | null {
+export function getClientIp(
+  headers: Headers | { get(name: string): string | null }
+): string | null {
   const cfIp = headers.get("cf-connecting-ip");
   if (cfIp) return cfIp.trim();
 
@@ -139,4 +141,3 @@ export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
     resetAt: existing.expiresAt,
   };
 }
-

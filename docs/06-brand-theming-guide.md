@@ -26,17 +26,18 @@ No Tailwind v4, toda a paleta de cores reside nas variáveis CSS nativas gerenci
 
 #### 1. Mapeamento dos Tokens Principais:
 
-| Token CSS | Utilização | Exemplo Visual |
-| :--- | :--- | :--- |
-| `--primary` | Cor predominante da marca (botões principais, destaques, links) | Azul corporativo, verde saúde, etc. |
-| `--primary-foreground` | Cor do texto exibido sobre a cor primária | Quase sempre Branco ou Preto |
-| `--secondary` | Cor de apoio (badges, botões secundários, cartões sutis) | Cinza neutro suave |
-| `--accent` | Cor de destaque para interações (efeitos de hover em menus) | Variação suave da cor primária |
-| `--background` | Fundo principal da página | Branco puro ou cinza gelo |
-| `--foreground` | Cor padrão de leitura dos textos e títulos | Chumbo escuro / preto suave |
-| `--radius` | Arredondamento dos cantos de botões e cards | `0.5rem` (arredondado) ou `0rem` (reto) |
+| Token CSS              | Utilização                                                      | Exemplo Visual                          |
+| :--------------------- | :-------------------------------------------------------------- | :-------------------------------------- |
+| `--primary`            | Cor predominante da marca (botões principais, destaques, links) | Azul corporativo, verde saúde, etc.     |
+| `--primary-foreground` | Cor do texto exibido sobre a cor primária                       | Quase sempre Branco ou Preto            |
+| `--secondary`          | Cor de apoio (badges, botões secundários, cartões sutis)        | Cinza neutro suave                      |
+| `--accent`             | Cor de destaque para interações (efeitos de hover em menus)     | Variação suave da cor primária          |
+| `--background`         | Fundo principal da página                                       | Branco puro ou cinza gelo               |
+| `--foreground`         | Cor padrão de leitura dos textos e títulos                      | Chumbo escuro / preto suave             |
+| `--radius`             | Arredondamento dos cantos de botões e cards                     | `0.5rem` (arredondado) ou `0rem` (reto) |
 
 #### 2. Como Aplicar a Cor do Cliente:
+
 Basta converter a cor hexadecimal fornecida no manual de marca do cliente para o formato `oklch()` (padrão nativo do Tailwind v4 e Shadcn/ui) ou `hsl()` completo, e atualizar as variáveis em `src/app/globals.css`:
 
 ```css
@@ -125,10 +126,9 @@ const fontSans = Plus_Jakarta_Sans({
 ```
 
 E aplique no elemento `<body>`:
+
 ```tsx
-<body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
-  {children}
-</body>
+<body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>{children}</body>
 ```
 
 ---
@@ -176,23 +176,23 @@ export const siteConfig = {
 
 Substitua os arquivos padrão dentro da pasta `/public` pelos ativos visuais fornecidos pelo cliente:
 
-| Arquivo | Dimensão Recomendada | Formato | Dica |
-| :--- | :--- | :---: | :--- |
-| `public/images/brand/logo.svg` | Vetorial (ou altura de 60px) | SVG ou PNG transparente | Versão colorida para fundos claros |
-| `public/images/brand/logo-dark.svg` | Vetorial (ou altura de 60px) | SVG ou PNG transparente | Versão branca/clara para fundo escuro |
-| `public/favicon.ico` | 32x32 px | ICO | Ícone clássico para a aba do navegador |
-| `public/icon.png` | 512x512 px | PNG | Ícone para navegadores modernos e PWA |
-| `public/apple-touch-icon.png` | 180x180 px | PNG | Ícone exibido ao salvar o site na tela inicial do iPhone |
-| `public/og.jpg` | **1200 x 630 px** (Exato) | JPG ou PNG (< 300 KB) | Imagem exibida ao compartilhar o link no WhatsApp, LinkedIn e Twitter |
+| Arquivo                             | Dimensão Recomendada         |         Formato         | Dica                                                                  |
+| :---------------------------------- | :--------------------------- | :---------------------: | :-------------------------------------------------------------------- |
+| `public/images/brand/logo.svg`      | Vetorial (ou altura de 60px) | SVG ou PNG transparente | Versão colorida para fundos claros                                    |
+| `public/images/brand/logo-dark.svg` | Vetorial (ou altura de 60px) | SVG ou PNG transparente | Versão branca/clara para fundo escuro                                 |
+| `public/favicon.ico`                | 32x32 px                     |           ICO           | Ícone clássico para a aba do navegador                                |
+| `public/icon.png`                   | 512x512 px                   |           PNG           | Ícone para navegadores modernos e PWA                                 |
+| `public/apple-touch-icon.png`       | 180x180 px                   |           PNG           | Ícone exibido ao salvar o site na tela inicial do iPhone              |
+| `public/og.jpg`                     | **1200 x 630 px** (Exato)    |  JPG ou PNG (< 300 KB)  | Imagem exibida ao compartilhar o link no WhatsApp, LinkedIn e Twitter |
 
 ---
 
 ### ✅ Checklist de Validação Visual Pré-Entrega
 
 Antes de apresentar o site para o cliente:
-* [ ] As cores primárias no cabeçalho e botões respeitam o manual de marca?
-* [ ] O contraste de texto em botões e badges foi validado no WebAIM (score verde)?
-* [ ] O link de WhatsApp abre diretamente a conversa com o número correto?
-* [ ] O logotipo renderiza com nitidez em telas de alta densidade (Retina/Mobile)?
-* [ ] Ao enviar o link do site no WhatsApp, o título, descrição e imagem de pré-visualização (`og.jpg`) carregam perfeitamente?
 
+- [ ] As cores primárias no cabeçalho e botões respeitam o manual de marca?
+- [ ] O contraste de texto em botões e badges foi validado no WebAIM (score verde)?
+- [ ] O link de WhatsApp abre diretamente a conversa com o número correto?
+- [ ] O logotipo renderiza com nitidez em telas de alta densidade (Retina/Mobile)?
+- [ ] Ao enviar o link do site no WhatsApp, o título, descrição e imagem de pré-visualização (`og.jpg`) carregam perfeitamente?

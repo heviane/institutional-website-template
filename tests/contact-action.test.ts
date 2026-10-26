@@ -7,9 +7,12 @@ import { serverEnv } from "@/env/server";
 
 // Mock next/headers
 vi.mock("next/headers", () => ({
-  headers: vi.fn(async () => new Headers({
-    "x-real-ip": "203.0.113.42",
-  })),
+  headers: vi.fn(
+    async () =>
+      new Headers({
+        "x-real-ip": "203.0.113.42",
+      })
+  ),
 }));
 
 // Mock resend
@@ -34,8 +37,8 @@ describe("Contact Server Action (src/app/actions/contact.ts)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubEnv("NODE_ENV", "test");
-    vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
-      new Response(JSON.stringify({ success: true }), { status: 200 })
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () => new Response(JSON.stringify({ success: true }), { status: 200 })
     );
   });
 
@@ -103,8 +106,8 @@ describe("Contact Server Action (src/app/actions/contact.ts)", () => {
 
   it("Caso 5 (Turnstile Fail-Closed): Invalid Turnstile token or Cloudflare failure blocks email", async () => {
     // Simulate Cloudflare returning error 500 or { success: false }
-    vi.spyOn(globalThis, "fetch").mockImplementationOnce(async () =>
-      new Response(JSON.stringify({ success: false }), { status: 200 })
+    vi.spyOn(globalThis, "fetch").mockImplementationOnce(
+      async () => new Response(JSON.stringify({ success: false }), { status: 200 })
     );
 
     // Ensure Turnstile verification is actively enforced
@@ -121,7 +124,8 @@ describe("Contact Server Action (src/app/actions/contact.ts)", () => {
     expect(response.message).toMatch(/validação de segurança/i);
     expect(resend.emails.send).not.toHaveBeenCalled();
 
-    (clientEnv as { NEXT_PUBLIC_ENABLE_TURNSTILE: boolean }).NEXT_PUBLIC_ENABLE_TURNSTILE = originalEnable;
+    (clientEnv as { NEXT_PUBLIC_ENABLE_TURNSTILE: boolean }).NEXT_PUBLIC_ENABLE_TURNSTILE =
+      originalEnable;
   });
 
   it("Caso 6 (Turnstile Modo Lite): Proceeds with dispatch when Turnstile is disabled", async () => {
@@ -136,7 +140,8 @@ describe("Contact Server Action (src/app/actions/contact.ts)", () => {
     expect(response.success).toBe(true);
     expect(resend.emails.send).toHaveBeenCalledTimes(1);
 
-    (clientEnv as { NEXT_PUBLIC_ENABLE_TURNSTILE: boolean }).NEXT_PUBLIC_ENABLE_TURNSTILE = originalEnable;
+    (clientEnv as { NEXT_PUBLIC_ENABLE_TURNSTILE: boolean }).NEXT_PUBLIC_ENABLE_TURNSTILE =
+      originalEnable;
   });
 
   it("Caso 7 (Resend Fail & Sanitização Absoluta): Resend API error returns sanitized fallback message without leaking internals", async () => {
@@ -201,4 +206,3 @@ describe("Contact Server Action (src/app/actions/contact.ts)", () => {
     expect(resend.emails.send).not.toHaveBeenCalled();
   });
 });
-

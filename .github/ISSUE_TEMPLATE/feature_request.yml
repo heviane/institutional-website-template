@@ -48,4 +48,3 @@ body:
       description: Links para exemplos no Figma, documentações ou screenshots de referência.
     validations:
       required: false
-

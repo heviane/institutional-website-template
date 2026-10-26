@@ -6,7 +6,7 @@ export const clientEnvSchema = z
     NEXT_PUBLIC_SITE_URL: z
       .string()
       .url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida.")
-      .default("http://localhost:3000"),
+      .optional(),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_ENABLE_TURNSTILE: z
       .string()
@@ -29,10 +29,13 @@ export const clientEnvSchema = z
 
 export type ClientEnv = z.infer<typeof clientEnvSchema>;
 
-export const clientEnv: ClientEnv = clientEnvSchema.parse({
+export function parseClientEnv(raw: unknown): ClientEnv {
+  return clientEnvSchema.parse(raw);
+}
+
+export const clientEnv: ClientEnv = parseClientEnv({
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   NEXT_PUBLIC_ENABLE_TURNSTILE: process.env.NEXT_PUBLIC_ENABLE_TURNSTILE,
 });
-

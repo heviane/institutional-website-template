@@ -152,9 +152,7 @@ describe("Layout Components Suite (Server-First & UI Matrix)", () => {
       expect(screen.getByText(new RegExp(currentYear))).toBeDefined();
 
       // Legal data
-      const companyElements = screen.getAllByText(
-        new RegExp(siteConfig.legal.companyName)
-      );
+      const companyElements = screen.getAllByText(new RegExp(siteConfig.legal.companyName));
       expect(companyElements.length).toBeGreaterThan(0);
       expect(screen.getByText(new RegExp(siteConfig.legal.cnpj))).toBeDefined();
 
@@ -171,4 +169,3 @@ describe("Layout Components Suite (Server-First & UI Matrix)", () => {
     });
   });
 });
-

@@ -105,7 +105,9 @@ function checkInternalLinks(markdownFiles) {
       const targetRelToRoot = path.relative(ROOT_DIR, targetFullPath).replace(/\\/g, "/");
 
       if (!fs.existsSync(targetFullPath) && !allowedFutureFiles.has(targetRelToRoot)) {
-        logError(`Broken link in ${relativePath}: "${target}" -> target not found at "${targetRelToRoot}"`);
+        logError(
+          `Broken link in ${relativePath}: "${target}" -> target not found at "${targetRelToRoot}"`
+        );
       }
     }
   }
@@ -147,7 +149,8 @@ function checkFolderStructureSync() {
 
   const specsDir = path.join(ROOT_DIR, "specs");
   const specFolders = fs.existsSync(specsDir)
-    ? fs.readdirSync(specsDir, { withFileTypes: true })
+    ? fs
+        .readdirSync(specsDir, { withFileTypes: true })
         .filter((d) => d.isDirectory())
         .map((d) => path.join(specsDir, d.name))
     : [];
@@ -169,7 +172,9 @@ function checkFolderStructureSync() {
   for (const file of realFiles) {
     const baseName = path.basename(file);
     if (!content.includes(baseName)) {
-      logError(`docs/04-folder-structure.md is missing documentation for existing item: "${baseName}" (${path.relative(ROOT_DIR, file)})`);
+      logError(
+        `docs/04-folder-structure.md is missing documentation for existing item: "${baseName}" (${path.relative(ROOT_DIR, file)})`
+      );
     }
   }
 
@@ -183,7 +188,9 @@ function checkFolderStructureSync() {
         const componentName = match[1];
         const fullPath = path.join(ROOT_DIR, "src", "components", "ui", componentName);
         if (!fs.existsSync(fullPath)) {
-          logError(`docs/04-folder-structure.md documents non-existent UI component: "src/components/ui/${componentName}"`);
+          logError(
+            `docs/04-folder-structure.md documents non-existent UI component: "src/components/ui/${componentName}"`
+          );
         }
       }
     }
@@ -211,7 +218,10 @@ function checkAntiDocRot() {
     { pattern: "export function ContactForm", desc: "ContactForm component implementation" },
     { pattern: "export function Header", desc: "Header component implementation" },
     { pattern: "export function Footer", desc: "Footer component implementation" },
-    { pattern: "export function FloatingWhatsApp", desc: "FloatingWhatsApp component implementation" },
+    {
+      pattern: "export function FloatingWhatsApp",
+      desc: "FloatingWhatsApp component implementation",
+    },
   ];
 
   const docsDir = path.join(ROOT_DIR, "docs");
@@ -286,8 +296,8 @@ function checkRoadmapSync() {
   const roadmapContent = fs.readFileSync(roadmapPath, "utf-8");
   const readmeContent = fs.readFileSync(readmePath, "utf-8");
 
-  // Parse features from CHANGELOG.md
-  const featureRegex = /\*\s*\[([ xX])\]\s*\*\*Feature\s*(\d{3}):\s*([^*]+)\*\*/g;
+  // Parse features from CHANGELOG.md (supports both - and * markdown list bullets)
+  const featureRegex = /[-*]\s*\[([ xX])\]\s*\*\*Feature\s*(\d{3}):\s*([^*]+)\*\*/g;
   const completedFeatures = [];
   const pendingFeatures = [];
   let match;
@@ -309,7 +319,9 @@ function checkRoadmapSync() {
   }
 
   // 1. Verify roadmap active status badge
-  const hasPhase2InProgress = roadmapContent.includes("Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)");
+  const hasPhase2InProgress = roadmapContent.includes(
+    "Fase 2<br/>Core & MVP em Código<br/>(Em Andamento)"
+  );
   const hasReadmePhase2Badge = readmeContent.includes("Status-Fase_2_Em_Andamento");
 
   if (!hasPhase2InProgress) {
@@ -324,11 +336,15 @@ function checkRoadmapSync() {
   const expectedLabel = formatCompletedFeaturesLabel(completedFeatures);
 
   if (!readmeContent.includes(expectedLabel)) {
-    logError(`README.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`);
+    logError(
+      `README.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`
+    );
   }
 
   if (!roadmapContent.includes(expectedLabel)) {
-    logError(`docs/03-project-roadmap.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`);
+    logError(
+      `docs/03-project-roadmap.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`
+    );
   }
 
   // 3. Verify each completed feature is mentioned in README, Roadmap, and specs have Concluída status
@@ -348,8 +364,13 @@ function checkRoadmapSync() {
         const specFile = path.join(specsDir, folder, "spec.md");
         if (fs.existsSync(specFile)) {
           const specText = fs.readFileSync(specFile, "utf-8");
-          if (!specText.includes("Status:** Concluída") && !specText.includes("Status:** Concluído")) {
-            logError(`Spec for completed Feature ${feat.num} (${folder}/spec.md) is not marked as 'Concluída'.`);
+          if (
+            !specText.includes("Status:** Concluída") &&
+            !specText.includes("Status:** Concluído")
+          ) {
+            logError(
+              `Spec for completed Feature ${feat.num} (${folder}/spec.md) is not marked as 'Concluída'.`
+            );
           }
         }
       }
@@ -360,10 +381,14 @@ function checkRoadmapSync() {
   if (pendingFeatures.length > 0) {
     const nextActive = pendingFeatures[0];
     if (!readmeContent.includes(`Feature ${nextActive.num}`)) {
-      logError(`README.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`);
+      logError(
+        `README.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`
+      );
     }
     if (!roadmapContent.includes(`Feature ${nextActive.num}`)) {
-      logError(`docs/03-project-roadmap.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`);
+      logError(
+        `docs/03-project-roadmap.md is missing reference to current active Feature ${nextActive.num} ("${nextActive.name}").`
+      );
     }
   }
 
@@ -460,7 +485,9 @@ function main() {
 
   console.log("\n------------------------------------------");
   if (errorCount > 0) {
-    console.error(`❌ Documentation Audit FAILED with ${errorCount} error(s) and ${warningCount} warning(s).`);
+    console.error(
+      `❌ Documentation Audit FAILED with ${errorCount} error(s) and ${warningCount} warning(s).`
+    );
     process.exit(1);
   } else {
     console.log(`✅ Documentation Audit PASSED with 0 errors and ${warningCount} warning(s).`);

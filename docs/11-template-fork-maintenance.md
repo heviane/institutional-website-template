@@ -12,14 +12,14 @@ Conforme deliberado no [ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionam
 flowchart TD
     Upstream["Template Base (Upstream: institutional-website-template)"]
     ClientRepo["Repositório do Cliente (Origin: site-cliente-xyz)"]
-    
+
     subgraph ClientImmuneZone ["🛡️ Zona Imune do Cliente (NUNCA SOBRESCREVER)"]
         SiteConfig["src/config/site.ts (Dados da Marca)"]
         Content["content/** (Posts, Serviços, FAQs)"]
         Images["public/images/content/** (Mídias do Cliente)"]
         Envs[".env.local (Segredos e Chaves do Cliente)"]
     end
-    
+
     subgraph TemplateEngineZone ["⚙️ Zona de Engenharia (ATUALIZÁVEL VIA UPSTREAM)"]
         Actions["src/app/actions/** (Server Actions & Defesas)"]
         UI["src/components/ui/** (Primitivos Shadcn/ui & WCAG)"]
@@ -27,7 +27,7 @@ flowchart TD
         Workflows[".github/workflows/** (CI/CD Pipelines)"]
         CoreDeps["package.json (Dependências Core & Scripts)"]
     end
-    
+
     Upstream -->|Cherry-pick cirúrgico ou Sync Branch| TemplateEngineZone
 ```
 
@@ -114,8 +114,8 @@ git commit -m "chore(template): sync upstream updates to v1.2.0"
 Se o upstream atualizou versões de pacotes e o cliente adicionou dependências próprias (ex.: uma biblioteca gráfica ou analytics):
 
 1. **Abra o `package.json` no editor:**
-   * Mantenha as versões mais recentes das dependências essenciais do template (`next`, `react`, `zod`, `resend`, `@upstash/redis`, etc.).
-   * Preserve as dependências exclusivas adicionadas para o cliente.
+   - Mantenha as versões mais recentes das dependências essenciais do template (`next`, `react`, `zod`, `resend`, `@upstash/redis`, etc.).
+   - Preserve as dependências exclusivas adicionadas para o cliente.
 2. **Reconstrua o Lockfile Determinístico:**
    ```bash
    # Remova o node_modules e regenere o lockfile de forma limpa
@@ -138,15 +138,16 @@ npm run verify
 ```
 
 O comando acima assegura que:
-* [x] **Documentação:** Nenhum link interno foi quebrado (`audit:docs`).
-* [x] **Estilo e Boas Práticas:** Zero violações no ESLint (`lint`).
-* [x] **Tipagem:** TypeScript compila sem erros estritos (`typecheck`).
-* [x] **Testes Automatizados:** Todos os testes unitários e de acessibilidade WCAG 2.1 AA passaram (`test`).
-* [x] **Build de Produção:** Compilação estática do Next.js 16 conclui com sucesso (`build`).
+
+- [x] **Documentação:** Nenhum link interno foi quebrado (`audit:docs`).
+- [x] **Estilo e Boas Práticas:** Zero violações no ESLint (`lint`).
+- [x] **Tipagem:** TypeScript compila sem erros estritos (`typecheck`).
+- [x] **Testes Automatizados:** Todos os testes unitários e de acessibilidade WCAG 2.1 AA passaram (`test`).
+- [x] **Build de Produção:** Compilação estática do Next.js 16 conclui com sucesso (`build`).
 
 ### 🧪 Teste Humano de Sanidade (Smoke Test)
+
 1. Rode `npm run dev` localmente.
 2. Acesse a Home Page e confirme que o visual da marca, logotipo e cores do cliente permanecem intactos.
 3. Submeta um formulário de teste e confirme o recebimento do e-mail.
 4. Acesse `/keystatic` e confirme que as coleções de conteúdo abrem normalmente.
-

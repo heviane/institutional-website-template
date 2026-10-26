@@ -32,23 +32,23 @@ export function Hero({
   },
 }: HeroProps = {}) {
   return (
-    <section className="py-16 md:py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+    <section className="bg-background py-16 md:py-24">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
         {badge && (
-          <div className="inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground mb-6 bg-muted/50">
+          <div className="border-border text-muted-foreground bg-muted/50 mb-6 inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold">
             {badge}
           </div>
         )}
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground max-w-4xl">
+        <h1 className="text-foreground max-w-4xl text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
           {title}
         </h1>
 
-        <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-3xl leading-relaxed">
+        <p className="text-muted-foreground mt-6 max-w-3xl text-lg leading-relaxed sm:text-xl">
           {subtitle}
         </p>
 
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
+        <div className="mt-8 flex w-full flex-col justify-center gap-4 sm:w-auto sm:flex-row">
           <Button
             asChild
             variant={primaryCta.variant ?? "whatsapp"}
@@ -73,4 +73,3 @@ export function Hero({
     </section>
   );
 }
-

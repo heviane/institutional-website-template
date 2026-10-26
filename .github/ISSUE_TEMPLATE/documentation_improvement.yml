@@ -37,4 +37,3 @@ body:
       options:
         - label: Gostaria de abrir um Pull Request para implementar essa melhoria.
           required: false
-

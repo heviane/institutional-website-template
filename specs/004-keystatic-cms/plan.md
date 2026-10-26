@@ -1,9 +1,9 @@
 # Feature 004: Gestão de Conteúdo Baseada em Git (Keystatic CMS) — Plano Técnico
 
-* **Data de Criação:** 2026-10-26
-* **Status:** Aprovada (Pronta para Execução)
-* **Spec de Referência:** [`spec.md`](spec.md)
-* **Documento Canônico:** [`docs/05-keystatic-content-model.md`](../../docs/05-keystatic-content-model.md)
+- **Data de Criação:** 2026-10-26
+- **Status:** Aprovada (Pronta para Execução)
+- **Spec de Referência:** [`spec.md`](spec.md)
+- **Documento Canônico:** [`docs/05-keystatic-content-model.md`](../../docs/05-keystatic-content-model.md)
 
 ---
 
@@ -114,7 +114,8 @@ export default config({
         title: fields.text({ label: "Nome do Serviço", validation: { isRequired: true } }),
         icon: fields.text({
           label: "Ícone Lucide",
-          description: "Nome do ícone da biblioteca Lucide (ex.: Briefcase, ShieldCheck, TrendingUp)",
+          description:
+            "Nome do ícone da biblioteca Lucide (ex.: Briefcase, ShieldCheck, TrendingUp)",
           validation: { isRequired: true },
         }),
         shortDescription: fields.text({
@@ -141,7 +142,11 @@ export default config({
           directory: "public/images/content/testimonials",
           publicPath: "/images/content/testimonials",
         }),
-        quote: fields.text({ label: "Depoimento", multiline: true, validation: { isRequired: true } }),
+        quote: fields.text({
+          label: "Depoimento",
+          multiline: true,
+          validation: { isRequired: true },
+        }),
         rating: fields.integer({
           label: "Avaliação (Estrelas de 1 a 5)",
           defaultValue: 5,
@@ -167,15 +172,27 @@ export default config({
       path: "content/singletons/home",
       format: "json",
       schema: {
-        heroHeadline: fields.text({ label: "Título de Impacto (Headline)", validation: { isRequired: true } }),
+        heroHeadline: fields.text({
+          label: "Título de Impacto (Headline)",
+          validation: { isRequired: true },
+        }),
         heroSubheadline: fields.text({
           label: "Subtítulo da Proposta de Valor",
           multiline: true,
           validation: { isRequired: true },
         }),
-        primaryCtaLabel: fields.text({ label: "Rótulo do Botão Principal", validation: { isRequired: true } }),
-        primaryCtaLink: fields.text({ label: "Destino do Botão Principal", validation: { isRequired: true } }),
-        showTestimonials: fields.checkbox({ label: "Exibir Seção de Depoimentos", defaultValue: true }),
+        primaryCtaLabel: fields.text({
+          label: "Rótulo do Botão Principal",
+          validation: { isRequired: true },
+        }),
+        primaryCtaLink: fields.text({
+          label: "Destino do Botão Principal",
+          validation: { isRequired: true },
+        }),
+        showTestimonials: fields.checkbox({
+          label: "Exibir Seção de Depoimentos",
+          defaultValue: true,
+        }),
       },
     }),
     aboutPage: singleton({
@@ -183,7 +200,11 @@ export default config({
       path: "content/singletons/about",
       format: "json",
       schema: {
-        mission: fields.text({ label: "Missão", multiline: true, validation: { isRequired: true } }),
+        mission: fields.text({
+          label: "Missão",
+          multiline: true,
+          validation: { isRequired: true },
+        }),
         vision: fields.text({ label: "Visão", multiline: true, validation: { isRequired: true } }),
         values: fields.array(fields.text({ label: "Valor" }), {
           label: "Valores Centrais",
@@ -213,7 +234,10 @@ export async function getPublishedPosts() {
   const allPosts = await reader.collections.posts.all();
   return allPosts
     .filter((post) => post.entry.status === "published")
-    .sort((a, b) => new Date(b.entry.publishedDate).getTime() - new Date(a.entry.publishedDate).getTime());
+    .sort(
+      (a, b) =>
+        new Date(b.entry.publishedDate).getTime() - new Date(a.entry.publishedDate).getTime()
+    );
 }
 
 /**
@@ -234,20 +258,20 @@ export async function getFaqs() {
 
 ---
 
-## 📁 4. Estrutura do *Seed Data* Inicial
+## 📁 4. Estrutura do _Seed Data_ Inicial
 
 Os seguintes arquivos devem ser criados e mantidos no Git:
 
-* `content/singletons/home.json`: Conteúdo padrão do banner hero e configurações da home.
-* `content/singletons/about.json`: Missão, visão e valores corporativos padrão.
-* `content/services/consultoria-estrategica.json`: Serviço modelo 1.
-* `content/services/seguranca-e-conformidade.json`: Serviço modelo 2.
-* `content/services/transformacao-e-escala.json`: Serviço modelo 3.
-* `content/faqs/quais-servicos-oferecem.json`: FAQ modelo 1.
-* `content/faqs/como-funciona-o-atendimento.json`: FAQ modelo 2.
-* `content/faqs/quais-sao-os-prazos.json`: FAQ modelo 3.
-* `content/posts/bem-vindo-ao-novo-site/index.mdoc`: Artigo de blog publicado.
-* `content/posts/governanca-e-seguranca-digital/index.mdoc`: Artigo de blog em rascunho (`status: draft`) para validação do filtro.
+- `content/singletons/home.json`: Conteúdo padrão do banner hero e configurações da home.
+- `content/singletons/about.json`: Missão, visão e valores corporativos padrão.
+- `content/services/consultoria-estrategica.json`: Serviço modelo 1.
+- `content/services/seguranca-e-conformidade.json`: Serviço modelo 2.
+- `content/services/transformacao-e-escala.json`: Serviço modelo 3.
+- `content/faqs/quais-servicos-oferecem.json`: FAQ modelo 1.
+- `content/faqs/como-funciona-o-atendimento.json`: FAQ modelo 2.
+- `content/faqs/quais-sao-os-prazos.json`: FAQ modelo 3.
+- `content/posts/bem-vindo-ao-novo-site/index.mdoc`: Artigo de blog publicado.
+- `content/posts/governanca-e-seguranca-digital/index.mdoc`: Artigo de blog em rascunho (`status: draft`) para validação do filtro.
 
 ---
 

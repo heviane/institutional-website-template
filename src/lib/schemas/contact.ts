@@ -23,11 +23,7 @@ export const contactFormSchema = z.object({
     .trim()
     .min(10, "A mensagem deve conter pelo menos 10 caracteres.")
     .max(1000, "A mensagem deve conter no máximo 1000 caracteres."),
-  website: z
-    .string()
-    .max(0, "Spam detectado pelo campo honeypot.")
-    .optional()
-    .or(z.literal("")),
+  website: z.string().max(0, "Spam detectado pelo campo honeypot.").optional().or(z.literal("")),
   turnstileToken: z.string().optional().or(z.literal("")),
   // LGPD Art. 5, XII: Explicit consent without presumed default(true)
   privacyConsent: z.boolean().optional(),
@@ -40,4 +36,3 @@ export interface ActionResponse {
   message: string;
   errors?: Record<string, string[]>;
 }
-

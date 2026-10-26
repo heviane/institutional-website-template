@@ -18,7 +18,7 @@ export function FloatingWhatsApp(): React.JSX.Element | null {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar conosco no WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground shadow-lg hover:shadow-xl hover:bg-whatsapp-hover hover:scale-105 active:scale-95 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-whatsapp"
+      className="bg-whatsapp text-whatsapp-foreground hover:bg-whatsapp-hover focus-visible:ring-whatsapp fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-95"
     >
       <svg
         className="h-8 w-8 fill-current"
@@ -31,4 +31,3 @@ export function FloatingWhatsApp(): React.JSX.Element | null {
     </a>
   );
 }
-

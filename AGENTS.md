@@ -29,22 +29,22 @@ flowchart TD
     L4 --> L5
 ```
 
-| Nível | Camada | Papel Canônico no Repositório | Força de Precedência |
-| :---: | :--- | :--- | :--- |
-| **1** | [`AGENTS.md`](AGENTS.md) | **Constituição de Engenharia & Comportamento dos Agentes:** Define os 9 princípios inegociáveis, restrições negativas, convenções de código (Code Style), ciclo SDD/TDD e quality gates. | **Soberano sobre as regras de processo, conduta e limites da IA.** Não dita comportamento funcional de negócio. |
-| **2** | [`docs/adr/`](docs/adr/) | **Decisões Arquiteturais Deliberadas (ADRs 0001 a 0011):** Registra decisões estruturais com justificativas, alternativas descartadas e trade-offs aceitos. | **Força de lei de arquitetura:** a IA não pode violar uma decisão de ADR aprovada sem solicitação explícita do desenvolvedor. |
-| **3** | [`docs/`](docs/) | **Especificações Globais de Domínio:** Contratos de ambiente, modelo de dados do CMS, theming, infraestrutura e onboarding. | **Fonte da verdade para contratos técnicos estáveis e transversais** (*cross-feature*). |
-| **4** | [`specs/<feature>/`](specs/) | **Tríade de Ciclo de Entrega Ativo (`spec.md`, `plan.md`, `tasks.md`):** O quê, por quê e como da funcionalidade em desenvolvimento na Fase 2. | **Fonte da verdade para o escopo e critérios de aceitação da feature em execução.** |
-| **5** | **`src/` e `tests/`** | **Código Executável e Testes Automatizados:** Implementação viva, tipada e verificada pelos testes no Vitest. | **Única fonte viva da verdade** sobre o comportamento efetivamente implementado e verificado no sistema (Princípio 9). |
+| Nível | Camada                       | Papel Canônico no Repositório                                                                                                                                                            | Força de Precedência                                                                                                          |
+| :---: | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| **1** | [`AGENTS.md`](AGENTS.md)     | **Constituição de Engenharia & Comportamento dos Agentes:** Define os 9 princípios inegociáveis, restrições negativas, convenções de código (Code Style), ciclo SDD/TDD e quality gates. | **Soberano sobre as regras de processo, conduta e limites da IA.** Não dita comportamento funcional de negócio.               |
+| **2** | [`docs/adr/`](docs/adr/)     | **Decisões Arquiteturais Deliberadas (ADRs 0001 a 0011):** Registra decisões estruturais com justificativas, alternativas descartadas e trade-offs aceitos.                              | **Força de lei de arquitetura:** a IA não pode violar uma decisão de ADR aprovada sem solicitação explícita do desenvolvedor. |
+| **3** | [`docs/`](docs/)             | **Especificações Globais de Domínio:** Contratos de ambiente, modelo de dados do CMS, theming, infraestrutura e onboarding.                                                              | **Fonte da verdade para contratos técnicos estáveis e transversais** (_cross-feature_).                                       |
+| **4** | [`specs/<feature>/`](specs/) | **Tríade de Ciclo de Entrega Ativo (`spec.md`, `plan.md`, `tasks.md`):** O quê, por quê e como da funcionalidade em desenvolvimento na Fase 2.                                           | **Fonte da verdade para o escopo e critérios de aceitação da feature em execução.**                                           |
+| **5** | **`src/` e `tests/`**        | **Código Executável e Testes Automatizados:** Implementação viva, tipada e verificada pelos testes no Vitest.                                                                            | **Única fonte viva da verdade** sobre o comportamento efetivamente implementado e verificado no sistema (Princípio 9).        |
 
 ### 🏛️ 1.2. Constituição de Engenharia (9 Princípios Inegociáveis)
 
 Todo código ou especificação gerada por IA neste repositório deve respeitar integralmente estes nove princípios:
 
 1. **Simplicidade antes de Complexidade:** Nenhuma abstração, padrão indireto ou dependência externa deve ser introduzida sem necessidade objetiva e benefício concreto comprovado.
-2. **Segurança por Padrão (*Security by Design*):** Toda entrada de usuário deve ser tratada como não confiável com validação estrita no servidor (Zod). Segredos e chaves de API nunca devem alcançar bundles de cliente, logs ou commits.
+2. **Segurança por Padrão (_Security by Design_):** Toda entrada de usuário deve ser tratada como não confiável com validação estrita no servidor (Zod). Segredos e chaves de API nunca devem alcançar bundles de cliente, logs ou commits.
 3. **Acessibilidade Inegociável (WCAG 2.1 AA):** Acessibilidade não é polimento tardio; é requisito de arquitetura desde o primeiro componente, validada continuamente via `vitest-axe` e suporte total a navegação por teclado.
-4. **Testabilidade Obrigatória e Prática de TDD:** Funcionalidades críticas (schemas Zod, regras de negócio, validação de ambiente e Server Actions) devem ser estruturadas de modo desacoplado para viabilizar testes unitários e de integração confiáveis com *mocks*. Para essas camadas lógicas, a IA deve adotar o ciclo TDD (*Red-Green-Refactor*), criando os testes antes da implementação em `src/`.
+4. **Testabilidade Obrigatória e Prática de TDD:** Funcionalidades críticas (schemas Zod, regras de negócio, validação de ambiente e Server Actions) devem ser estruturadas de modo desacoplado para viabilizar testes unitários e de integração confiáveis com _mocks_. Para essas camadas lógicas, a IA deve adotar o ciclo TDD (_Red-Green-Refactor_), criando os testes antes da implementação em `src/`.
 5. **Reprodutibilidade em Clone Limpo:** A instalação de dependências (`npm ci`), compilação (`npm run build`) e testes (`npm test`) devem ser rigorosamente determinísticos a partir de um repositório clonado do zero, ancorados em `package-lock.json`.
 6. **Rastreabilidade e Decisões Explícitas:** Todo código gerado deve atender a uma especificação em [`specs/`](specs/) ou a um ADR aprovado em [`docs/adr/`](docs/adr/), sem mudanças de contrato ou escopo não documentadas.
 7. **Mitigação Realista vs. Afirmações Absolutas:** Não presumir imunidade matemática ou conformidade cega; utilizar barreiras defensivas em camadas, monitoramento contínuo e procedimentos claros de contingência.
@@ -55,19 +55,19 @@ Todo código ou especificação gerada por IA neste repositório deve respeitar 
 
 Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar estritamente dentro da estrutura de três artefatos em `specs/<feature>/`:
 
-* **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos numerados (`FR-xxx`), limites e critérios objetivos de aceitação (`AC-xxx`).
-* **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
-* **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
+- **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos numerados (`FR-xxx`), limites e critérios objetivos de aceitação (`AC-xxx`).
+- **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
+- **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
 
 #### 🚦 Máquina de Estados e Ciclo de Vida de Specs
 
 Toda funcionalidade em `specs/<feature>/` deve explicitar em seu cabeçalho o status canônico:
 $$\text{Draft (Em Elaboração)} \longrightarrow \text{Aprovada (Pronta para Execução)} \longrightarrow \text{Em Execução} \longrightarrow \text{Concluída}$$
 
-* **`Draft`:** Em fase de concepção e refinamento técnico inicial.
-* **`Aprovada`:** Validada pelo desenvolvedor e pronta para início das tarefas em código.
-* **`Em Execução`:** Tarefas de código e testes em andamento na branch de trabalho.
-* **`Concluída`:** 100% dos testes verdes, documentação sincronizada e build aprovado. O script `npm run audit:docs` valida compulsoriamente essa paridade com o `CHANGELOG.md`.
+- **`Draft`:** Em fase de concepção e refinamento técnico inicial.
+- **`Aprovada`:** Validada pelo desenvolvedor e pronta para início das tarefas em código.
+- **`Em Execução`:** Tarefas de código e testes em andamento na branch de trabalho.
+- **`Concluída`:** 100% dos testes verdes, documentação sincronizada e build aprovado. O script `npm run audit:docs` valida compulsoriamente essa paridade com o `CHANGELOG.md`.
 
 #### 🏷️ Rastreabilidade de Requisitos (`FR-xxx` e `AC-xxx`) nos Testes
 
@@ -78,15 +78,16 @@ $$\text{Draft (Em Elaboração)} \longrightarrow \text{Aprovada (Pronta para Exe
 #### 📑 Portão Obrigatório de Alinhamento Bidirecional de Specs (Spec-to-Docs Parity Gate)
 
 SEMPRE que novas especificações forem criadas, editadas ou calibradas no diretório `specs/<feature>/`, a IA **DEVE obrigatoriamente** realizar uma verificação cruzada com a documentação formal antes de avançar para a escrita de código em `src/`:
+
 1. **Auditoria de Compatibilidade com ADRs (`docs/adr/`):**
-   * Verificar se nenhum requisito novo ou flexibilizado na spec contradiz decisões arquiteturais aprovadas em `docs/adr/`.
-   * Se a spec introduzir uma mudança arquitetural deliberada (ex.: novos modos de deploy, relaxamento de variáveis mandatórias, adição de bibliotecas core), a IA **NÃO PODE** apenas alterar a spec de forma isolada; ela DEVE criar um novo ADR formal (ex.: `ADR 0012`), emendar os ADRs impactados e atualizar o índice `docs/adr/README.md`.
+   - Verificar se nenhum requisito novo ou flexibilizado na spec contradiz decisões arquiteturais aprovadas em `docs/adr/`.
+   - Se a spec introduzir uma mudança arquitetural deliberada (ex.: novos modos de deploy, relaxamento de variáveis mandatórias, adição de bibliotecas core), a IA **NÃO PODE** apenas alterar a spec de forma isolada; ela DEVE criar um novo ADR formal (ex.: `ADR 0012`), emendar os ADRs impactados e atualizar o índice `docs/adr/README.md`.
 2. **Sincronização com as Especificações de Domínio (`docs/`):**
-   * Verificar se as especificações transversais (`docs/01` a `docs/12`) necessitam de atualização de contrato (ex.: variáveis em `02-environment-setup.md`, novos marcos em `03-project-roadmap.md`, novos passos em `07-client-onboarding-checklist.md`).
+   - Verificar se as especificações transversais (`docs/01` a `docs/12`) necessitam de atualização de contrato (ex.: variáveis em `02-environment-setup.md`, novos marcos em `03-project-roadmap.md`, novos passos em `07-client-onboarding-checklist.md`).
 3. **Sincronização com Documentos Raiz:**
-   * Garantir que a documentação na raiz do projeto (`README.md`, `CHANGELOG.md`, `SECURITY.md`, `.env.example`) reflita com fidelidade as alterações de contrato.
+   - Garantir que a documentação na raiz do projeto (`README.md`, `CHANGELOG.md`, `SECURITY.md`, `.env.example`) reflita com fidelidade as alterações de contrato.
 4. **Validação Programática Imediata:**
-   * Executar compulsoriamente `npm run audit:docs` para certificar que a calibração documental possui zero erros de integridade ou links quebrados.
+   - Executar compulsoriamente `npm run audit:docs` para certificar que a calibração documental possui zero erros de integridade ou links quebrados.
 
 #### 🧪 Execução de Tarefas com TDD (Red-Green-Refactor)
 
@@ -99,17 +100,18 @@ Para tarefas de código que envolvem lógica de validação (schemas Zod), vari�
 #### 📚 Tarefa Obrigatória Final de toda Feature (Sincronização Documental, Anti-Doc Rot & Auditoria de PRs)
 
 Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como última tarefa a sincronização da documentação e a verificação de Pull Requests:
-* Sincronização coordenada de status na tríade de governança:
-  * Registro de conclusão da feature em `CHANGELOG.md` sob `### 📊 Status das Features` e notas da entrega sob `[Unreleased]` (fonte única da verdade de status).
-  * Atualização de status da feature no `README.md` (alerta de status e próxima feature).
-  * Atualização de status da feature em `docs/03-project-roadmap.md` (cabeçalho da fase, checklists da feature e indicação da próxima).
-* Inclusão de todos os novos arquivos criados na árvore canônica de `docs/04-folder-structure.md`.
-* Aplicação do Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
-* Execução e validação obrigatória do script: `npm run audit:docs` (que valida programaticamente a paridade estrita entre `CHANGELOG.md`, `README.md` e `docs/03-project-roadmap.md`).
-* **Auditoria Obrigatória de Pull Requests Abertos:** Inspecionar Pull Requests abertos no repositório remoto (`gh pr list`). Se houver PRs pendentes (ex.: gerados pelo Dependabot ou colaboradores):
-  * Analisar o status do CI e o escopo das alterações.
-  * Se for seguro (atualizações minor/patch com CI verde e sem quebra de invariantes): propor ou realizar o merge via squash.
-  * Se violar invariantes técnicos ou falhar no CI: fechar com justificativa técnica explícita e ajustar as regras de dependência no `.github/dependabot.yml` se aplicável.
+
+- Sincronização coordenada de status na tríade de governança:
+  - Registro de conclusão da feature em `CHANGELOG.md` sob `### 📊 Status das Features` e notas da entrega sob `[Unreleased]` (fonte única da verdade de status).
+  - Atualização de status da feature no `README.md` (alerta de status e próxima feature).
+  - Atualização de status da feature em `docs/03-project-roadmap.md` (cabeçalho da fase, checklists da feature e indicação da próxima).
+- Inclusão de todos os novos arquivos criados na árvore canônica de `docs/04-folder-structure.md`.
+- Aplicação do Princípio 9 (Anti-Doc Rot): substituir blocos de código implementados em `docs/` por referências diretas via links.
+- Execução e validação obrigatória do script: `npm run audit:docs` (que valida programaticamente a paridade estrita entre `CHANGELOG.md`, `README.md` e `docs/03-project-roadmap.md`).
+- **Auditoria Obrigatória de Pull Requests Abertos:** Inspecionar Pull Requests abertos no repositório remoto (`gh pr list`). Se houver PRs pendentes (ex.: gerados pelo Dependabot ou colaboradores):
+  - Analisar o status do CI e o escopo das alterações.
+  - Se for seguro (atualizações minor/patch com CI verde e sem quebra de invariantes): propor ou realizar o merge via squash.
+  - Se violar invariantes técnicos ou falhar no CI: fechar com justificativa técnica explícita e ajustar as regras de dependência no `.github/dependabot.yml` se aplicável.
 
 ---
 
@@ -117,35 +119,35 @@ Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como 
 
 Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação correspondente na tabela abaixo:
 
-| Domínio da Tarefa | Especificação Canônica (Spec) |
-| :--- | :--- |
-| **Arquitetura Geral, Pilares & Escopo** | [`docs/01-architecture-overview.md`](docs/01-architecture-overview.md) |
-| **Setup Técnico, Comandos & Código Canônico** | [`docs/02-environment-setup.md`](docs/02-environment-setup.md) |
-| **Roadmap, Fases & Critérios de Aceitação** | [`docs/03-project-roadmap.md`](docs/03-project-roadmap.md) (Especialmente Seção 2.2) |
-| **Estrutura de Pastas & Fronteiras do Projeto** | [`docs/04-folder-structure.md`](docs/04-folder-structure.md) |
-| **Modelo de Dados & Collections do CMS** | [`docs/05-keystatic-content-model.md`](docs/05-keystatic-content-model.md) |
-| **Design System, UI & Temas (Tailwind v4)** | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md) |
-| **Onboarding de Clientes, Envs & Custos** | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md) |
-| **Troubleshooting & Runbook de Incidentes** | [`docs/09-troubleshooting-and-runbook.md`](docs/09-troubleshooting-and-runbook.md) |
-| **Arquitetura de Dados & LGPD Blueprint** | [`docs/10-data-flow-and-privacy-map.md`](docs/10-data-flow-and-privacy-map.md) |
-| **Playbook de Manutenção de Forks** | [`docs/11-template-fork-maintenance.md`](docs/11-template-fork-maintenance.md) |
-| **Performance & Scripts de Terceiros** | [`docs/12-performance-and-third-parties.md`](docs/12-performance-and-third-parties.md) |
-| **Decisões de Arquitetura (0001 a 0014)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
-| **Especificações de Funcionalidades (Fase 2)** | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`) |
+| Domínio da Tarefa                               | Especificação Canônica (Spec)                                                          |
+| :---------------------------------------------- | :------------------------------------------------------------------------------------- |
+| **Arquitetura Geral, Pilares & Escopo**         | [`docs/01-architecture-overview.md`](docs/01-architecture-overview.md)                 |
+| **Setup Técnico, Comandos & Código Canônico**   | [`docs/02-environment-setup.md`](docs/02-environment-setup.md)                         |
+| **Roadmap, Fases & Critérios de Aceitação**     | [`docs/03-project-roadmap.md`](docs/03-project-roadmap.md) (Especialmente Seção 2.2)   |
+| **Estrutura de Pastas & Fronteiras do Projeto** | [`docs/04-folder-structure.md`](docs/04-folder-structure.md)                           |
+| **Modelo de Dados & Collections do CMS**        | [`docs/05-keystatic-content-model.md`](docs/05-keystatic-content-model.md)             |
+| **Design System, UI & Temas (Tailwind v4)**     | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md)                     |
+| **Onboarding de Clientes, Envs & Custos**       | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md)     |
+| **Troubleshooting & Runbook de Incidentes**     | [`docs/09-troubleshooting-and-runbook.md`](docs/09-troubleshooting-and-runbook.md)     |
+| **Arquitetura de Dados & LGPD Blueprint**       | [`docs/10-data-flow-and-privacy-map.md`](docs/10-data-flow-and-privacy-map.md)         |
+| **Playbook de Manutenção de Forks**             | [`docs/11-template-fork-maintenance.md`](docs/11-template-fork-maintenance.md)         |
+| **Performance & Scripts de Terceiros**          | [`docs/12-performance-and-third-parties.md`](docs/12-performance-and-third-parties.md) |
+| **Decisões de Arquitetura (0001 a 0014)**       | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs)                            |
+| **Especificações de Funcionalidades (Fase 2)**  | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`)                        |
 
 ---
 
 ## 🔒 3. Invariantes Técnicos e Versões Inegociáveis
 
-* **Node.js Runtime:** `24.x LTS (Active LTS)` — versão travada no [`.nvmrc`](.nvmrc) e no CI. Não gere sintaxes incompatíveis.
-* **Framework:** `Next.js 16 (App Router / Active LTS)` — NUNCA gere arquivos ou arquitetura baseada no Pages Router (`pages/`).
-* **React:** `19.x`.
-* **Validação de Schemas (Zod):** Travada na versão estável **Zod v3 (`^3.24.x`)** para compatibilidade com `@hookform/resolvers/zod`. NUNCA use métodos ou sintaxes exclusivas do Zod 4.
-* **CSS & Design System:** `Tailwind CSS v4` utilizando variáveis `@theme` diretamente no `src/app/globals.css`. NUNCA crie nem sugira o arquivo legado `tailwind.config.js`.
-* **Componentes de UI:** `Shadcn/ui` fundamentado exclusivamente nos primitivos acessíveis do `Radix UI` (conformidade estrita com WCAG 2.1 AA).
-* **Gestão de Conteúdo (CMS):** `Keystatic` gravando Markdown/JSON no repositório Git. Modo local em desenvolvimento e Keystatic Cloud em produção.
-* **Envio Transacional:** `Resend API` (plano gratuito com cota de até 100 e-mails/dia).
-* **Defesa Anti-Spam em 3 Camadas:** Honeypot oculto + Rate Limiting por Hash de IP com TTL + Cloudflare Turnstile (validação condicional a dev/prod).
+- **Node.js Runtime:** `24.x LTS (Active LTS)` — versão travada no [`.nvmrc`](.nvmrc) e no CI. Não gere sintaxes incompatíveis.
+- **Framework:** `Next.js 16 (App Router / Active LTS)` — NUNCA gere arquivos ou arquitetura baseada no Pages Router (`pages/`).
+- **React:** `19.x`.
+- **Validação de Schemas (Zod):** Travada na versão estável **Zod v3 (`^3.24.x`)** para compatibilidade com `@hookform/resolvers/zod`. NUNCA use métodos ou sintaxes exclusivas do Zod 4.
+- **CSS & Design System:** `Tailwind CSS v4` utilizando variáveis `@theme` diretamente no `src/app/globals.css`. NUNCA crie nem sugira o arquivo legado `tailwind.config.js`.
+- **Componentes de UI:** `Shadcn/ui` fundamentado exclusivamente nos primitivos acessíveis do `Radix UI` (conformidade estrita com WCAG 2.1 AA).
+- **Gestão de Conteúdo (CMS):** `Keystatic` gravando Markdown/JSON no repositório Git. Modo local em desenvolvimento e Keystatic Cloud em produção.
+- **Envio Transacional:** `Resend API` (plano gratuito com cota de até 100 e-mails/dia).
+- **Defesa Anti-Spam em 3 Camadas:** Honeypot oculto + Rate Limiting por Hash de IP com TTL + Cloudflare Turnstile (validação condicional a dev/prod).
 
 ---
 
@@ -153,21 +155,21 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 
 Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriamente** estes identificadores canônicos:
 
-* **Variáveis de E-mail:**
-  * Remetente autenticado: SEMPRE `RESEND_FROM_EMAIL` (ex.: `"Contato <contato@empresa.com.br>"`).
-  * Destinatário de recebimento de leads: SEMPRE `CONTACT_EMAIL_TO` (ex.: `comercial@empresa.com.br`).
-  * Chave de API: SEMPRE `RESEND_API_KEY`.
-* **Acesso a Variáveis de Ambiente:**
-  * NUNCA utilize `process.env.*` solto dentro de componentes ou actions.
-  * Importe SEMPRE os schemas validados através dos submódulos segregados (conforme [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)):
-    * No servidor (RSC, Server Actions): `import { serverEnv } from "@/env/server";` (protegido nativamente com `import "server-only"`).
-    * No cliente (Client Components): `import { clientEnv } from "@/env/client";`.
-* **Configuração Centralizada da Marca:**
-  * Objeto e arquivo único: `src/config/site.ts` exportando a constante `siteConfig` e o tipo `SiteConfig`.
-  * Canal WhatsApp corporativo: SEMPRE `siteConfig.contact.whatsapp` (não confunda com `siteConfig.contact.phone`).
-* **Processamento de Formulários:**
-  * Server Action canônica: `src/app/actions/contact.ts` exportando a função `sendContactEmail(rawInput: unknown)`.
-  * Schema de validação Zod: `src/lib/schemas/contact.ts` exportando `contactFormSchema`.
+- **Variáveis de E-mail:**
+  - Remetente autenticado: SEMPRE `RESEND_FROM_EMAIL` (ex.: `"Contato <contato@empresa.com.br>"`).
+  - Destinatário de recebimento de leads: SEMPRE `CONTACT_EMAIL_TO` (ex.: `comercial@empresa.com.br`).
+  - Chave de API: SEMPRE `RESEND_API_KEY`.
+- **Acesso a Variáveis de Ambiente:**
+  - NUNCA utilize `process.env.*` solto dentro de componentes ou actions.
+  - Importe SEMPRE os schemas validados através dos submódulos segregados (conforme [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)):
+    - No servidor (RSC, Server Actions): `import { serverEnv } from "@/env/server";` (protegido nativamente com `import "server-only"`).
+    - No cliente (Client Components): `import { clientEnv } from "@/env/client";`.
+- **Configuração Centralizada da Marca:**
+  - Objeto e arquivo único: `src/config/site.ts` exportando a constante `siteConfig` e o tipo `SiteConfig`.
+  - Canal WhatsApp corporativo: SEMPRE `siteConfig.contact.whatsapp` (não confunda com `siteConfig.contact.phone`).
+- **Processamento de Formulários:**
+  - Server Action canônica: `src/app/actions/contact.ts` exportando a função `sendContactEmail(rawInput: unknown)`.
+  - Schema de validação Zod: `src/lib/schemas/contact.ts` exportando `contactFormSchema`.
 
 ---
 
@@ -176,27 +178,30 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 Para assegurar consistência cirúrgica entre diferentes assistentes de IA e desenvolvedores humanos, o repositório adota os seguintes padrões mandatórios:
 
 ### 🌐 5.1. Fronteira de Idioma (Language Boundary)
-* **Código 100% em Inglês:** Variáveis, funções, componentes, métodos, tipos, interfaces, comentários de código (`//`, `/* */`), JSDoc, nomes de arquivos e mensagens de commit (Conventional Commits) devem ser **exclusivamente em inglês**.
-  * ✅ `const clientIp = ...`, `function sendContactEmail()`, `// Validate honeypot field`
-  * ❌ `const ipCliente = ...`, `function enviarEmailContato()`, `// Valida o campo honeypot`
-* **Português (pt-BR) Restrito ao Domínio do Usuário Final:** Textos visíveis na interface, mensagens de validação e feedback do Zod (`"O nome deve conter pelo menos 2 caracteres."`), e-mails enviados a clientes brasileiros, páginas legais (`(legal)/politica-de-privacidade`) e rótulos de campos no painel do Keystatic (`label: "Título da Postagem"`).
+
+- **Código 100% em Inglês:** Variáveis, funções, componentes, métodos, tipos, interfaces, comentários de código (`//`, `/* */`), JSDoc, nomes de arquivos e mensagens de commit (Conventional Commits) devem ser **exclusivamente em inglês**.
+  - ✅ `const clientIp = ...`, `function sendContactEmail()`, `// Validate honeypot field`
+  - ❌ `const ipCliente = ...`, `function enviarEmailContato()`, `// Valida o campo honeypot`
+- **Português (pt-BR) Restrito ao Domínio do Usuário Final:** Textos visíveis na interface, mensagens de validação e feedback do Zod (`"O nome deve conter pelo menos 2 caracteres."`), e-mails enviados a clientes brasileiros, páginas legais (`(legal)/politica-de-privacidade`) e rótulos de campos no painel do Keystatic (`label: "Título da Postagem"`).
 
 ### 🏷️ 5.2. Nomenclatura no TypeScript & React
-* **Arquivos e Pastas:** SEMPRE em `kebab-case` (`contact-form.tsx`, `rate-limit.ts`, `site.ts`), seguindo o padrão oficial do Shadcn/ui e Next.js App Router.
-* **Componentes React:** Declaração em `PascalCase` com exportação nomeada explícita (`export function ContactForm() { ... }`).
-* **Funções e Métodos:** `camelCase` iniciando com verbo indicativo de ação (`sendContactEmail`, `verifyTurnstileToken`, `checkRateLimit`).
-* **Variáveis Booleanas:** Obrigatoriamente prefixadas com verbo semântico (`is`, `has`, `should`, `can`):
-  * ✅ `isValid`, `hasConsent`, `isLoading`, `canSubmit`, `isRateLimitAllowed`
-  * ❌ `valid`, `consent`, `loading`, `rateLimit`
-* **Tipos e Interfaces:** `PascalCase` sem prefixos húngaros (`I` ou `T`):
-  * ✅ `SiteConfig`, `ActionResponse`, `ContactFormData`
-  * ❌ `ISiteConfig`, `SiteConfigType`
-* **Schemas Zod:** `camelCase` finalizando com o sufixo `Schema` (`contactFormSchema`, `serverEnvSchema`).
-* **Tipos Invertidos do Zod:** `PascalCase` derivado com `z.infer` e sufixo `Data` ou `Input`:
-  * `export type ContactFormData = z.infer<typeof contactFormSchema>;`
-* **Constantes e Enums:** `UPPER_SNAKE_CASE` para valores literais imutáveis (`MAX_PAYLOAD_SIZE`, `DEFAULT_TTL_SECONDS`) e `camelCase` para objetos de configuração (`siteConfig`).
+
+- **Arquivos e Pastas:** SEMPRE em `kebab-case` (`contact-form.tsx`, `rate-limit.ts`, `site.ts`), seguindo o padrão oficial do Shadcn/ui e Next.js App Router.
+- **Componentes React:** Declaração em `PascalCase` com exportação nomeada explícita (`export function ContactForm() { ... }`).
+- **Funções e Métodos:** `camelCase` iniciando com verbo indicativo de ação (`sendContactEmail`, `verifyTurnstileToken`, `checkRateLimit`).
+- **Variáveis Booleanas:** Obrigatoriamente prefixadas com verbo semântico (`is`, `has`, `should`, `can`):
+  - ✅ `isValid`, `hasConsent`, `isLoading`, `canSubmit`, `isRateLimitAllowed`
+  - ❌ `valid`, `consent`, `loading`, `rateLimit`
+- **Tipos e Interfaces:** `PascalCase` sem prefixos húngaros (`I` ou `T`):
+  - ✅ `SiteConfig`, `ActionResponse`, `ContactFormData`
+  - ❌ `ISiteConfig`, `SiteConfigType`
+- **Schemas Zod:** `camelCase` finalizando com o sufixo `Schema` (`contactFormSchema`, `serverEnvSchema`).
+- **Tipos Invertidos do Zod:** `PascalCase` derivado com `z.infer` e sufixo `Data` ou `Input`:
+  - `export type ContactFormData = z.infer<typeof contactFormSchema>;`
+- **Constantes e Enums:** `UPPER_SNAKE_CASE` para valores literais imutáveis (`MAX_PAYLOAD_SIZE`, `DEFAULT_TTL_SECONDS`) e `camelCase` para objetos de configuração (`siteConfig`).
 
 ### 🛡️ 5.3. Qualidade de Código & Guardrails para IA
+
 1. **Tipagem Estrita e Retornos Explícitos:** Proibido o uso de `any`. Utilize `unknown` para payloads de entrada não confiáveis e refine com Zod. Todas as funções exportadas e Server Actions devem declarar explicitamente seus tipos de retorno (ex.: `Promise<ActionResponse>`).
 2. **Separação de Tipos (`import type`):** Importações que contenham apenas tipos TypeScript devem utilizar obrigatoriamente a sintaxe `import type { ... } from "..."` para garantir compilação limpa e tree-shaking eficiente.
 3. **Composição Segura de Classes CSS com `cn()`:** Nunca realize concatenação pura de strings para classes Tailwind (`className={`btn ${active ? 'active' : ''}`}`). Utilize invariavelmente o utilitário canônico `cn(...)` (`clsx` + `tailwind-merge`).
@@ -207,16 +212,16 @@ Para assegurar consistência cirúrgica entre diferentes assistentes de IA e des
 
 ## 🚫 6. Restrições Negativas (O que a IA NUNCA deve fazer)
 
-1. **NUNCA introduzir bancos de dados relacionais (SQL) ou NoSQL persistentes no MVP:** A arquitetura do template é intencionalmente efêmera (*Zero-Database Architecture*), com encaminhamento direto de mensagens para a caixa de e-mail do cliente via Resend API ([ADR 0007](docs/adr/0007-conformidade-lgpd-e-privacidade.md)).
+1. **NUNCA introduzir bancos de dados relacionais (SQL) ou NoSQL persistentes no MVP:** A arquitetura do template é intencionalmente efêmera (_Zero-Database Architecture_), com encaminhamento direto de mensagens para a caixa de e-mail do cliente via Resend API ([ADR 0007](docs/adr/0007-conformidade-lgpd-e-privacidade.md)).
 2. **NUNCA criar rotas REST manuais em `src/app/api/contact/route.ts` para formulários:** Utilize exclusivamente Server Actions com `'use server'` ([ADR 0003](docs/adr/0003-estrategia-de-formularios.md)).
 3. **NUNCA armazenar endereços IP brutos no Rate Limiting:** Em conformidade com a LGPD e a política de Zero-Database, calcule e armazene sempre o hash anônimo do IP via segredo forte de servidor (`HMAC-SHA256(ip, RATE_LIMIT_SECRET)`) e extração segura via `x-real-ip`/`cf-connecting-ip`, garantindo consistência serverless no Redis compartilhado e auto-expiração atômica de curto prazo (TTL de 3.600s).
 4. **NUNCA retornar códigos HTTP em Server Actions:** Server Actions retornam objetos JavaScript tipados (`ActionResponse` com `{ success: boolean, message?: string }`), não status HTTP REST como 400 ou 429.
 5. **NUNCA instalar dependências redundantes:** Sempre verifique se o projeto já não possui a ferramenta necessária antes de sugerir pacotes npm (ex.: use Zod para validação, Vitest para testes, Radix para acessibilidade).
 6. **NUNCA recomendar merge de históricos desconectados como procedimento padrão:** O comando `git merge --allow-unrelated-histories` é experimental; atualizações do template devem priorizar releases e patches cirúrgicos (`cherry-pick`) em branch isolada ([ADR 0010](docs/adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
-7. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: *"mitigação de abuso"*, *"metas planejadas"*), nunca *"100% blindado"* ou *"imunidade absoluta"*.
-8. **NUNCA manter blocos extensos de código duplicados na documentação após sua implementação em `src/`:** A documentação pós-implementação deve focar no *porquê*, arquitetura, regras de negócio e referenciar os arquivos reais via links, combatendo a deterioração da documentação (*doc rot*).
+7. **NUNCA fazer afirmações de qualidade ou segurança absolutas:** Utilize sempre linguagem baseada em metas probabilísticas e redução de riscos (ex.: _"mitigação de abuso"_, _"metas planejadas"_), nunca _"100% blindado"_ ou _"imunidade absoluta"_.
+8. **NUNCA manter blocos extensos de código duplicados na documentação após sua implementação em `src/`:** A documentação pós-implementação deve focar no _porquê_, arquitetura, regras de negócio e referenciar os arquivos reais via links, combatendo a deterioração da documentação (_doc rot_).
 9. **NUNCA ajustar testes apenas para forçar aprovação de código defeituoso:** Testes automatizados expressam os critérios objetivos de aceitação do `spec.md`. Se um teste falhar, corrija a implementação em `src/`, nunca fragilize as asserções do teste para mascarar falhas.
-10. **NUNCA manter código morto ou comentado (*Zombie Code*):** O histórico do Git é o arquivo definitivo. Trechos depreciados, rascunhos comentados ou `TODOs` órfãos devem ser excluídos.
+10. **NUNCA manter código morto ou comentado (_Zombie Code_):** O histórico do Git é o arquivo definitivo. Trechos depreciados, rascunhos comentados ou `TODOs` órfãos devem ser excluídos.
 11. **NUNCA utilizar "Portinglês" ou português em identificadores de código:** Nomes de variáveis, funções, arquivos, tipos e comentários de código devem ser 100% em inglês; o português é reservado estritamente para o conteúdo exibido ao usuário final.
 12. **NUNCA utilizar o tipo `any` no TypeScript:** Utilize `unknown`, genéricos ou schemas Zod para validar e tipar entradas externas de forma segura e estrita.
 

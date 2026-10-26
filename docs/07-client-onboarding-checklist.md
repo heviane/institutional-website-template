@@ -23,16 +23,16 @@ flowchart LR
 
 Para assegurar uma relação transparente e sem surpresas entre a agência/desenvolvedor e o cliente final, a tabela abaixo mapeia cada serviço utilizado pelo template, seus limites no plano gratuito, gatilhos de upgrade e a respectiva responsabilidade de pagamento:
 
-| Recurso / Serviço | Plano Base Inicial | Limite Gratuito Incluído | Gatilho para Plano Pago | Responsável Financeiro | Aferido em |
-| :--- | :--- | :--- | :--- | :--- | :---: |
-| **Registro de Domínio**<br/>*(Registro.br / GoDaddy)* | Pago pelo cliente | Não possui plano gratuito | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`) | **Cliente** (titularidade e dados cadastrais próprios) | Out/2026 |
-| **Hospedagem & CDN (Vercel)** | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento) | **Cliente** (conta mantida no nome da empresa do cliente) | Out/2026 |
-| **Hospedagem & CDN (Cloudflare Pages)**<br/>*(Alternativa Arquitetural)* | Free (Alternativa Comercial) | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês | **Cliente** | Out/2026 |
-| **E-mails Transacionais (Resend)** | Gratuito | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia** | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês) | **Cliente** | Out/2026 |
-| **Proteção Anti-Spam (Cloudflare Turnstile)** | Gratuito | Ilimitado para a esmagadora maioria de sites institucionais | Planos enterprise com SLA dedicado | **Cliente** | Out/2026 |
-| **Rate Limiting em Produção (Upstash Redis)** | Serverless Free | Até **10.000 comandos/dia**, 256 MB de dados e até 100 conexões simultâneas | Ultrapassar 10.000 comandos/dia (Pay-as-you-go ~US$ 0,20 por 100k comandos) | **Cliente** | Out/2026 |
-| **Gestão de Conteúdo (Keystatic Cloud)** | Gratuito | Até **3 editores** por projeto com commits automáticos | Necessidade de mais de 3 editores simultâneos | **Cliente** | Out/2026 |
-| **Armazenamento de Mídia** | Repositório Git (Gratuito) | Até **1 GB** recomendado no GitHub sem lentidão de clone | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente** | Out/2026 |
+| Recurso / Serviço                                                        | Plano Base Inicial                 | Limite Gratuito Incluído                                                    | Gatilho para Plano Pago                                                                                    | Responsável Financeiro                                    | Aferido em |
+| :----------------------------------------------------------------------- | :--------------------------------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :--------: |
+| **Registro de Domínio**<br/>_(Registro.br / GoDaddy)_                    | Pago pelo cliente                  | Não possui plano gratuito                                                   | Cobrança anual (aprox. R$ 40/ano para `.com.br` ou ~US$ 14/ano para `.com`)                                | **Cliente** (titularidade e dados cadastrais próprios)    |  Out/2026  |
+| **Hospedagem & CDN (Vercel)**                                            | Hobby (Pessoal) ou Pro (Comercial) | Hobby: 100 GB banda, builds ilimitados para projetos não comerciais         | Uso comercial estrito exige Vercel Pro (US$ 20/mês por assento)                                            | **Cliente** (conta mantida no nome da empresa do cliente) |  Out/2026  |
+| **Hospedagem & CDN (Cloudflare Pages)**<br/>_(Alternativa Arquitetural)_ | Free (Alternativa Comercial)       | Ilimitado de requisições e banda, 500 builds/mês, uso comercial permitido   | Necessidade de recursos corporativos avançados ou mais de 500 builds/mês                                   | **Cliente**                                               |  Out/2026  |
+| **E-mails Transacionais (Resend)**                                       | Gratuito                           | 3.000 e-mails/mês com teto estrito de **100 e-mails/dia**                   | Ultrapassar 100 envios/dia exige plano Pro (a partir de US$ 20/mês)                                        | **Cliente**                                               |  Out/2026  |
+| **Proteção Anti-Spam (Cloudflare Turnstile)**                            | Gratuito                           | Ilimitado para a esmagadora maioria de sites institucionais                 | Planos enterprise com SLA dedicado                                                                         | **Cliente**                                               |  Out/2026  |
+| **Rate Limiting em Produção (Upstash Redis)**                            | Serverless Free                    | Até **10.000 comandos/dia**, 256 MB de dados e até 100 conexões simultâneas | Ultrapassar 10.000 comandos/dia (Pay-as-you-go ~US$ 0,20 por 100k comandos)                                | **Cliente**                                               |  Out/2026  |
+| **Gestão de Conteúdo (Keystatic Cloud)**                                 | Gratuito                           | Até **3 editores** por projeto com commits automáticos                      | Necessidade de mais de 3 editores simultâneos                                                              | **Cliente**                                               |  Out/2026  |
+| **Armazenamento de Mídia**                                               | Repositório Git (Gratuito)         | Até **1 GB** recomendado no GitHub sem lentidão de clone                    | Bibliotecas volumosas de fotos em alta resolução ou vídeos requerem CDN externa (Cloudinary / Vercel Blob) | **Cliente**                                               |  Out/2026  |
 
 > 💡 **Nota sobre Limites e Tarifas:** Os limites de planos gratuitos e políticas comerciais de serviços SaaS (Vercel, Resend, Upstash, Cloudflare) estão sujeitos a alterações periódicas por seus fornecedores. Consulte as tabelas oficiais de preços vigentes ao iniciar cada novo projeto de cliente.
 
@@ -124,10 +124,10 @@ Para assegurar uma relação transparente e sem surpresas entre a agência/desen
 - [ ] **3.3. Configurar Apontamentos DNS (no Registro.br, Cloudflare DNS ou GoDaddy):**
   - ⚠️ **Importante:** Copie **SEMPRE** os valores exatos exibidos na aba **Settings** > **Domains** do seu projeto na Vercel, pois a plataforma pode fornecer endereços Anycast dedicados ou CNAMEs específicos. Os valores padrão de referência são:
 
-  | Tipo | Nome / Host | Valor / Destino (Padrão de Referência) | TTL |
-  | :--- | :--- | :--- | :--- |
-  | **A** | `@` (raiz) | `76.76.21.21` *(ou IP específico gerado no painel)* | 3600 (1h) |
-  | **CNAME** | `www` | `cname.vercel-dns.com.` *(ou CNAME específico do projeto)* | 3600 (1h) |
+  | Tipo      | Nome / Host | Valor / Destino (Padrão de Referência)                     | TTL       |
+  | :-------- | :---------- | :--------------------------------------------------------- | :-------- |
+  | **A**     | `@` (raiz)  | `76.76.21.21` _(ou IP específico gerado no painel)_        | 3600 (1h) |
+  | **CNAME** | `www`       | `cname.vercel-dns.com.` _(ou CNAME específico do projeto)_ | 3600 (1h) |
 
 - [ ] **3.4. Validar Emissão de Certificado SSL/TLS:**
   - Aguardar a propagação do DNS e verificar se o status do domínio na Vercel exibe **Valid Configuration** e o cadeado HTTPS está ativo no navegador.
@@ -199,7 +199,7 @@ Conforme [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md), utilizamos 
   - No painel do Keystatic Cloud, convidar o e-mail do cliente como **Editor**.
   - O cliente receberá um link seguro de acesso sem precisar entender Git.
 - [ ] **6.3. Configurar Variáveis de Ambiente na Vercel:**
-  - No painel da Vercel, em **Settings** > **Environment Variables**, adicionar para os ambientes *Production* e *Preview*:
+  - No painel da Vercel, em **Settings** > **Environment Variables**, adicionar para os ambientes _Production_ e _Preview_:
 
     ```env
     NEXT_PUBLIC_SITE_URL=https://www.cliente.com.br
@@ -237,7 +237,7 @@ Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
     - Descrever o fluxo de mensagens de contato via Resend (retenção efêmera e entrega à caixa postal corporativa).
   - Revisar `src/app/(legal)/termos-de-uso/page.tsx`.
 - [ ] **7.3. Alinhar Base Legal e Validação do Formulário:**
-  - Confirmar com o cliente se o formulário utiliza a base de *Procedimentos Preliminares Contratuais (Art. 7º, V)* com aviso informativo transparente ou se requer *Consentimento Expresso (Art. 7º, I)* com checkbox ativo no schema do Zod (ex.: para inclusão em newsletter/marketing).
+  - Confirmar com o cliente se o formulário utiliza a base de _Procedimentos Preliminares Contratuais (Art. 7º, V)_ com aviso informativo transparente ou se requer _Consentimento Expresso (Art. 7º, I)_ com checkbox ativo no schema do Zod (ex.: para inclusão em newsletter/marketing).
   - Caso utilize checkbox de consentimento, validar o teste com campo desmarcado (erro no Zod) e marcado (sucesso).
 
 ---
@@ -277,10 +277,10 @@ Conforme [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md):
 
 ## 🆘 Resolução Rápida de Problemas Comuns (Troubleshooting)
 
-| Sintoma | Causa Mais Frequente | Como Corrigir |
-| :--- | :--- | :--- |
-| **Erro de build: `ZodError` nas envs** | Falta variável obrigatória na hospedagem | Verifique o painel da Vercel e compare com `.env.example`. |
-| **E-mails do formulário caem em Spam** | Falta de registro DKIM ou DMARC | Valide o domínio no Resend e teste com o [Mail-Tester](https://www.mail-tester.com/). |
-| **Erro 403 no Keystatic ao publicar** | GitHub App sem permissão de escrita no repo | Reautorize o GitHub App do Keystatic Cloud nas configurações do repositório. |
-| **Turnstile sempre dá erro no envio** | Domínio do site não cadastrado no Cloudflare | Adicione o domínio exato e `localhost` na lista de domínios permitidos do Turnstile. |
-| **Lighthouse acusa imagens pesadas** | Imagem adicionada sem usar `next/image` ou em PNG pesado | Converta para WebP/AVIF e adicione dimensões explícitas `width` e `height`. |
+| Sintoma                                | Causa Mais Frequente                                     | Como Corrigir                                                                         |
+| :------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------ |
+| **Erro de build: `ZodError` nas envs** | Falta variável obrigatória na hospedagem                 | Verifique o painel da Vercel e compare com `.env.example`.                            |
+| **E-mails do formulário caem em Spam** | Falta de registro DKIM ou DMARC                          | Valide o domínio no Resend e teste com o [Mail-Tester](https://www.mail-tester.com/). |
+| **Erro 403 no Keystatic ao publicar**  | GitHub App sem permissão de escrita no repo              | Reautorize o GitHub App do Keystatic Cloud nas configurações do repositório.          |
+| **Turnstile sempre dá erro no envio**  | Domínio do site não cadastrado no Cloudflare             | Adicione o domínio exato e `localhost` na lista de domínios permitidos do Turnstile.  |
+| **Lighthouse acusa imagens pesadas**   | Imagem adicionada sem usar `next/image` ou em PNG pesado | Converta para WebP/AVIF e adicione dimensões explícitas `width` e `height`.           |

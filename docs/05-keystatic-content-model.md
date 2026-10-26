@@ -1,6 +1,6 @@
 # 05 - Modelo de Conteúdo do Keystatic (Content Modeling)
 
-Este documento descreve a arquitetura de dados e modelagem de conteúdo gerenciada pelo **Keystatic CMS** no `institutional-website-template`. O Keystatic é um CMS baseado em Git (*Git-based CMS*) que armazena os conteúdos diretamente no repositório em arquivos Markdown (Markdoc) e JSON, garantindo **custo de infraestrutura otimizado** (sem necessidade de banco de dados gerenciado dedicado), portabilidade total e tempo de carregamento estático ultrarrápido (SSG/ISR).
+Este documento descreve a arquitetura de dados e modelagem de conteúdo gerenciada pelo **Keystatic CMS** no `institutional-website-template`. O Keystatic é um CMS baseado em Git (_Git-based CMS_) que armazena os conteúdos diretamente no repositório em arquivos Markdown (Markdoc) e JSON, garantindo **custo de infraestrutura otimizado** (sem necessidade de banco de dados gerenciado dedicado), portabilidade total e tempo de carregamento estático ultrarrápido (SSG/ISR).
 
 ---
 
@@ -12,10 +12,10 @@ Toda a definição de coleções, esquemas de campos e regras de armazenamento �
 
 ### Modos de Operação (Dual Mode)
 
-* **Em Desenvolvimento Local (`npm run dev`):**  
+- **Em Desenvolvimento Local (`npm run dev`):**  
   Opera em modo local (`storage: { kind: 'local' }`), gravando e lendo alterações instantaneamente no sistema de arquivos da máquina dentro do diretório `/content`.
-* **Em Produção:**  
-  Conforme definido na **ADR 0006**, opera preferencialmente integrado ao **Keystatic Cloud** (`storage: { kind: 'cloud' }`), permitindo que clientes não técnicos façam login por e-mail sem precisar de conta no GitHub, enquanto o serviço assina os *commits* no repositório automaticamente.
+- **Em Produção:**  
+  Conforme definido na **ADR 0006**, opera preferencialmente integrado ao **Keystatic Cloud** (`storage: { kind: 'cloud' }`), permitindo que clientes não técnicos façam login por e-mail sem precisar de conta no GitHub, enquanto o serviço assina os _commits_ no repositório automaticamente.
 
 ---
 
@@ -24,19 +24,20 @@ Toda a definição de coleções, esquemas de campos e regras de armazenamento �
 As coleções são conjuntos de itens repetíveis com a mesma estrutura de campos (ex.: posts de blog, lista de serviços, depoimentos de clientes).
 
 ### 1. Coleção: Posts do Blog (`posts`)
-* **Caminho de Armazenamento:** `content/posts/[slug]/`
-* **Formato:** Arquivo Markdown com campos estruturados em Frontmatter e corpo rico em Markdoc.
 
-| Campo | Tipo do Campo | Obrigatório? | Descrição |
-| :--- | :--- | :---: | :--- |
-| `title` | `fields.text` | Sim | Título principal do artigo |
-| `slug` | `fields.slug` | Sim | Identificador único de URL amigável gerado do título |
-| `status` | `fields.select` | Sim | Status de publicação (`published` ou `draft`, padrão: `draft`). Permite despublicar conteúdos |
-| `publishedDate` | `fields.date` | Sim | Data de publicação do artigo |
-| `summary` | `fields.text` | Sim | Resumo curto do artigo para listagens e SEO (Meta Description) |
-| `coverImage` | `fields.image` | Não | Imagem de destaque (salva em `public/images/content/posts`) |
-| `author` | `fields.text` | Não | Nome do autor da postagem |
-| `content` | `fields.markdoc` | Sim | Corpo do texto com editor rico WYSIWYG (títulos, links, listas, citações) |
+- **Caminho de Armazenamento:** `content/posts/[slug]/`
+- **Formato:** Arquivo Markdown com campos estruturados em Frontmatter e corpo rico em Markdoc.
+
+| Campo           | Tipo do Campo    | Obrigatório? | Descrição                                                                                     |
+| :-------------- | :--------------- | :----------: | :-------------------------------------------------------------------------------------------- |
+| `title`         | `fields.text`    |     Sim      | Título principal do artigo                                                                    |
+| `slug`          | `fields.slug`    |     Sim      | Identificador único de URL amigável gerado do título                                          |
+| `status`        | `fields.select`  |     Sim      | Status de publicação (`published` ou `draft`, padrão: `draft`). Permite despublicar conteúdos |
+| `publishedDate` | `fields.date`    |     Sim      | Data de publicação do artigo                                                                  |
+| `summary`       | `fields.text`    |     Sim      | Resumo curto do artigo para listagens e SEO (Meta Description)                                |
+| `coverImage`    | `fields.image`   |     Não      | Imagem de destaque (salva em `public/images/content/posts`)                                   |
+| `author`        | `fields.text`    |     Não      | Nome do autor da postagem                                                                     |
+| `content`       | `fields.markdoc` |     Sim      | Corpo do texto com editor rico WYSIWYG (títulos, links, listas, citações)                     |
 
 > 💡 **Controle de Publicação e Despublicação:**  
 > Itens com `status: 'draft'` são automaticamente filtrados nas páginas públicas e no sitemap XML (`src/app/sitemap.ts`). Isso permite que o cliente rascunhe postagens ou despublique artigos antigos diretamente no painel do Keystatic sem precisar deletar o arquivo.
@@ -44,71 +45,76 @@ As coleções são conjuntos de itens repetíveis com a mesma estrutura de campo
 ---
 
 ### 2. Coleção: Serviços da Empresa (`services`)
-* **Caminho de Armazenamento:** `content/services/[slug].json`
-* **Formato:** JSON estruturado.
 
-| Campo | Tipo do Campo | Obrigatório? | Descrição |
-| :--- | :--- | :---: | :--- |
-| `title` | `fields.text` | Sim | Nome do serviço prestado (ex.: "Consultoria Empresarial") |
-| `slug` | `fields.slug` | Sim | Slug para âncora ou página individual |
-| `icon` | `fields.text` | Sim | Nome do ícone da biblioteca [Lucide Icons](https://lucide.dev/) (ex.: `Briefcase`, `ShieldCheck`) |
-| `shortDescription` | `fields.text` | Sim | Descrição sucinta para exibição nos cards da Home Page |
-| `features` | `fields.array` | Sim | Lista de diferenciais e benefícios incluídos no serviço |
+- **Caminho de Armazenamento:** `content/services/[slug].json`
+- **Formato:** JSON estruturado.
+
+| Campo              | Tipo do Campo  | Obrigatório? | Descrição                                                                                         |
+| :----------------- | :------------- | :----------: | :------------------------------------------------------------------------------------------------ |
+| `title`            | `fields.text`  |     Sim      | Nome do serviço prestado (ex.: "Consultoria Empresarial")                                         |
+| `slug`             | `fields.slug`  |     Sim      | Slug para âncora ou página individual                                                             |
+| `icon`             | `fields.text`  |     Sim      | Nome do ícone da biblioteca [Lucide Icons](https://lucide.dev/) (ex.: `Briefcase`, `ShieldCheck`) |
+| `shortDescription` | `fields.text`  |     Sim      | Descrição sucinta para exibição nos cards da Home Page                                            |
+| `features`         | `fields.array` |     Sim      | Lista de diferenciais e benefícios incluídos no serviço                                           |
 
 ---
 
 ### 3. Coleção: Depoimentos de Clientes (`testimonials`)
-* **Caminho de Armazenamento:** `content/testimonials/[slug].json`
-* **Formato:** JSON estruturado.
 
-| Campo | Tipo do Campo | Obrigatório? | Descrição |
-| :--- | :--- | :---: | :--- |
-| `clientName` | `fields.text` | Sim | Nome completo do cliente ou parceiro |
-| `companyOrRole` | `fields.text` | Não | Cargo e nome da empresa (ex.: "Diretora de Marketing na Alfa S.A.") |
-| `avatar` | `fields.image` | Não | Foto de perfil do cliente |
-| `quote` | `fields.text` | Sim | O depoimento ou avaliação textual |
-| `rating` | `fields.integer` | Sim | Nota em estrelas (de 1 a 5) |
+- **Caminho de Armazenamento:** `content/testimonials/[slug].json`
+- **Formato:** JSON estruturado.
+
+| Campo           | Tipo do Campo    | Obrigatório? | Descrição                                                           |
+| :-------------- | :--------------- | :----------: | :------------------------------------------------------------------ |
+| `clientName`    | `fields.text`    |     Sim      | Nome completo do cliente ou parceiro                                |
+| `companyOrRole` | `fields.text`    |     Não      | Cargo e nome da empresa (ex.: "Diretora de Marketing na Alfa S.A.") |
+| `avatar`        | `fields.image`   |     Não      | Foto de perfil do cliente                                           |
+| `quote`         | `fields.text`    |     Sim      | O depoimento ou avaliação textual                                   |
+| `rating`        | `fields.integer` |     Sim      | Nota em estrelas (de 1 a 5)                                         |
 
 ---
 
 ### 4. Coleção: Perguntas Frequentes (`faqs`)
-* **Caminho de Armazenamento:** `content/faqs/[slug].json`
-* **Formato:** JSON estruturado.
 
-| Campo | Tipo do Campo | Obrigatório? | Descrição |
-| :--- | :--- | :---: | :--- |
-| `question` | `fields.text` | Sim | A pergunta comum feita pelos clientes |
-| `answer` | `fields.markdoc` | Sim | Resposta detalhada com suporte a links e formatação |
-| `order` | `fields.integer` | Não | Número de ordenação para exibição no acordeão |
+- **Caminho de Armazenamento:** `content/faqs/[slug].json`
+- **Formato:** JSON estruturado.
+
+| Campo      | Tipo do Campo    | Obrigatório? | Descrição                                           |
+| :--------- | :--------------- | :----------: | :-------------------------------------------------- |
+| `question` | `fields.text`    |     Sim      | A pergunta comum feita pelos clientes               |
+| `answer`   | `fields.markdoc` |     Sim      | Resposta detalhada com suporte a links e formatação |
+| `order`    | `fields.integer` |     Não      | Número de ordenação para exibição no acordeão       |
 
 ---
 
 ## 📄 Modelagem de Páginas Fixas (`singletons`)
 
-Os *singletons* representam documentos únicos, ideais para páginas institucionais com blocos específicos de conteúdo.
+Os _singletons_ representam documentos únicos, ideais para páginas institucionais com blocos específicos de conteúdo.
 
 ### 1. Singleton: Página Inicial (`homePage`)
-* **Caminho de Armazenamento:** `content/singletons/home.json`
-* **Campos Principais:**
-  * `heroHeadline`: Frase de impacto do banner principal.
-  * `heroSubheadline`: Parágrafo explicativo da proposta de valor.
-  * `primaryCtaLabel`: Texto do botão principal (ex.: "Fale com um Especialista").
-  * `primaryCtaLink`: Destino do botão (ex.: `#contato` ou `/servicos`).
-  * `showTestimonials`: Interruptor booleano (`true`/`false`) para exibir ou ocultar a seção de depoimentos.
+
+- **Caminho de Armazenamento:** `content/singletons/home.json`
+- **Campos Principais:**
+  - `heroHeadline`: Frase de impacto do banner principal.
+  - `heroSubheadline`: Parágrafo explicativo da proposta de valor.
+  - `primaryCtaLabel`: Texto do botão principal (ex.: "Fale com um Especialista").
+  - `primaryCtaLink`: Destino do botão (ex.: `#contato` ou `/servicos`).
+  - `showTestimonials`: Interruptor booleano (`true`/`false`) para exibir ou ocultar a seção de depoimentos.
 
 ### 2. Singleton: Página Sobre a Empresa (`aboutPage`)
-* **Caminho de Armazenamento:** `content/singletons/about.json`
-* **Campos Principais:**
-  * `mission`: Declaração de missão da empresa.
-  * `vision`: Declaração de visão de futuro.
-  * `values`: Lista de valores centrais.
-  * `story`: História da fundação e trajetória em texto rico (Markdoc).
+
+- **Caminho de Armazenamento:** `content/singletons/about.json`
+- **Campos Principais:**
+  - `mission`: Declaração de missão da empresa.
+  - `vision`: Declaração de visão de futuro.
+  - `values`: Lista de valores centrais.
+  - `story`: História da fundação e trajetória em texto rico (Markdoc).
 
 ---
 
 ## ⚡ Como Consumir os Dados no Next.js (Reader API)
 
-O Keystatic fornece uma biblioteca de leitura direta em tempo de compilação (`@keystatic/core/reader`). Como os dados residem no próprio sistema de arquivos em produção, **não existem chamadas de rede lentas para APIs externas**, garantindo renderização instantânea em *React Server Components*:
+O Keystatic fornece uma biblioteca de leitura direta em tempo de compilação (`@keystatic/core/reader`). Como os dados residem no próprio sistema de arquivos em produção, **não existem chamadas de rede lentas para APIs externas**, garantindo renderização instantânea em _React Server Components_:
 
 ```typescript
 // src/lib/keystatic.ts
@@ -130,9 +136,9 @@ export default async function HomePage() {
   return (
     <main>
       <h1>{homeData?.heroHeadline}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {services.map((service) => (
-          <div key={service.slug} className="p-6 border rounded-lg">
+          <div key={service.slug} className="rounded-lg border p-6">
             <h3>{service.entry.title}</h3>
             <p>{service.entry.shortDescription}</p>
           </div>
@@ -147,8 +153,8 @@ export default async function HomePage() {
 
 ## 🛡️ Diretrizes de Mídia e Imagens (Conformidade com a ADR 0006)
 
-Para evitar o inchaço do histórico do Git (*Git Bloat*) com fotos pesadas:
-* Todas as imagens adicionadas no Keystatic são salvas no diretório `public/images/content/`.
-* Como o `fields.image` do Keystatic não possui validação nativa de tamanho em bytes no schema, adota-se a diretriz operacional de imagens (teto recomendado de **1 MB** por foto antes do upload no painel), complementada pelo pipeline de otimização em tempo de compilação/execução via `next/image` (conversão automática para **WebP e AVIF**). Para bibliotecas volumosas de mídia, deve-se integrar CDN externa conforme o [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md).
-* As fotos são processadas e servidas pelo componente `<Image />` do Next.js, que realiza compressão automática em tempo de execução para formatos modernos como **WebP e AVIF**.
+Para evitar o inchaço do histórico do Git (_Git Bloat_) com fotos pesadas:
 
+- Todas as imagens adicionadas no Keystatic são salvas no diretório `public/images/content/`.
+- Como o `fields.image` do Keystatic não possui validação nativa de tamanho em bytes no schema, adota-se a diretriz operacional de imagens (teto recomendado de **1 MB** por foto antes do upload no painel), complementada pelo pipeline de otimização em tempo de compilação/execução via `next/image` (conversão automática para **WebP e AVIF**). Para bibliotecas volumosas de mídia, deve-se integrar CDN externa conforme o [ADR 0006](adr/0006-autenticacao-cms-e-gestao-de-midia.md).
+- As fotos são processadas e servidas pelo componente `<Image />` do Next.js, que realiza compressão automática em tempo de execução para formatos modernos como **WebP e AVIF**.

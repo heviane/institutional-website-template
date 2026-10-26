@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { siteConfig, type SiteConfig } from "@/config/site";
+import type { SiteConfig as SiteConfigContract } from "@/types/site";
 
 describe("siteConfig configuration object", () => {
   it("should contain all required top-level metadata fields", () => {
@@ -54,5 +55,9 @@ describe("siteConfig configuration object", () => {
     const config: SiteConfig = siteConfig;
     expect(config).toBeDefined();
   });
-});
 
+  it("should conform to SiteConfig type contract from template types zone", () => {
+    const config: SiteConfigContract = siteConfig;
+    expect(config).toBeDefined();
+  });
+});

@@ -1,45 +1,6 @@
-export interface NavItem {
-  title: string;
-  href: string;
-}
+import type { SiteConfig } from "@/types/site";
 
-export interface ContactConfig {
-  email: string;
-  phone: string;
-  whatsapp: string;
-  address: string;
-  showFloatingWhatsapp?: boolean;
-}
-
-export interface LegalConfig {
-  companyName: string;
-  cnpj: string;
-  dpoEmail: string;
-  services?: {
-    turnstile?: boolean;
-    plausible?: boolean;
-    googleAnalytics?: boolean;
-  };
-}
-
-export interface SocialLinks {
-  instagram?: string;
-  linkedin?: string;
-  facebook?: string;
-  github?: string;
-}
-
-export interface SiteConfig {
-  name: string;
-  slogan: string;
-  description: string;
-  url: string;
-  ogImage: string;
-  nav: readonly NavItem[];
-  contact: ContactConfig;
-  legal: LegalConfig;
-  social: SocialLinks;
-}
+export type * from "@/types/site";
 
 /**
  * ⚠️ DEMO PLACEHOLDER VALUES:
@@ -82,5 +43,4 @@ export const siteConfig: SiteConfig = {
     instagram: "https://instagram.com/empresaexemplo",
     linkedin: "https://linkedin.com/company/empresaexemplo",
   },
-} as const;
-
+};

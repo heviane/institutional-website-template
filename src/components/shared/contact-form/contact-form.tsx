@@ -5,10 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
-import {
-  contactFormSchema,
-  type ContactFormData,
-} from "@/lib/schemas/contact";
+import { contactFormSchema, type ContactFormData } from "@/lib/schemas/contact";
 import { sendContactEmail } from "@/app/actions/contact";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -69,13 +66,13 @@ export function ContactForm(): React.JSX.Element {
   );
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="mx-auto w-full max-w-2xl">
       {statusMessage ? (
         <div
           role="status"
-          className="mb-6 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 flex items-start gap-3"
+          className="mb-6 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
         >
-          <CheckCircle2 className="h-5 w-5 mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
           <p className="text-sm font-medium">{statusMessage}</p>
         </div>
       ) : null}
@@ -83,9 +80,9 @@ export function ContactForm(): React.JSX.Element {
       {errorMessage ? (
         <div
           role="alert"
-          className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive flex items-start gap-3"
+          className="bg-destructive/10 border-destructive/20 text-destructive mb-6 flex items-start gap-3 rounded-lg border p-4"
         >
-          <AlertCircle className="h-5 w-5 mt-0.5 shrink-0" />
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
           <div className="text-sm">
             <p className="font-medium">{errorMessage}</p>
             <p className="mt-2">
@@ -94,7 +91,7 @@ export function ContactForm(): React.JSX.Element {
                 href={whatsappDirectUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4 font-semibold hover:opacity-80"
+                className="font-semibold underline underline-offset-4 hover:opacity-80"
               >
                 fale conosco diretamente pelo WhatsApp
               </a>
@@ -106,10 +103,7 @@ export function ContactForm(): React.JSX.Element {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
         {/* Honeypot field (hidden from assistive technologies and users) */}
-        <div
-          className="absolute left-[-9999px] opacity-0 pointer-events-none"
-          aria-hidden="true"
-        >
+        <div className="pointer-events-none absolute left-[-9999px] opacity-0" aria-hidden="true">
           <label htmlFor="website-honeypot">Website</label>
           <input
             id="website-honeypot"
@@ -122,10 +116,7 @@ export function ContactForm(): React.JSX.Element {
 
         {/* Name Field */}
         <div className="space-y-2">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-foreground"
-          >
+          <label htmlFor="name" className="text-foreground block text-sm font-medium">
             Nome completo <span className="text-destructive">*</span>
           </label>
           <Input
@@ -138,7 +129,7 @@ export function ContactForm(): React.JSX.Element {
             {...register("name")}
           />
           {errors.name ? (
-            <p id="name-error" className="text-sm text-destructive">
+            <p id="name-error" className="text-destructive text-sm">
               {errors.name.message}
             </p>
           ) : null}
@@ -146,10 +137,7 @@ export function ContactForm(): React.JSX.Element {
 
         {/* Email Field */}
         <div className="space-y-2">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-foreground"
-          >
+          <label htmlFor="email" className="text-foreground block text-sm font-medium">
             E-mail profissional <span className="text-destructive">*</span>
           </label>
           <Input
@@ -162,7 +150,7 @@ export function ContactForm(): React.JSX.Element {
             {...register("email")}
           />
           {errors.email ? (
-            <p id="email-error" className="text-sm text-destructive">
+            <p id="email-error" className="text-destructive text-sm">
               {errors.email.message}
             </p>
           ) : null}
@@ -170,11 +158,8 @@ export function ContactForm(): React.JSX.Element {
 
         {/* Phone Field */}
         <div className="space-y-2">
-          <label
-            htmlFor="phone"
-            className="block text-sm font-medium text-foreground"
-          >
-            Telefone / WhatsApp <span className="text-xs text-muted-foreground">(opcional)</span>
+          <label htmlFor="phone" className="text-foreground block text-sm font-medium">
+            Telefone / WhatsApp <span className="text-muted-foreground text-xs">(opcional)</span>
           </label>
           <Input
             id="phone"
@@ -186,7 +171,7 @@ export function ContactForm(): React.JSX.Element {
             {...register("phone")}
           />
           {errors.phone ? (
-            <p id="phone-error" className="text-sm text-destructive">
+            <p id="phone-error" className="text-destructive text-sm">
               {errors.phone.message}
             </p>
           ) : null}
@@ -194,10 +179,7 @@ export function ContactForm(): React.JSX.Element {
 
         {/* Message Field */}
         <div className="space-y-2">
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-foreground"
-          >
+          <label htmlFor="message" className="text-foreground block text-sm font-medium">
             Mensagem <span className="text-destructive">*</span>
           </label>
           <Textarea
@@ -210,15 +192,14 @@ export function ContactForm(): React.JSX.Element {
             {...register("message")}
           />
           {errors.message ? (
-            <p id="message-error" className="text-sm text-destructive">
+            <p id="message-error" className="text-destructive text-sm">
               {errors.message.message}
             </p>
           ) : null}
         </div>
 
         {/* Cloudflare Turnstile */}
-        {clientEnv.NEXT_PUBLIC_ENABLE_TURNSTILE &&
-        clientEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
+        {clientEnv.NEXT_PUBLIC_ENABLE_TURNSTILE && clientEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
           <div className="pt-2">
             <Turnstile
               siteKey={clientEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
@@ -232,17 +213,17 @@ export function ContactForm(): React.JSX.Element {
           <input
             id="privacyConsent"
             type="checkbox"
-            className="mt-1 h-4 w-4 rounded border-input cursor-pointer"
+            className="border-input mt-1 h-4 w-4 cursor-pointer rounded"
             {...register("privacyConsent")}
           />
           <label
             htmlFor="privacyConsent"
-            className="text-xs text-muted-foreground leading-relaxed cursor-pointer"
+            className="text-muted-foreground cursor-pointer text-xs leading-relaxed"
           >
             Concordo com a{" "}
             <a
               href="/politica-de-privacidade"
-              className="underline underline-offset-4 text-primary hover:text-primary/80"
+              className="text-primary hover:text-primary/80 underline underline-offset-4"
             >
               Política de Privacidade
             </a>{" "}
@@ -255,7 +236,7 @@ export function ContactForm(): React.JSX.Element {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:w-auto min-h-[44px] px-8 cursor-pointer"
+            className="min-h-[44px] w-full cursor-pointer px-8 sm:w-auto"
           >
             {isSubmitting ? (
               <>
@@ -274,4 +255,3 @@ export function ContactForm(): React.JSX.Element {
     </div>
   );
 }
-

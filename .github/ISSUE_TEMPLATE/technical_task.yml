@@ -48,4 +48,3 @@ body:
         - "Refatoração de Componentes"
     validations:
       required: true
-

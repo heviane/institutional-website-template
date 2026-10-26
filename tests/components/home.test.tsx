@@ -26,9 +26,7 @@ describe("HomePage (Layout Shell Demo)", () => {
     expect(screen.getByText(`Sobre a ${siteConfig.name}`)).toBeDefined();
 
     // Contact Section with Form
-    expect(
-      screen.getByText("Pronto para conversar sobre o seu projeto?")
-    ).toBeDefined();
+    expect(screen.getByText("Pronto para conversar sobre o seu projeto?")).toBeDefined();
     expect(screen.getByLabelText(/Nome completo/i)).toBeDefined();
     expect(screen.getByLabelText(/E-mail profissional/i)).toBeDefined();
     expect(screen.getByLabelText(/Mensagem/i)).toBeDefined();

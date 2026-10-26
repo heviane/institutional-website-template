@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "audit:docs": "node scripts/audit-docs.mjs",
-    "verify": "npm run audit:docs && npm run lint && npm run typecheck && npm test && npm run build"
+    "verify": "npm run audit:docs && npm run format:check && npm run lint && npm run typecheck && npm test && npm run build"
   },
   "engines": {
     "node": ">=24.0.0"
