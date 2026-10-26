@@ -25,10 +25,14 @@ describe("HomePage (Layout Shell Demo)", () => {
     // About Section
     expect(screen.getByText(`Sobre a ${siteConfig.name}`)).toBeDefined();
 
-    // Contact CTA
+    // Contact Section with Form
     expect(
       screen.getByText("Pronto para conversar sobre o seu projeto?")
     ).toBeDefined();
+    expect(screen.getByLabelText(/Nome completo/i)).toBeDefined();
+    expect(screen.getByLabelText(/E-mail profissional/i)).toBeDefined();
+    expect(screen.getByLabelText(/Mensagem/i)).toBeDefined();
+    expect(screen.getByRole("button", { name: /Enviar mensagem/i })).toBeDefined();
 
     // Footer
     expect(screen.getByText(new RegExp(siteConfig.legal.cnpj))).toBeDefined();

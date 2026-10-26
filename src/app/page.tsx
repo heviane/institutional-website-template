@@ -3,6 +3,7 @@ import { Briefcase, ShieldCheck, TrendingUp } from "lucide-react";
 import { Header } from "@/components/shared/header/header";
 import { Hero } from "@/components/shared/hero/hero";
 import { Footer } from "@/components/shared/footer/footer";
+import { ContactForm } from "@/components/shared/contact-form/contact-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -111,31 +112,22 @@ export default function HomePage(): ReactNode {
           </div>
         </section>
 
-        {/* Contact CTA Section */}
+        {/* Contact Section */}
         <section
           id="contato"
           className="py-16 md:py-24 border-t border-border bg-muted/30"
         >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              Pronto para conversar sobre o seu projeto?
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Nossa equipe está disponível para apresentar uma proposta sob
-              medida para as necessidades da sua empresa.
-            </p>
-            <div>
-              <Button asChild variant="whatsapp" size="lg">
-                <a
-                  href={formatWhatsAppUrl(
-                    siteConfig.contact.whatsapp,
-                    "Olá! Gostaria de falar sobre os serviços da empresa."
-                  )}
-                >
-                  Falar Conosco no WhatsApp
-                </a>
-              </Button>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Pronto para conversar sobre o seu projeto?
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Envie sua mensagem pelo formulário abaixo ou fale diretamente com a nossa
+                equipe pelos canais corporativos oficiais.
+              </p>
             </div>
+            <ContactForm />
           </div>
         </section>
       </main>
