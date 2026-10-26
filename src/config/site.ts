@@ -15,6 +15,11 @@ export interface LegalConfig {
   companyName: string;
   cnpj: string;
   dpoEmail: string;
+  services?: {
+    turnstile?: boolean;
+    plausible?: boolean;
+    googleAnalytics?: boolean;
+  };
 }
 
 export interface SocialLinks {
@@ -67,6 +72,11 @@ export const siteConfig: SiteConfig = {
     companyName: "Empresa Exemplo Ltda",
     cnpj: "00.000.000/0001-00",
     dpoEmail: "privacidade@empresaexemplo.com.br",
+    services: {
+      turnstile: true,
+      plausible: false,
+      googleAnalytics: false,
+    },
   },
   social: {
     instagram: "https://instagram.com/empresaexemplo",
