@@ -90,7 +90,7 @@ Esta fase representa a materialização do template em código, dividida entre a
   * [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido (e desativação graciosa no modo Lite).
   * [ ] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
   * [ ] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
-  * [ ] Testar comportamento resiliente caso o serviço de Redis (Upstash) sofra indisponibilidade momentânea (fallback para Map em memória).
+  * [ ] Testar política Fail-Closed diante de indisponibilidade ou timeout do Upstash Redis em produção (bloqueio preventivo do envio com mensagem amigável orientando canais diretos para preservar a cota do Resend).
   * [ ] Executar deploy piloto de sanidade na Vercel (*smoke test*) ao término da Feature 003, homologando antecipadamente Server Actions, runtime serverless e Resend API em nuvem real.
 * [ ] **4. Autonomia Real de Conteúdo e CMS (Requisito de Produto):**
   * [ ] Validar o fluxo de ponta a ponta com um usuário de perfil não técnico no Keystatic Cloud: criação de post, edição de texto institucional e adição de imagem.

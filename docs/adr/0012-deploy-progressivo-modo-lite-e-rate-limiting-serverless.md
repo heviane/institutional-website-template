@@ -50,7 +50,7 @@ flowchart TD
 * **Requisitos:** `NEXT_PUBLIC_ENABLE_TURNSTILE="true"`, chaves do Turnstile preenchidas e credenciais completas do Upstash Redis configuradas.
 * **Comportamento:**
   * Camada 1: Descarte silencioso via Honeypot.
-  * Camada 2: Rate Limiting atômico global no Upstash Redis (`INCR` + `EXPIRE 3600`) limitado a 5 requisições/hora por hash de IP (`HMAC-SHA256`).
+  * Camada 2: Rate Limiting atômico global no Upstash Redis (`INCR` + `EXPIRE 3600`) limitado a 5 requisições/hora por hash de IP (`HMAC-SHA256`), aplicando política *Fail-Closed* em caso de pane, erro 5xx ou timeout de conexão.
   * Camada 3: Verificação criptográfica do token na API da Cloudflare (*Fail-Closed* em caso de erro/timeout).
   * Envio: Resend API com mascaramento seguro de erros.
 
