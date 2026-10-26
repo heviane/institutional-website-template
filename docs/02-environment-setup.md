@@ -247,13 +247,22 @@ async function verifyTurnstileToken(token?: string, remoteIp?: string): Promise<
 }
 
 export async function sendContactEmail(rawInput: unknown): Promise<ActionResponse> {
-  // 1. Extração segura do IP do visitante (prioriza x-real-ip e cf-connecting-ip contra forjamento)
+  // 1. Extração segura do IP do visitante (prioriza cf-connecting-ip e x-real-ip contra forjamento)
   const headerList = await headers();
-  const rawIp =
-    headerList.get("x-real-ip") ??
+  const extractedIp =
     headerList.get("cf-connecting-ip") ??
-    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "127.0.0.1";
+    headerList.get("x-real-ip") ??
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim();
+
+  // Em produção, a ausência de cabeçalhos de borda indica anomalia ou tentativa de bypass de CDN (Fail-Closed)
+  if (!extractedIp && process.env.NODE_ENV === "production") {
+    return {
+      success: false,
+      message: `Não foi possível validar a segurança da conexão. Por favor, entre em contato via WhatsApp (${siteConfig.contact.whatsapp}) ou telefone (${siteConfig.contact.phone}).`,
+    };
+  }
+
+  const rawIp = extractedIp ?? "127.0.0.1";
 
   // 2. Proteção preliminar de tipo e tamanho da carga (fronteira pública)
   if (!rawInput || typeof rawInput !== "object") {

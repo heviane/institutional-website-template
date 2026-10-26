@@ -206,15 +206,26 @@ Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formulario
   - **Eliminação da Data no Salt:** Ao fixar a expiração via TTL atômico de 3.600s, o registro se auto-destrói da memória/Redis após 1 hora de inatividade, eliminando a chave sem resíduos e sem a anomalia de reset artificial na virada da meia-noite (`YYYY-MM-DD`).
 - **Implementação Dual e Degradação Graciosa:**
   - **Com Upstash configurado (Modo Robusto — `UPSTASH_REDIS_REST_URL` & `TOKEN`):**
-    - Executa `INCR key`. Se o retorno for `1` (primeira requisição), agenda `EXPIRE key 3600`.
+    - **Execução Atômica via Script Lua (`redis.eval`):** Em ambientes serverless, chamadas separadas de `INCR` seguidas de `EXPIRE` não são atômicas e podem deixar chaves com TTL perpétuo caso a instância morra entre os dois comandos. A execução ocorre atomicamente via script Lua nativo em um único round-trip HTTP:
+      ```lua
+      local current = redis.call('INCR', KEYS[1])
+      if current == 1 then
+          redis.call('EXPIRE', KEYS[1], ARGV[1])
+      end
+      return current
+      ```
     - Se `count > 5`, retorna `{ isAllowed: false, remaining: 0, resetAt }`.
     - Se `count <= 5`, retorna `{ isAllowed: true, remaining: 5 - count, resetAt }`.
+    - **Falha de Conexão no Redis em Produção (Fail-Closed):** Se o Redis lançar exceção ou timeout em produção, a ação rejeita o envio de e-mails e orienta o usuário para canais diretos (WhatsApp/Telefone).
   - **Sem Upstash configurado (Modo Lite / dev / micro-projetos — ADR 0012):**
     - Armazena em `Map<string, { count: number; expiresAt: number }>`.
     - **Compromisso de "Melhor Esforço" (*Best-Effort*):** Em arquiteturas serverless com instâncias efêmeras, a memória RAM não é sincronizada globalmente entre containers concorrentes. O Map atua com eficiência contendo rajadas e disparos acidentais no mesmo container, mas opera formalmente sob regime de melhor esforço ([ADR 0012](../../docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md)).
     - Ao consultar: se não existir ou `Date.now() > item.expiresAt`, cria/reseta com `{ count: 1, expiresAt: Date.now() + 3600000 }`.
     - Se existir e ainda válido: incrementa o contador e valida se `count <= 5`.
-- **Extração Segura do IP:** Priorização de cabeçalhos de borda da Vercel (`x-real-ip`) e Cloudflare (`cf-connecting-ip`), evitando forjamento via `x-forwarded-for` direto.
+- **Extração Segura do IP e Prevenção de Balde Compartilhado:**
+  - Priorização de cabeçalhos de borda: `cf-connecting-ip` (Cloudflare), `x-real-ip` (Vercel/Nginx) e o primeiro IP de `x-forwarded-for`.
+  - **Ambiente de Desenvolvimento/Testes (`NODE_ENV !== "production"`):** Fallback para `"127.0.0.1"` para testes locais.
+  - **Ambiente de Produção (`NODE_ENV === "production"`):** Se NENHUM cabeçalho de IP estiver presente, a Server Action **NÃO** agrupa a requisição no balde comum `"127.0.0.1"` (o que permitiria a um bot sem cabeçalho esgotar a cota de todos os demais usuários). Em vez disso, aplica o **Fail-Closed Defensivo**, rejeitando a requisição antes de acionar o Redis ou o Resend (`{ success: false, message: "Não foi possível validar a segurança da conexão. Por favor, utilize nossos canais diretos de WhatsApp ou telefone." }`).
 
 ---
 
@@ -222,9 +233,9 @@ Conforme [ADR 0011](../../docs/adr/0011-defesa-antispam-e-protecao-de-formulario
 
 A Server Action cumpre o papel de fronteira segura e efêmera de dados (*Zero-Database Architecture*), aplicando rigorosamente a política **Fail-Closed** nas defesas e sanitização absoluta nas respostas:
 
-1. **Guarda Preliminar de Payload (Anti-DoS):**
-   - Constante `MAX_RAW_PAYLOAD_SIZE = 5120` (~5 KB).
-   - Rejeição sumária se o payload bruto não for um objeto ou se sua representação serializada exceder 5.000 caracteres, bloqueando ataques de *Buffer Stuffing* antes de consumir ciclos de CPU com parsers complexos: `{ success: false, message: "Payload excede o limite máximo permitido." }`.
+1. **Barreira Estrutural de Payload (Infraestrutura & CPU):**
+   - **Camada de Infraestrutura (`next.config.ts`):** `experimental.serverActions.bodySizeLimit = "64kb"` configurado no Next.js para descartar buffers HTTP excessivos na borda antes de alocar memória na instância serverless.
+   - **Camada de CPU (Server Action):** Constante `MAX_RAW_PAYLOAD_SIZE = 5120` (~5 KB). Rejeição sumária se o payload bruto não for um objeto ou se sua representação serializada exceder 5.000 caracteres, bloqueando ataques de *Buffer Stuffing* antes de consumir ciclos de CPU com parsers complexos: `{ success: false, message: "Payload excede o limite máximo permitido." }`.
 2. **Validação Funcional via Zod:** Extrai IP dos headers confiáveis e executa `contactFormSchema.safeParse(rawInput)` (validando os limites funcionais de cada campo, incluindo `message` entre 10 e 1.000 caracteres).
 3. **Camada 1 (Honeypot):** Se `data.website` contiver qualquer valor, retorna silenciosamente `{ success: true, message: "Mensagem enviada com sucesso!" }` sem acionar provedores externos.
 4. **Camada 2 (Rate Limit - Fail-Closed):** Verifica taxa de envio do hash de IP. Se exceder 5 envios na janela de 1 hora OU se a conexão com o Upstash Redis falhar em produção (timeout/5xx), a requisição é bloqueada imediatamente (*Fail-Closed*, não chama o Resend), retornando `{ success: false, message: "Limite temporário de envios atingido ou serviço indisponível. Por favor, entre em contato diretamente pelo nosso WhatsApp." }`.

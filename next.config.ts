@@ -43,6 +43,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "64kb",
+    },
+  },
   async headers() {
     return [
       {

@@ -32,9 +32,13 @@
     * Regras de tamanho funcional (aceitando até 1.000 caracteres e rejeitando a partir de 1.001 caracteres no campo `message`).
     * Detecção de automação pelo campo honeypot (`website`).
     * Conformidade LGPD: `privacyConsent` opcional sem injeção de consentimento presumido (`.default(true)` proibido por LGPD Art. 5º, XII).
-  * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando cálculo determinístico de hash HMAC de IP com `RATE_LIMIT_SECRET`, algoritmo de janela fixa de 1 hora com TTL de 3.600s, bloqueio na 6ª requisição e liberação após expiração (cobrindo tanto o Map local quanto a simulação com Upstash Redis).
+  * [ ] 🔴 **Red:** Criar testes em `tests/rate-limit.test.ts` validando:
+    * Cálculo determinístico de hash HMAC de IP com `RATE_LIMIT_SECRET` (pseudonimização técnica sob LGPD Art. 13, § 4º).
+    * Execução atômica no Upstash via script Lua nativo (`redis.eval`), garantindo que `INCR` e `EXPIRE` ocorram atomicamente sem risco de chaves órfãs com TTL infinito.
+    * Algoritmo de janela fixa de 1 hora com TTL de 3.600s, bloqueio na 6ª requisição e liberação após expiração (cobrindo tanto o Map local quanto a simulação com Upstash Redis).
+    * Extração de IP: fallback controlado `"127.0.0.1"` em `NODE_ENV !== "production"`.
   * [ ] 🟢 **Green:** Implementar `src/lib/schemas/contact.ts` exportando `contactFormSchema` e tipos TypeScript.
-  * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis quando configurado).
+  * [ ] 🟢 **Green:** Implementar `src/lib/rate-limit.ts` com suporte híbrido (Map nativo por padrão e Upstash Redis via script Lua atômico quando configurado).
   * [ ] 🔵 **Refactor:** Eliminar duplicações e validar conformidade com LGPD.
 
 * [ ] **4. Cliente Resend & Server Action com Defesa em 3 Camadas & Fail-Closed — TDD:**
@@ -46,10 +50,11 @@
     * **Caso 5 (Turnstile Fail-Closed):** Token inválido OU indisponibilidade da API da Cloudflare (500/timeout) bloqueia o envio (*Fail-Closed*, não chama o Resend).
     * **Caso 6 (Turnstile Modo Lite):** Quando Turnstile desativado (`NEXT_PUBLIC_ENABLE_TURNSTILE="false"` ou chaves ausentes), ignora a Camada 3 e prossegue com envio válido.
     * **Caso 7 (Resend Fail & Sanitização Absoluta):** Erro de cota (429) ou indisponibilidade da Resend API retorna mensagem de contingência sanitizada, sem vazar chaves, status HTTP ou payloads de erro internos.
-    * **Caso 8 (Guarda Preliminar de Payload Anti-DoS):** Payload abusivo serializado com mais de 5.000 caracteres (~5 KB) ou tipo não-objeto é rejeitado sumariamente pelo guarda prévio sem onerar os parsers.
+    * **Caso 8 (Guarda Preliminar de Payload Anti-DoS):** Payload abusivo serializado com mais de 5.000 caracteres (~5 KB) ou tipo não-objeto é rejeitado sumariamente pelo guarda prévio sem onerar os parsers (com `experimental.serverActions.bodySizeLimit: "64kb"` no Next.js).
     * **Caso 9 (Validação Zod de Payload):** Payload malformado ou campos inválidos (ex.: mensagem > 1.000 caracteres) são rejeitados pelo Zod retornando erros estruturados sem exceções não tratadas (*unhandled rejections*).
+    * **Caso 10 (IP Ausente em Produção - Fail-Closed):** Requisição sem nenhum cabeçalho de IP em ambiente de produção (`NODE_ENV === "production"`) é rejeitada preventivamente sem alocar balde comum (`"127.0.0.1"`), orientando contato direto.
   * [ ] 🟢 **Green:** Implementar `src/lib/resend.ts` inicializando o cliente Resend.
-  * [ ] 🟢 **Green:** Implementar `src/app/actions/contact.ts` exportando `sendContactEmail` com defesas *Fail-Closed*.
+  * [ ] 🟢 **Green:** Implementar `src/app/actions/contact.ts` exportando `sendContactEmail` com defesas *Fail-Closed* e tratamento de IP.
   * [ ] 🔵 **Refactor:** Garantir tipagem estrita de retorno (`ActionResponse`) sem retornar códigos HTTP.
 
 * [ ] **5. Componente de Formulário Reativo e Acessível (`src/components/shared/contact-form/`) — TDD:**
