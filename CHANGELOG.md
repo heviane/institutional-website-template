@@ -19,6 +19,14 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado (Unreleased)
 
+* **Refinamento de Qualidade, Acessibilidade WCAG 2.2 AA & Polimento de Segurança:**
+  * Conformidade com WCAG 2.2 AA: Adição de Skip Link acessível ("Pular para o conteúdo principal" para `#main-content`) no `RootLayout`, suporte a Focus Not Obscured com `scroll-mt-20` nas seções com âncora (`#servicos`, `#sobre`, `#contato`), e inclusão de `DialogDescription` no `<MobileNav />` para eliminar advertências do Radix UI.
+  * Tokens semânticos e Contraste: Criação dos tokens semânticos `--whatsapp` e `--whatsapp-foreground` eliminando hex bruto inline e assegurando contraste $\ge 3:1$ no FAB flutuante; calibração do botão WhatsApp para `bg-emerald-700` (razão de contraste de 4,77:1 atendendo ao WCAG AA para texto).
+  * Navegação SPA e Rotas: Hrefs canônicos globais (`/`, `/#servicos`, `/#sobre`, `/#contato`) em `siteConfig.nav` viabilizando retorno a partir de páginas legais e subrotas; adoção de `<Link>` do Next.js no cabeçalho, navegação móvel e rodapé, e padding de segurança mobile (`pb-20 sm:pb-0`) para prevenir sobreposição do botão flutuante.
+  * Headers de Segurança no `next.config.ts`: Supressão de cabeçalho com `poweredByHeader: false` e fortalecimento do CSP com diretivas defensivas (`base-uri 'self'`, `object-src 'none'`, `form-action 'self'`, `frame-ancestors 'self'` e restrição de conexões autorizadas).
+  * Tipagem estrita: Substituição de `any` por `unknown` em `src/types/index.d.ts`, satisfazendo integralmente a Regra 12 do [AGENTS.md](AGENTS.md).
+  * Animações no Tailwind CSS v4: Instalação e integração do pacote oficial `tw-animate-css` para suporte pleno a transições de diálogo do Radix/Shadcn.
+
 * **Feature 003 (Validação de Ambiente, Formulário Transacional & Conformidade Legal):**
   * Validação segregada de variáveis de ambiente no build via Zod (`src/env/client.ts` e `src/env/server.ts` blindado com `import "server-only"`).
   * Proteção no build do Next.js com `experimental.serverActions.bodySizeLimit = "64kb"` e guarda de payload de 5.000 caracteres contra ataques de DoS.

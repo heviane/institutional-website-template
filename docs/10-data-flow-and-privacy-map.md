@@ -92,3 +92,4 @@ Como o website utiliza provedores globais de infraestrutura em nuvem, a operaç�
 
 > **Declaração de Conformidade Técnica do Website Institucional**  
 > *"O website institucional desenvolvido sob a arquitetura `institutional-website-template` opera sob a modalidade Zero-Database, não mantendo bases relacionais ou armazenamento persistente de dados coletados por formulários. Todos os dados preenchidos no formulário de contato têm a finalidade exclusiva de viabilizar o retorno comercial solicitado pelo usuário (Art. 7º, V da LGPD). O endereço IP do usuário é submetido a algoritmo criptográfico HMAC-SHA256 para controle estrito de abuso, sendo descartado automaticamente em até 3.600 segundos. Não são utilizados cookies de terceiros para publicidade comportamental ou rastreamento cruzado de navegação sem consentimento."*
+

@@ -50,12 +50,12 @@ export default function HomePage(): ReactNode {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section */}
         <Hero />
 
         {/* Services & Features Section */}
-        <section id="servicos" className="py-16 md:py-24 border-t border-border bg-muted/20">
+        <section id="servicos" className="py-16 md:py-24 border-t border-border bg-muted/20 scroll-mt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto space-y-4">
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
@@ -96,7 +96,7 @@ export default function HomePage(): ReactNode {
         </section>
 
         {/* About Section */}
-        <section id="sobre" className="py-16 md:py-24 border-t border-border bg-background">
+        <section id="sobre" className="py-16 md:py-24 border-t border-border bg-background scroll-mt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-6">
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
@@ -115,7 +115,7 @@ export default function HomePage(): ReactNode {
         {/* Contact Section */}
         <section
           id="contato"
-          className="py-16 md:py-24 border-t border-border bg-muted/30"
+          className="py-16 md:py-24 border-t border-border bg-muted/30 scroll-mt-20"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="text-center space-y-4">

@@ -28,9 +28,9 @@ describe("Button component", () => {
     render(<Button variant="whatsapp">WhatsApp</Button>);
     const button = screen.getByRole("button", { name: /whatsapp/i });
 
-    expect(button.className).toContain("bg-emerald-600");
+    expect(button.className).toContain("bg-emerald-700");
     expect(button.className).toContain("text-white");
-    expect(button.className).toContain("hover:bg-emerald-700");
+    expect(button.className).toContain("hover:bg-emerald-800");
   });
 
   it("supports polymorphism with asChild prop rendering anchor element (Case 6)", () => {

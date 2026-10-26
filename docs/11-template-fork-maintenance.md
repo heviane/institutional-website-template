@@ -149,3 +149,4 @@ O comando acima assegura que:
 2. Acesse a Home Page e confirme que o visual da marca, logotipo e cores do cliente permanecem intactos.
 3. Submeta um formulário de teste e confirme o recebimento do e-mail.
 4. Acesse `/keystatic` e confirme que as coleções de conteúdo abrem normalmente.
+

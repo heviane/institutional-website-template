@@ -56,10 +56,10 @@ export const siteConfig: SiteConfig = {
   url: "https://www.empresaexemplo.com.br",
   ogImage: "https://www.empresaexemplo.com.br/og.jpg",
   nav: [
-    { title: "Início", href: "#" },
-    { title: "Serviços", href: "#servicos" },
-    { title: "Sobre", href: "#sobre" },
-    { title: "Contato", href: "#contato" },
+    { title: "Início", href: "/" },
+    { title: "Serviços", href: "/#servicos" },
+    { title: "Sobre", href: "/#sobre" },
+    { title: "Contato", href: "/#contato" },
   ],
   contact: {
     email: "contato@empresaexemplo.com.br",

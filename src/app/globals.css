@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -22,6 +23,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --color-whatsapp-hover: var(--whatsapp-hover);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -49,6 +53,9 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  --whatsapp: oklch(0.53 0.16 150);
+  --whatsapp-foreground: oklch(1 0 0);
+  --whatsapp-hover: oklch(0.46 0.16 150);
 }
 
 .dark {
@@ -71,6 +78,9 @@
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
   --ring: oklch(0.439 0 0);
+  --whatsapp: oklch(0.55 0.16 150);
+  --whatsapp-foreground: oklch(1 0 0);
+  --whatsapp-hover: oklch(0.48 0.16 150);
 }
 
 body {

@@ -98,11 +98,11 @@ describe("Layout Components Suite (Server-First & UI Matrix)", () => {
       });
       expect(primaryLink.getAttribute("href")).toBe(expectedWhatsAppUrl);
 
-      // Secondary CTA pointing to #servicos
+      // Secondary CTA pointing to /#servicos
       const secondaryLink = screen.getByRole("link", {
         name: /conhecer serviços/i,
       });
-      expect(secondaryLink.getAttribute("href")).toBe("#servicos");
+      expect(secondaryLink.getAttribute("href")).toBe("/#servicos");
     });
 
     it("supports custom props overriding fallbacks while respecting button hierarchy", () => {

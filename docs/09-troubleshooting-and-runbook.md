@@ -148,3 +148,4 @@ Ao se deparar com qualquer comportamento anômalo em ambiente local ou de produ�
 | **Erro de compilação com `server-only`** | Importação indevida de `src/env/server.ts` na UI | Mudar importação para `src/env/client.ts` ou delegar para Server Action. |
 | **Desafio do Turnstile falha permanentemente** | Chaves inválidas ou domínio não cadastrado | Usar chaves de teste da Cloudflare ou desabilitar no `.env.local`. |
 | **Painel `/keystatic` em branco ou 404** | Rotas do App Router ausentes ou sem envs | Verificar arquivos em `src/app/api/keystatic/` e `src/app/keystatic/`. |
+

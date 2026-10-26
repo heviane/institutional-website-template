@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { formatTelUrl } from "@/lib/utils";
 
@@ -5,7 +6,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-muted/30">
+    <footer className="border-t border-border bg-muted/30 pb-20 sm:pb-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand & Slogan */}
@@ -25,13 +26,13 @@ export function Footer() {
             </h4>
             <nav className="flex flex-col space-y-2" aria-label="Links do rodapé">
               {siteConfig.nav.map((item) => (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {item.title}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
@@ -94,18 +95,18 @@ export function Footer() {
             reservados.
           </p>
           <div className="flex gap-4">
-            <a
+            <Link
               href="/politica-de-privacidade"
               className="hover:text-foreground transition-colors"
             >
               Política de Privacidade
-            </a>
-            <a
+            </Link>
+            <Link
               href="/termos-de-uso"
               className="hover:text-foreground transition-colors"
             >
               Termos de Uso
-            </a>
+            </Link>
           </div>
         </div>
       </div>

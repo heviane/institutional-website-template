@@ -114,3 +114,4 @@ Para simular com fidelidade a avaliação do Googlebot e do PageSpeed Insights:
    * **Categorias:** Performance, Acessibilidade, Melhores Práticas, SEO
 5. Clique em **Analyze page load**.
 6. A meta estabelecida pelo template é atingir **pontuação 90+ em Mobile e 98+ em Desktop** em todas as categorias.
+

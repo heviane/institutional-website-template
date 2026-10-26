@@ -68,3 +68,4 @@ Para a proposta do template (websites corporativos, páginas institucionais e la
 
 ### Negativas (Riscos Aceitos):
 * **Prop Drilling em Profundidades Moderadas:** Se uma propriedade precisar ser repassada por 2 ou 3 níveis de componentes de layout (ex.: links do menu), isso deve ser feito de forma explícita via props tipadas ou composição de componentes (`children`), o que é considerado uma prática saudável e transparente de arquitetura de software.
+

@@ -12,7 +12,7 @@ const buttonVariants = cva(
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         cta: "bg-primary text-primary-foreground shadow-md hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-transform",
         whatsapp:
-          "bg-emerald-600 text-white shadow hover:bg-emerald-700 focus-visible:ring-emerald-500",
+          "bg-emerald-700 text-white shadow hover:bg-emerald-800 focus-visible:ring-emerald-600",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:

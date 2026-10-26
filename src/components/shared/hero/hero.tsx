@@ -27,7 +27,7 @@ export function Hero({
   },
   secondaryCta = {
     text: "Conhecer Serviços",
-    href: "#servicos",
+    href: "/#servicos",
     variant: "outline",
   },
 }: HeroProps = {}) {
