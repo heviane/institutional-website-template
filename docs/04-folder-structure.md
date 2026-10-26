@@ -8,13 +8,9 @@ Este documento detalha a organização de arquivos, diretórios e padrões de no
 
 ```text
 institutional-website-template/
-├── .cursor/                         # Configurações do editor Cursor
+├── .cursor/                         # Configurações e regras do editor Cursor
 │   └── rules/                       # Regras de contexto para IA (.mdc)
 │       └── sdd.mdc                  # Instruções de SDD vinculadas ao AGENTS.md
-│
-├── .cursor/                         # Regras e contexto para agentes no Cursor IDE
-│   └── rules/
-│       └── sdd.mdc                  # Diretrizes SDD e ponteiro para AGENTS.md
 │
 ├── .github/                         # Automações e governança do GitHub
 │   ├── ISSUE_TEMPLATE/              # Modelos para abertura de issues
@@ -36,7 +32,7 @@ institutional-website-template/
 │   └── singletons/                  # Conteúdos de páginas fixas (Home, Sobre)
 │
 ├── docs/                            # Documentação técnica e governança do projeto
-│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0012)
+│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0013)
 │   ├── 01-architecture-overview.md  # Visão geral de requisitos e decisões
 │   ├── 02-environment-setup.md      # Guia de setup local e padrões de código
 │   ├── 03-project-roadmap.md        # Roadmap e fases de desenvolvimento
@@ -189,6 +185,41 @@ São os arquivos que representam a arquitetura, segurança, performance e esteir
 * `src/env/**` e `next.config.ts`: Validações de ambiente e cabeçalhos de segurança HTTP.
 * `.github/**`: Workflows de CI/CD e configuração do Dependabot.
 * `package.json`: Dependências e scripts de automação.
+
+---
+
+## 🏛️ Por que não há separação física em pastas `frontend/` e `backend/`?
+
+Uma dúvida recorrente de engenheiros e novos colaboradores com experiência em arquiteturas desacopladas clássicas (ex.: Single Page Applications comunicando-se com APIs REST em servidores dedicados) é por que este projeto não organiza seu código-fonte em duas pastas separadas:
+
+```text
+# ❌ Abordagem Tradicional em Duas Pastas (Rejeitada no Template)
+meu-projeto/
+├── frontend/   # SPA em React/Vite
+└── backend/    # Servidor Express/NestJS com API REST
+```
+
+A resposta técnica e os trade-offs estão deliberados formalmente no [**ADR 0013**](adr/0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md). Em resumo:
+
+1. **Paradigma do Next.js 16 App Router (React Server Components):** Em Next.js App Router, componentes de servidor renderizam estaticamente no servidor Node.js e componentes interativos rodam no navegador com `'use client'`. Ambos compõem o mesmo fluxo unificado de renderização em `src/app/` e `src/components/`. Criar pastas físicas quebraria o modelo mental de co-locação.
+2. **Arquitetura Zero-Database (Sem Servidor Contínuo):** O template não possui um servidor backend residente ou banco de dados relacional tradicional (PostgreSQL/MySQL). A lógica transacional existe sob demanda em Server Actions milissegúndicas com encaminhamento via Resend API ([ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md)).
+3. **Simplicidade Operacional e Zero Overengineering (Princípio 1 do AGENTS.md):** Uma divisão física exigiria monorepo (Turborepo/Nx), múltiplos `package.json`, pipelines duplicados no CI e duplicação ou sincronização artificial de schemas Zod e tipos TypeScript.
+
+### 🛡️ Segregação Lógica de Fronteiras no Código (`src/`)
+
+Em vez de separação física de pastas, o isolamento e a segurança são garantidos por **fronteiras lógicas estritas** asseguradas pelo compilador do Next.js e TypeScript:
+
+| Fronteira Lógica | Papel Arquitetural | Onde Fica no Código | Garantia de Isolamento |
+| :--- | :--- | :--- | :--- |
+| **Backend (Segredos)** | Chaves de API privadas e segredos de ambiente | [`src/env/server.ts`](../src/env/server.ts) | Blindado com `import "server-only"`; quebra o build se importado no bundle do cliente ([ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md)). |
+| **Backend (Transacional)** | Processamento de formulários e envio de e-mails | [`src/app/actions/contact.ts`](../src/app/actions/contact.ts) | Diretiva `'use server'`; executado puramente no servidor Next.js sem expor credenciais ([ADR 0003](adr/0003-estrategia-de-formularios.md)). |
+| **Backend (Defesa & Cache)** | Rate Limiting e cálculo de hash HMAC de IP | [`src/lib/rate-limit.ts`](../src/lib/rate-limit.ts) | Execução serverless no runtime de borda/servidor sem persistência relacional. |
+| **Backend (CMS Reader)** | Leitura de Markdown e dados estáticos no build | [`src/lib/keystatic.ts`](../src/lib/keystatic.ts) | Keystatic Reader API acessando o sistema de arquivos apenas durante o build estático (SSG/ISR). |
+| **Contrato Compartilhado** | Validação de tipos e schemas de entrada | [`src/lib/schemas/`](../src/lib/schemas/) | Tipos Zod consumidos simultaneamente pelo formulário reativo (UI) e pela Server Action (Server). |
+| **Frontend (UI & Layout)** | Componentes visuais, páginas e acessibilidade | [`src/components/`](../src/components/) e `src/app/` | React Server Components por padrão; `'use client'` isolado exclusivamente nos componentes com interatividade. |
+| **Frontend (Público)** | Variáveis e chaves públicas de widgets | [`src/env/client.ts`](../src/env/client.ts) | Prefixadas obrigatoriamente com `NEXT_PUBLIC_*`. |
+
+Para detalhes aprofundados sobre exceções (ex.: quando criar uma pasta separada caso surja um app móvel nativo ou microserviços persistentes), consulte o [**ADR 0013**](adr/0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md).
 
 ---
 

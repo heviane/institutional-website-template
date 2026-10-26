@@ -110,7 +110,7 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 | **Modelo de Dados & Collections do CMS** | [`docs/05-keystatic-content-model.md`](docs/05-keystatic-content-model.md) |
 | **Design System, UI & Temas (Tailwind v4)** | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md) |
 | **Onboarding de Clientes, Envs & Custos** | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md) |
-| **Decisões de Arquitetura (0001 a 0012)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
+| **Decisões de Arquitetura (0001 a 0013)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
 | **Especificações de Funcionalidades (Fase 2)** | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`) |
 
 ---

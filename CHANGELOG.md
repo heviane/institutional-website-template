@@ -30,10 +30,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Páginas legais fidedignas (`src/app/(legal)/politica-de-privacidade/page.tsx` e `termos-de-uso/page.tsx`) com cláusula de Transferência Internacional de Dados (Art. 33 da LGPD) e declaração condicional de serviços ativos (ADR 0007).
   * Integração completa na Home Page (`src/app/page.tsx`) e suíte de testes unitários, funcionais e de acessibilidade WCAG 2.1 AA (`vitest-axe`).
 
-* **Governança & Decisões Arquiteturais (ADR 0012 & Spec-to-Docs Parity Gate):**
+* **Governança & Decisões Arquiteturais (ADRs 0012, 0013 & Spec-to-Docs Parity Gate):**
+  * Formalização do [ADR 0013](docs/adr/0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md) estabelecendo a adoção da Arquitetura Unificada Full-Stack (Next.js App Router) e a rejeição de separação física em diretórios `frontend/` e `backend/` em favor de segregação lógica estrita de fronteiras (`server-only`, `'use server'`, schemas Zod compartilhados e RSC).
+  * Atualização de [docs/04-folder-structure.md](docs/04-folder-structure.md) com seção didática detalhando as fronteiras lógicas no código e catálogo no índice [docs/adr/README.md](docs/adr/README.md).
   * Formalização do [ADR 0012](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) estabelecendo a estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e documentando o Rate Limiting em memória serverless como de melhor esforço.
   * Emenda controlada aos [ADR 0009](docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md) e [ADR 0011](docs/adr/0011-defesa-antispam-e-protecao-de-formularios.md).
-  * Criação do portão mandatória de alinhamento bidirecional de especificações (*Spec-to-Docs Parity Gate*) no [AGENTS.md](AGENTS.md).
+  * Criação do portão mandatório de alinhamento bidirecional de especificações (*Spec-to-Docs Parity Gate*) no [AGENTS.md](AGENTS.md).
 * **Feature 002 (Design System, Layout Base & Componentes Essenciais):**
   * Configuração manual e declarativa do Shadcn/ui (`components.json`) compatível com Tailwind CSS v4.
   * Instalação de dependências acessíveis de UI (`lucide-react`, `class-variance-authority`, `@radix-ui/react-slot`, `@radix-ui/react-dialog`) e de teste de acessibilidade (`axe-core`).

@@ -20,6 +20,7 @@ Este diretório centraliza os **Architectural Decision Records (ADRs)** do `inst
 | **0010** | [Estratégia de Versionamento do Template e Propagação de Atualizações](0010-estrategia-de-atualizacao-e-versionamento.md) | `Aceito` | 2026-10-22 | Estabelecer SemVer/Releases e estruturar validação prática de fluxos de propagação com baixo índice de conflito. |
 | **0011** | [Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](0011-defesa-antispam-e-protecao-de-formularios.md) | `Aceito*` | 2026-10-22 | Implementar defesa em 3 camadas (Honeypot, Turnstile e Rate Limiting) com monitoramento e protocolo de contingência de cota. *(Emendado pelo ADR 0012)* |
 | **0012** | [Estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e Rate Limiting Serverless de Melhor Esforço](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) | `Aceito` | 2026-10-25 | Estabelecer desacoplamento de serviços externos com Modo Lite opcional e documentar Rate Limiting serverless em memória como de melhor esforço. |
+| **0013** | [Arquitetura Unificada Full-Stack (App Router) vs. Separação Física Frontend/Backend](0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md) | `Aceito` | 2026-10-26 | Adotar monólito modular unificado do Next.js App Router e rejeitar pastas físicas separadas `frontend/` e `backend/` em favor de segregação lógica estrita. |
 
 ---
 
