@@ -166,256 +166,27 @@ export type SiteConfig = typeof siteConfig;
 
 2. **Vantagem Arquitetural:** Em novos projetos de clientes, basta atualizar este único arquivo de configuração para refletir dados globais no cabeçalho, rodapé, contatos, metadados e termos de privacidade.
 
-3. **Schema de Validação do Formulário com LGPD e Limites de Payload (`src/lib/schemas/contact.ts`):**
+3. **Schema de Validação do Formulário com LGPD e Limites de Payload ([`src/lib/schemas/contact.ts`](../src/lib/schemas/contact.ts)):**
 
-* Conforme definido nas [ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md), o schema Zod valida tipos, restringe limites de caracteres contra sobrecarga (DoS) e inclui os campos de segurança:
+* Conforme formalizado nas [ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0007](adr/0007-conformidade-lgpd-e-privacidade.md), o schema Zod valida rigorosamente os campos de contato (`name`, `email`, `phone`, `message`), o consentimento de privacidade sob o Art. 5º, XII da LGPD, a chave opcional do Turnstile e o campo honeypot silencioso (`website`).
+* Para detalhes de implementação e tipagem inferida (`ContactFormData`), consulte diretamente o arquivo [`src/lib/schemas/contact.ts`](../src/lib/schemas/contact.ts) e a especificação executável em [`specs/003-environment-and-contact-form/`](../specs/003-environment-and-contact-form/).
 
-```typescript
-import { z } from "zod";
+4. **Server Action com Defesa em Camadas e Contingência ([`src/app/actions/contact.ts`](../src/app/actions/contact.ts)):**
 
-// Travado na versão estável Zod 3 (^3.24.x) para compatibilidade com @hookform/resolvers/zod
-export const contactFormSchema = z.object({
-  name: z.string().trim().min(2, "O nome deve conter pelo menos 2 caracteres.").max(100, "O nome excede 100 caracteres."),
-  email: z.string().trim().email("Insira um e-mail válido.").max(255, "E-mail muito longo."),
-  phone: z.string().trim().max(20, "Telefone inválido.").optional(),
-  message: z.string().trim().min(10, "A mensagem deve conter pelo menos 10 caracteres.").max(5000, "A mensagem excede o limite de 5.000 caracteres."),
-  // Salvaguarda LGPD configurável (ADR 0007): z.literal(true) para opt-in explícito (Art. 7º, I) ou opcional para contato preliminar (Art. 7º, V)
-  privacyConsent: z.boolean().optional(),
-  // Camada 1: Campo Honeypot (deve estar vazio em envios legítimos)
-  honeypot: z.string().max(0, "Tentativa de automação detectada.").optional(),
-  // Camada 3: Token efêmero do Cloudflare Turnstile gerado no frontend (opcional em dev/test sem chaves)
-  turnstileToken: z.string().optional(),
-}).superRefine((data, ctx) => {
-  // Em produção, a presença do token do Turnstile é obrigatória para combater automações
-  if (process.env.NODE_ENV === "production" && !data.turnstileToken) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["turnstileToken"],
-      message: "A verificação de segurança é obrigatória.",
-    });
-  }
-});
+* Conforme definido no [ADR 0003](adr/0003-estrategia-de-formularios.md), [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md) e [ADR 0012](adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md), a Server Action opera como fronteira pública não confiável (*untrusted boundary*):
+  1. **Guarda de Payload:** Rejeição prematura de corpos superiores a 5.000 caracteres (além da trava de `64kb` no `next.config.ts`).
+  2. **Camada 1 (Honeypot):** Descarte silencioso com resposta simulada se o campo `website` estiver preenchido.
+  3. **Camada 2 (Rate Limiting):** Limitação de 5 envios por hora por hash de IP pseudonimizado via HMAC-SHA256 (Upstash Redis / Fallback em memória).
+  4. **Camada 3 (Cloudflare Turnstile):** Verificação de token anti-robô invisível.
+  5. **Despacho Transacional via Resend:** Envio seguro sem retenção de banco de dados e sanitização total de erros internos em contingência.
+* Consulte o código executável em [`src/app/actions/contact.ts`](../src/app/actions/contact.ts).
 
-export type ContactFormData = z.infer<typeof contactFormSchema>;
-```
+5. **Validação Segregada de Variáveis de Ambiente no Build ([`src/env/`](../src/env/)):**
 
-4. **Server Action com Defesa em Camadas e Contingência (`src/app/actions/contact.ts`):**
-* Conforme definido no [ADR 0003](adr/0003-estrategia-de-formularios.md) e [ADR 0011](adr/0011-defesa-antispam-e-protecao-de-formularios.md), a Server Action é tratada como fronteira pública não confiável (*untrusted boundary*), validando tipo e tamanho do payload, aplicando Honeypot, Rate Limiting por IP, verificação na API do Turnstile, envio via Resend e tratamento de contingência de cota com mascaramento de erros internos:
-
-```typescript
-"use server";
-
-import { headers } from "next/headers";
-import { contactFormSchema } from "@/lib/schemas/contact";
-import { resend } from "@/lib/resend";
-import { serverEnv } from "@/env/server";
-import { siteConfig } from "@/config/site";
-import { checkRateLimit } from "@/lib/rate-limit"; // Upstash Redis em produção / Map com TTL em desenvolvimento
-
-export type ActionResponse = {
-  success: boolean;
-  message?: string;
-  fieldErrors?: Record<string, string[]>;
-};
-
-// Verificação do token na API do Cloudflare Turnstile
-async function verifyTurnstileToken(token?: string, remoteIp?: string): Promise<boolean> {
-  // Bypass gracioso para desenvolvimento local ou CI caso a chave não esteja configurada
-  if (process.env.NODE_ENV !== "production" && !serverEnv.TURNSTILE_SECRET_KEY) {
-    return true;
-  }
-  if (!token) {
-    return false;
-  }
-
-  try {
-    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        secret: serverEnv.TURNSTILE_SECRET_KEY ?? "",
-        response: token,
-        remoteip: remoteIp ?? "",
-      }),
-    });
-
-    const data = (await response.json()) as { success: boolean };
-    return data.success;
-  } catch {
-    return false;
-  }
-}
-
-export async function sendContactEmail(rawInput: unknown): Promise<ActionResponse> {
-  // 1. Extração segura do IP do visitante (prioriza cf-connecting-ip e x-real-ip contra forjamento)
-  const headerList = await headers();
-  const extractedIp =
-    headerList.get("cf-connecting-ip") ??
-    headerList.get("x-real-ip") ??
-    headerList.get("x-forwarded-for")?.split(",")[0]?.trim();
-
-  // Em produção, a ausência de cabeçalhos de borda indica anomalia ou tentativa de bypass de CDN (Fail-Closed)
-  if (!extractedIp && process.env.NODE_ENV === "production") {
-    return {
-      success: false,
-      message: `Não foi possível validar a segurança da conexão. Por favor, entre em contato via WhatsApp (${siteConfig.contact.whatsapp}) ou telefone (${siteConfig.contact.phone}).`,
-    };
-  }
-
-  const rawIp = extractedIp ?? "127.0.0.1";
-
-  // 2. Proteção preliminar de tipo e tamanho da carga (fronteira pública)
-  if (!rawInput || typeof rawInput !== "object") {
-    return { success: false, message: "Payload de requisição inválido." };
-  }
-
-  // 3. Camada 1: Honeypot (descarte silencioso com resposta de sucesso simulada para despistar bots)
-  const inputRecord = rawInput as Record<string, unknown>;
-  if (inputRecord.honeypot && typeof inputRecord.honeypot === "string" && inputRecord.honeypot.length > 0) {
-    return { success: true, message: "Mensagem enviada com sucesso!" };
-  }
-
-  // 4. Camada 2: Rate Limiting por Hash de IP (padrão de até 5 requisições/hora, sem armazenar IP bruto)
-  const isRateLimitAllowed = await checkRateLimit(rawIp);
-  if (!isRateLimitAllowed) {
-    return {
-      success: false,
-      message: `Limite temporário de envios atingido. Para atendimento imediato, entre em contato via WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail corporativo (${siteConfig.contact.email}).`,
-    };
-  }
-
-  // 5. Validação rigorosa dos campos e limites via Zod
-  const parsed = contactFormSchema.safeParse(rawInput);
-  if (!parsed.success) {
-    return {
-      success: false,
-      message: "Por favor, preencha os campos obrigatórios corretamente.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
-  }
-
-  const { name, email, phone, message, turnstileToken } = parsed.data;
-
-  // 6. Camada 3: Verificação do desafio Cloudflare Turnstile no servidor
-  const isTurnstileValid = await verifyTurnstileToken(turnstileToken, rawIp);
-  if (!isTurnstileValid) {
-    return {
-      success: false,
-      message: "Falha na validação de segurança anti-robô. Por favor, recarregue a página e tente novamente.",
-    };
-  }
-
-  // Higienização contra Email Header Injection (remoção de caracteres de controle CR/LF)
-  const sanitizedSubjectName = name.replace(/[\r\n]/g, "").trim();
-
-  // 7. Envio via Resend API com tratamento gracioso de falhas e contingência de cota
-  try {
-    const { error } = await resend.emails.send({
-      from: serverEnv.RESEND_FROM_EMAIL,
-      to: serverEnv.CONTACT_EMAIL_TO,
-      replyTo: email,
-      subject: `[Contato Site] Mensagem de ${sanitizedSubjectName}`,
-      text: `Nome: ${name}\nE-mail: ${email}\nTelefone: ${phone ?? "Não informado"}\n\nMensagem:\n${message}`,
-    });
-
-    if (error) {
-      // Falha reportada pelo provedor (ex.: HTTP 429 ou cota diária excedida)
-      return {
-        success: false,
-        message: `Não foi possível encaminhar seu formulário no momento. Por favor, utilize nosso WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail direto (${siteConfig.contact.email}).`,
-      };
-    }
-
-    return {
-      success: true,
-      message: "Mensagem recebida com sucesso! Retornaremos o seu contato em breve.",
-    };
-  } catch {
-    // Mascaramento de erros internos de runtime sem vazar credenciais ou rastreamento de pilha
-    return {
-      success: false,
-      message: `Ocorreu uma instabilidade no envio. Caso prefira, utilize nossos canais diretos: WhatsApp (${siteConfig.contact.whatsapp}) ou e-mail (${siteConfig.contact.email}).`,
-    };
-  }
-}
-```
-
-5. **Validação Segregada de Variáveis de Ambiente no Build (`src/env/`):**
-* Conforme formalizado na [ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md), valida rigorosamente todas as variáveis de ambiente durante o `next build` com segregação física entre escopos de servidor e cliente em dois módulos dedicados:
-
-**Módulo de Cliente (`src/env/client.ts`):**
-```typescript
-import { z } from "zod";
-
-// Variáveis Públicas do Cliente (Acessíveis no navegador via NEXT_PUBLIC_)
-export const clientEnvSchema = z
-  .object({
-    NEXT_PUBLIC_SITE_URL: z.string().url("NEXT_PUBLIC_SITE_URL deve ser uma URL válida."),
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
-    // Keystatic Cloud (Padrão de produção conforme ADR 0006)
-    NEXT_PUBLIC_KEYSTATIC_PROJECT: z.string().optional(),
-    // Keystatic Modo GitHub App (Alternativa self-hosted)
-    NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: z.string().optional(),
-  })
-  .superRefine((data, ctx) => {
-    // Em produção, o Turnstile é mandatório para proteção anti-spam do formulário (ADR 0011)
-    if (process.env.NODE_ENV === "production" && !data.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["NEXT_PUBLIC_TURNSTILE_SITE_KEY"],
-        message: "NEXT_PUBLIC_TURNSTILE_SITE_KEY é obrigatória em produção para proteção contra spam.",
-      });
-    }
-  });
-
-export const clientEnv = clientEnvSchema.parse({
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-  NEXT_PUBLIC_KEYSTATIC_PROJECT: process.env.NEXT_PUBLIC_KEYSTATIC_PROJECT,
-  NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG,
-});
-```
-
-**Módulo de Servidor (`src/env/server.ts`):**
-```typescript
-import "server-only";
-import { z } from "zod";
-
-// Variáveis exclusivas do Servidor (Segredos NUNCA expostos ao navegador)
-export const serverEnvSchema = z
-  .object({
-    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-
-    // Comunicação Transacional (Core do Formulário)
-    RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY é obrigatória."),
-    RESEND_FROM_EMAIL: z.string().min(1, "RESEND_FROM_EMAIL é obrigatória."),
-    CONTACT_EMAIL_TO: z.string().email("CONTACT_EMAIL_TO deve ser um e-mail válido."),
-
-    // Proteção Anti-Spam (Mandatória em produção conforme ADR 0011 / opcional em dev)
-    TURNSTILE_SECRET_KEY: z.string().optional(),
-
-    // Rate Limiting Distribuído (Upstash Redis para Serverless / opcional em dev com fallback para Map)
-    UPSTASH_REDIS_REST_URL: z.string().url().optional(),
-    UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
-
-    // Keystatic CMS (Segredos necessários caso utilize GitHub App próprio em vez de Keystatic Cloud)
-    KEYSTATIC_SECRET: z.string().optional(),
-    KEYSTATIC_GITHUB_CLIENT_ID: z.string().optional(),
-    KEYSTATIC_GITHUB_CLIENT_SECRET: z.string().optional(),
-  })
-  .superRefine((data, ctx) => {
-    // Em produção, a chave secreta do Turnstile é mandatória para validação dos tokens (ADR 0011)
-    if (data.NODE_ENV === "production" && !data.TURNSTILE_SECRET_KEY) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["TURNSTILE_SECRET_KEY"],
-        message: "TURNSTILE_SECRET_KEY é obrigatória em produção para validação dos envios de formulário.",
-      });
-    }
-  });
-
-export const serverEnv = serverEnvSchema.parse(process.env);
-```
+* Conforme formalizado na [ADR 0009](adr/0009-seguranca-headers-e-validacao-de-ambiente.md) e [ADR 0012](adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md), o template valida estritamente todas as variáveis no momento da compilação com segregação de escopos:
+  * **Módulo de Cliente ([`src/env/client.ts`](../src/env/client.ts)):** Variáveis públicas prefixadas com `NEXT_PUBLIC_*`.
+  * **Módulo de Servidor ([`src/env/server.ts`](../src/env/server.ts)):** Segredos blindados com `import "server-only"` (aborta o build se importado no cliente).
+* Consulte a suíte de testes em [`tests/env.test.ts`](../tests/env.test.ts).
 
 > 🛡️ **Garantias Técnicas de Segurança:**
 > 1. **Prevenção de Vazamentos:** O arquivo `src/env/server.ts` utiliza `import "server-only";`, fazendo com que o compilador do Next.js aborte o build se qualquer Client Component tentar importá-lo.

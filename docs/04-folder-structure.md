@@ -53,8 +53,7 @@ institutional-website-template/
 │   ├── favicon.ico                  # Ícone de favoritos padrão
 │   ├── icon.png                     # Ícone em alta resolução para navegadores modernos
 │   ├── apple-touch-icon.png         # Ícone para dispositivos iOS
-│   ├── og.jpg                       # Imagem padrão de compartilhamento (Open Graph 1200x630)
-│   └── robots.txt                   # Instruções básicas para indexadores
+│   └── og.jpg                       # Imagem padrão de compartilhamento (Open Graph 1200x630)
 │
 ├── specs/                           # Especificações executáveis de funcionalidades (SDD)
 │   ├── 001-project-bootstrap/       # Artefatos da Feature 001 (spec.md, plan.md, tasks.md)
@@ -84,7 +83,8 @@ institutional-website-template/
 │   │   │       └── page.tsx
 │   │   ├── globals.css              # Estilos globais e tema Tailwind v4 (@theme)
 │   │   ├── layout.tsx               # Layout raiz com fontes, metadados e scripts
-│   │   └── page.tsx                 # Página Inicial (Home Page institucional)
+│   │   ├── page.tsx                 # Página Inicial (Home Page institucional)
+│   │   └── robots.ts                # Regras de indexação para robôs de busca (Metadata API)
 │   │
 │   ├── components/                  # Componentes React reutilizáveis
 │   │   ├── shared/                  # Componentes compostos de layout
@@ -104,8 +104,7 @@ institutional-website-template/
 │   │       ├── card.tsx
 │   │       ├── dialog.tsx
 │   │       ├── input.tsx
-│   │       ├── textarea.tsx
-│   │       └── toast.tsx
+│   │       └── textarea.tsx
 │   │
 │   ├── config/                      # Configurações globais desacopladas
 │   │   └── site.ts                  # Centralização única de dados do cliente

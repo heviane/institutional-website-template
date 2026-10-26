@@ -173,6 +173,22 @@ function checkFolderStructureSync() {
     }
   }
 
+  // Check that UI components documented in docs/04 actually exist on disk (avoid phantom files like toast.tsx)
+  const uiSectionMatch = content.match(/ui\/\s*#.*?([\s\S]*?)├──\s*config/);
+  if (uiSectionMatch) {
+    const uiLines = uiSectionMatch[1].split("\n");
+    for (const line of uiLines) {
+      const match = line.match(/[├└]──\s*([a-zA-Z0-9_-]+\.tsx)/);
+      if (match) {
+        const componentName = match[1];
+        const fullPath = path.join(ROOT_DIR, "src", "components", "ui", componentName);
+        if (!fs.existsSync(fullPath)) {
+          logError(`docs/04-folder-structure.md documents non-existent UI component: "src/components/ui/${componentName}"`);
+        }
+      }
+    }
+  }
+
   if (errorCount === initialErrors) {
     logSuccess("docs/04-folder-structure.md is synchronized with existing code files.");
   }
@@ -185,16 +201,40 @@ function checkFolderStructureSync() {
 function checkAntiDocRot() {
   console.log("\n🔍 Checking Principle 9 (Anti-Doc Rot) across documentation...");
   const initialErrors = errorCount;
-  const setupDocPath = path.join(ROOT_DIR, "docs", "02-environment-setup.md");
 
-  if (fs.existsSync(setupDocPath)) {
-    const content = fs.readFileSync(setupDocPath, "utf-8");
+  const implementedSignatures = [
+    { pattern: "const nextConfig: NextConfig = {", desc: "next.config.ts configuration" },
+    { pattern: "export const contactFormSchema", desc: "contactFormSchema definition" },
+    { pattern: "export async function sendContactEmail", desc: "sendContactEmail server action" },
+    { pattern: "export const clientEnvSchema", desc: "clientEnvSchema definition" },
+    { pattern: "export const serverEnvSchema", desc: "serverEnvSchema definition" },
+    { pattern: "export function ContactForm", desc: "ContactForm component implementation" },
+    { pattern: "export function Header", desc: "Header component implementation" },
+    { pattern: "export function Footer", desc: "Footer component implementation" },
+    { pattern: "export function FloatingWhatsApp", desc: "FloatingWhatsApp component implementation" },
+  ];
 
-    // next.config.ts is implemented; it should not contain duplicated typescript code block
-    if (content.includes("const nextConfig: NextConfig = {") && content.includes("export default nextConfig;")) {
-      logError(
-        "docs/02-environment-setup.md contains duplicate next.config.ts code block. Replace with link to next.config.ts per Principle 9."
-      );
+  const docsDir = path.join(ROOT_DIR, "docs");
+  if (fs.existsSync(docsDir)) {
+    const docFiles = findMarkdownFiles(docsDir);
+
+    for (const filePath of docFiles) {
+      const relPath = path.relative(ROOT_DIR, filePath).replace(/\\/g, "/");
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+
+      // Extract markdown code blocks (```typescript, ```tsx, ```ts)
+      const codeBlockRegex = /```(?:typescript|tsx|ts|jsx)\s*([\s\S]*?)```/g;
+      let blockMatch;
+      while ((blockMatch = codeBlockRegex.exec(fileContent)) !== null) {
+        const blockCode = blockMatch[1];
+        for (const sig of implementedSignatures) {
+          if (blockCode.includes(sig.pattern)) {
+            logError(
+              `Anti-Doc Rot violation in ${relPath}: contains duplicated code block for ${sig.desc}. Reference the real code in src/ via link per Principle 9.`
+            );
+          }
+        }
+      }
     }
   }
 
@@ -220,7 +260,7 @@ function formatCompletedFeaturesLabel(features) {
 /**
  * Check 4: Roadmap & Status Synchronization
  * Uses CHANGELOG.md as single source of truth for completed and pending features,
- * asserting that README.md and docs/03-project-roadmap.md match it semantically.
+ * asserting that README.md, docs/03-project-roadmap.md and specs/ match it semantically.
  */
 function checkRoadmapSync() {
   console.log("\n🔍 Checking Roadmap and Status Synchronization...");
@@ -291,13 +331,28 @@ function checkRoadmapSync() {
     logError(`docs/03-project-roadmap.md does not contain the expected status label "${expectedLabel}" derived from CHANGELOG.md.`);
   }
 
-  // 3. Verify each completed feature is mentioned in README and Roadmap
+  // 3. Verify each completed feature is mentioned in README, Roadmap, and specs have Concluída status
+  const specsDir = path.join(ROOT_DIR, "specs");
   for (const feat of completedFeatures) {
     if (!readmeContent.includes(`Feature ${feat.num}`)) {
       logError(`README.md is missing reference to completed Feature ${feat.num}.`);
     }
     if (!roadmapContent.includes(`Feature ${feat.num}`)) {
       logError(`docs/03-project-roadmap.md is missing reference to completed Feature ${feat.num}.`);
+    }
+
+    // Spec status parity check
+    if (fs.existsSync(specsDir)) {
+      const folders = fs.readdirSync(specsDir).filter((f) => f.startsWith(feat.num));
+      for (const folder of folders) {
+        const specFile = path.join(specsDir, folder, "spec.md");
+        if (fs.existsSync(specFile)) {
+          const specText = fs.readFileSync(specFile, "utf-8");
+          if (!specText.includes("Status:** Concluída") && !specText.includes("Status:** Concluído")) {
+            logError(`Spec for completed Feature ${feat.num} (${folder}/spec.md) is not marked as 'Concluída'.`);
+          }
+        }
+      }
     }
   }
 
@@ -316,6 +371,58 @@ function checkRoadmapSync() {
     logSuccess(
       `Roadmap and status documentation are dynamically synchronized (${expectedLabel}, próxima: Feature ${pendingFeatures[0]?.num ?? "N/A"}).`
     );
+  }
+}
+
+/**
+ * Check 5: Guardrail - Zero Raw Hex Colors in UI Components
+ * Asserts that components in src/components/ do not use raw hex colors (#fff, #25D366, etc.)
+ */
+function checkSemanticColors() {
+  console.log("\n🔍 Checking for zero raw hex colors in UI components...");
+  const initialErrors = errorCount;
+  const componentsDir = path.join(ROOT_DIR, "src", "components");
+
+  if (!fs.existsSync(componentsDir)) return;
+
+  function findTsxFiles(dir, list = []) {
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    for (const item of items) {
+      const full = path.join(dir, item.name);
+      if (item.isDirectory()) {
+        findTsxFiles(full, list);
+      } else if (item.name.endsWith(".tsx")) {
+        list.push(full);
+      }
+    }
+    return list;
+  }
+
+  const tsxFiles = findTsxFiles(componentsDir);
+  const hexRegex = /#[0-9a-fA-F]{3,8}\b/g;
+
+  for (const file of tsxFiles) {
+    const content = fs.readFileSync(file, "utf-8");
+    const rel = path.relative(ROOT_DIR, file).replace(/\\/g, "/");
+    const lines = content.split("\n");
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+      if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) {
+        continue;
+      }
+      const matches = line.match(hexRegex);
+      if (matches) {
+        logError(
+          `Raw hex color found in ${rel}:${i + 1} (${matches.join(", ")}). Use semantic design tokens from globals.css instead.`
+        );
+      }
+    }
+  }
+
+  if (errorCount === initialErrors) {
+    logSuccess("Zero raw hex colors found across UI components.");
   }
 }
 
@@ -349,6 +456,7 @@ function main() {
   checkFolderStructureSync();
   checkAntiDocRot();
   checkRoadmapSync();
+  checkSemanticColors();
 
   console.log("\n------------------------------------------");
   if (errorCount > 0) {

@@ -1,6 +1,6 @@
 # Feature 003: Validação de Ambiente, Formulário Transacional & Conformidade Legal (Spec)
 
-* **Status:** Em Especificação (Aguardando Aprovação do Desenvolvedor)
+* **Status:** Concluída
 * **Data:** 2026-10-25
 * **Fase do Roadmap:** [Fase 2 (Core & MVP)](../../docs/03-project-roadmap.md)
 * **ADRs Vinculados:**

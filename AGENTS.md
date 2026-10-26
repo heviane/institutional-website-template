@@ -55,9 +55,25 @@ Todo código ou especificação gerada por IA neste repositório deve respeitar 
 
 Para qualquer funcionalidade ou entrega não trivial da Fase 2, a IA deve operar estritamente dentro da estrutura de três artefatos em `specs/<feature>/`:
 
-* **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos, limites e critérios objetivos de aceitação.
+* **`spec.md` (O quê e Por quê):** Problema, escopo funcional, requisitos numerados (`FR-xxx`), limites e critérios objetivos de aceitação (`AC-xxx`).
 * **`plan.md` (Como):** Solução técnica, arquitetura de componentes, contratos de dados, dependências e estratégia de testes.
 * **`tasks.md` (Trabalho Executável):** Checklist de tarefas pequenas, sequenciais e verificáveis com testes automatizados.
+
+#### 🚦 Máquina de Estados e Ciclo de Vida de Specs
+
+Toda funcionalidade em `specs/<feature>/` deve explicitar em seu cabeçalho o status canônico:
+$$\text{Draft (Em Elaboração)} \longrightarrow \text{Aprovada (Pronta para Execução)} \longrightarrow \text{Em Execução} \longrightarrow \text{Concluída}$$
+
+* **`Draft`:** Em fase de concepção e refinamento técnico inicial.
+* **`Aprovada`:** Validada pelo desenvolvedor e pronta para início das tarefas em código.
+* **`Em Execução`:** Tarefas de código e testes em andamento na branch de trabalho.
+* **`Concluída`:** 100% dos testes verdes, documentação sincronizada e build aprovado. O script `npm run audit:docs` valida compulsoriamente essa paridade com o `CHANGELOG.md`.
+
+#### 🏷️ Rastreabilidade de Requisitos (`FR-xxx` e `AC-xxx`) nos Testes
+
+1. Requisitos funcionais em `spec.md` devem ser codificados com identificadores únicos (ex.: `FR-001`, `FR-002`).
+2. Critérios de aceitação correspondentes devem ser codificados como `AC-001`, `AC-002`.
+3. Os testes automatizados em `tests/` devem referenciar explicitamente o critério testado na descrição do caso (ex.: `it("AC-001: should validate...")`), garantindo rastreabilidade total entre negócio e código.
 
 #### 📑 Portão Obrigatório de Alinhamento Bidirecional de Specs (Spec-to-Docs Parity Gate)
 

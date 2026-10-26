@@ -1,7 +1,7 @@
 # Feature 004: Gestão de Conteúdo Baseada em Git (Keystatic CMS) — Especificação
 
 * **Data de Criação:** 2026-10-26
-* **Status:** Especificação Proposta (Aguardando Aprovação do Desenvolvedor)
+* **Status:** Aprovada (Pronta para Execução)
 * **ADRs Relacionadas:** [ADR 0002](../../docs/adr/0002-escolha-do-cms-keystatic.md), [ADR 0006](../../docs/adr/0006-autenticacao-cms-e-gestao-de-midia.md), [ADR 0009](../../docs/adr/0009-seguranca-headers-e-validacao-de-ambiente.md)
 * **Documento Canônico de Domínio:** [`docs/05-keystatic-content-model.md`](../../docs/05-keystatic-content-model.md)
 

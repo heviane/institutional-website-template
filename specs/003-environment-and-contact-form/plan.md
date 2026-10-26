@@ -1,6 +1,6 @@
 # Feature 003: Validação de Ambiente, Formulário Transacional & Conformidade Legal (Plan)
 
-* **Status:** Em Especificação (Aguardando Aprovação do Desenvolvedor)
+* **Status:** Concluída
 * **Spec de Referência:** [`spec.md`](spec.md)
 * **Constituição de Engenharia:** [`AGENTS.md`](../../AGENTS.md)
 * **ADRs Vinculados:**
