@@ -17,10 +17,12 @@
     * Execução offline em `development` e `test` com fallbacks controlados (sem enfraquecer produção).
     * Rejeição em `production` se `RATE_LIMIT_SECRET` estiver ausente ou utilizar o valor padrão de desenvolvimento.
     * Paridade estrita de credenciais do Upstash (rejeita quando apenas URL ou apenas Token é fornecido).
+    * Rejeição em `production` se o Turnstile estiver ativo (`NEXT_PUBLIC_ENABLE_TURNSTILE !== "false"`) com chaves ausentes (*Zero Fail-Open por desconfiguração*).
     * Rejeição imediata diante de variáveis core ausentes (`RESEND_API_KEY`, etc.) ou malformatadas sem vazar valores confidenciais no console.
-    * Validação da Feature Flag `NEXT_PUBLIC_ENABLE_TURNSTILE` (true por padrão, false explícito desativando o Turnstile).
-  * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*` e flag booleana de Turnstile.
-  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, validação condicional rigorosa de `RATE_LIMIT_SECRET` e paridade de Upstash.
+    * Validação da Feature Flag `NEXT_PUBLIC_ENABLE_TURNSTILE` (true por padrão, false explícito ativando o Modo Lite).
+  * [ ] 🟢 **Green:** Implementar `src/env/client.ts` com validação de `NEXT_PUBLIC_*`, checagem de chave obrigatória em produção quando ativo e flag booleana.
+  * [ ] 🟢 **Green:** Implementar `src/env/server.ts` com `import "server-only"`, validação condicional rigorosa de `RATE_LIMIT_SECRET`, paridade de Upstash e chave do Turnstile obrigatória em produção quando ativo.
+  * [ ] 🟢 **Green:** Atualizar `.github/workflows/ci.yml` com `RATE_LIMIT_SECRET` e `NEXT_PUBLIC_ENABLE_TURNSTILE: "false"` para o build de produção do CI.
   * [ ] 🔵 **Refactor:** Garantir segurança de tipos, relatório de erros sanitizado e proteção contra vazamento acidental para o cliente.
 
 * [ ] **3. Schema Canônico de Contato & Rate Limiting Anônimo — TDD:**

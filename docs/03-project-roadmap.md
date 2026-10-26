@@ -77,10 +77,10 @@ Esta fase representa a materialização do template em código, dividida entre a
 #### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído)
 
 * [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env/`):**
-  * [ ] Testar build com configuração mínima de desenvolvimento/CI (apenas variáveis core: `NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL` e `CONTACT_EMAIL_TO`).
-  * [ ] Testar build com configuração completa de produção (todas as integrações ativas).
-  * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas.
-  * [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash em dev) não quebrem o build nem deixem o formulário em estado vulnerável.
+  * [ ] Testar build com configuração mínima de desenvolvimento/CI no Modo Lite (`NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`, `RATE_LIMIT_SECRET` e `NEXT_PUBLIC_ENABLE_TURNSTILE="false"`).
+  * [ ] Testar build com configuração completa de produção (todas as integrações ativas no Modo Robusto).
+  * [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas (incluindo aborto de build se o Turnstile estiver ativo em produção com chaves ausentes ou Upstash configurado pela metade).
+  * [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash no Modo Lite) não quebrem o build nem deixem o formulário em estado vulnerável.
 * [ ] **2. Compatibilidade Prática de Dependências & Lockfile:**
   * [x] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci` (Feature 001 Concluída).
   * [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
