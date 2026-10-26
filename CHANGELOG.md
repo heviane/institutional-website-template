@@ -30,7 +30,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   * Páginas legais fidedignas (`src/app/(legal)/politica-de-privacidade/page.tsx` e `termos-de-uso/page.tsx`) com cláusula de Transferência Internacional de Dados (Art. 33 da LGPD) e declaração condicional de serviços ativos (ADR 0007).
   * Integração completa na Home Page (`src/app/page.tsx`) e suíte de testes unitários, funcionais e de acessibilidade WCAG 2.1 AA (`vitest-axe`).
 
-* **Governança & Decisões Arquiteturais (ADRs 0012, 0013 & Spec-to-Docs Parity Gate):**
+* **Governança, Decisões Arquiteturais & Guias Operacionais (ADRs 0012 a 0014 & Docs 09 a 12):**
+  * Formalização do [ADR 0014](docs/adr/0014-rejeicao-de-estado-global-em-favor-de-rsc.md) estabelecendo a rejeição de gerenciadores de estado global (Redux, Zustand, React Contexts em cascata) em favor do fluxo Server-First via React Server Components e estado colocalizado na folha.
+  * Criação do [Guia de Resolução de Problemas e Runbook de Incidentes](docs/09-troubleshooting-and-runbook.md) detalhando procedimentos de emergência para formulários, rate limit, Cloudflare Turnstile, validação de ambiente e CMS.
+  * Criação do [Blueprint de Fluxo de Dados e Conformidade LGPD](docs/10-data-flow-and-privacy-map.md) com diagrama de sequência ponta a ponta, inventário de dados, fundamentação técnica da pseudonimização de IP e modelo de declaração para DPOs.
+  * Criação do [Playbook de Manutenção e Sincronização de Forks](docs/11-template-fork-maintenance.md) estabelecendo fluxos com `git cherry-pick`, isolamento da Zona Imune do Cliente e checklist pós-sincronização.
+  * Criação do [Guia de Performance, Core Web Vitals e Scripts de Terceiros](docs/12-performance-and-third-parties.md) estipulando o Performance Budget, estratégias do `next/script` e diretrizes de mídia.
   * Formalização do [ADR 0013](docs/adr/0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md) estabelecendo a adoção da Arquitetura Unificada Full-Stack (Next.js App Router) e a rejeição de separação física em diretórios `frontend/` e `backend/` em favor de segregação lógica estrita de fronteiras (`server-only`, `'use server'`, schemas Zod compartilhados e RSC).
   * Atualização de [docs/04-folder-structure.md](docs/04-folder-structure.md) com seção didática detalhando as fronteiras lógicas no código e catálogo no índice [docs/adr/README.md](docs/adr/README.md).
   * Formalização do [ADR 0012](docs/adr/0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) estabelecendo a estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e documentando o Rate Limiting em memória serverless como de melhor esforço.

@@ -21,6 +21,7 @@ Este diretório centraliza os **Architectural Decision Records (ADRs)** do `inst
 | **0011** | [Defesa Anti-Spam, Proteção de Formulários e Rate Limiting](0011-defesa-antispam-e-protecao-de-formularios.md) | `Aceito*` | 2026-10-22 | Implementar defesa em 3 camadas (Honeypot, Turnstile e Rate Limiting) com monitoramento e protocolo de contingência de cota. *(Emendado pelo ADR 0012)* |
 | **0012** | [Estratégia de Deploy Progressivo (Modo Lite vs. Modo Robusto) e Rate Limiting Serverless de Melhor Esforço](0012-deploy-progressivo-modo-lite-e-rate-limiting-serverless.md) | `Aceito` | 2026-10-25 | Estabelecer desacoplamento de serviços externos com Modo Lite opcional e documentar Rate Limiting serverless em memória como de melhor esforço. |
 | **0013** | [Arquitetura Unificada Full-Stack (App Router) vs. Separação Física Frontend/Backend](0013-arquitetura-unificada-fullstack-vs-separacao-fisica.md) | `Aceito` | 2026-10-26 | Adotar monólito modular unificado do Next.js App Router e rejeitar pastas físicas separadas `frontend/` e `backend/` em favor de segregação lógica estrita. |
+| **0014** | [Rejeição de Gerenciadores de Estado Global em favor de React Server Components](0014-rejeicao-de-estado-global-em-favor-de-rsc.md) | `Aceito` | 2026-10-26 | Rejeitar bibliotecas de estado global (Redux, Zustand, Contexts em cascata) e adotar fluxo de dados Server-First via RSC e estado colocalizado na folha. |
 
 ---
 

@@ -19,7 +19,7 @@ meu-projeto/
 └── backend/    # API REST, servidor Express/NestJS, banco de dados
 ```
 
-No entanto, o `institutional-website-template` adota como base tecnológica o **Next.js (App Router)** e opera sob o paradigma de **Arquitetura Sem Banco de Dados (*Zero-Database Architecture*)** com compilação estática (SSG/ISR). 
+No entanto, o `institutional-website-template` adota como base tecnológica o **Next.js (App Router)** e opera sob o paradigma de **Arquitetura Sem Banco de Dados (*Zero-Database Architecture*)** com compilação estática (SSG/ISR).
 
 Tornou-se imperativo deliberar e registrar formalmente por que a divisão em pastas físicas `frontend/` e `backend/` é contraproducente para este projeto, estabelecendo o padrão canônico para novos desenvolvedores e assistentes de Inteligência Artificial.
 
@@ -67,6 +67,7 @@ Em substituição à separação física de diretórios, o repositório adota a 
 ## 4. Critérios de Exceção (Quando a Separação Física Faria Sentido?)
 
 A separação física em diretórios independentes ou monorepo só deverá ser reconsiderada se:
+
 1. **Múltiplos Clientes Heterogêneos:** O projeto demandar um aplicativo móvel nativo (iOS/Android em Flutter ou React Native) ou extensões de terceiros que consumam os mesmos dados de negócio via API REST/GraphQL pública e unificada.
 2. **Serviços de Background Contínuos:** O projeto evoluir para exigir filas persistentes (RabbitMQ/Kafka), microsserviços especializados ou bancos de dados relacionais dedicados operando fora do modelo serverless.
 
@@ -77,10 +78,11 @@ Para o propósito do **`institutional-website-template` (websites institucionais
 ## 5. Consequências e Trade-offs (Consequences)
 
 ### Positivas (Benefícios):
+
 * **Velocidade de Onboarding:** Desenvolvedores trabalham em um repositório único com um único comando de inicialização (`npm run dev`) e build determinístico (`npm run build`).
 * **Segurança Reforçada sem Redundância:** O isolamento de dados confidenciais é garantido programaticamente pelo pacote `server-only` e pelas Server Actions, com custo zero de infraestrutura.
 * **Tipagem End-to-End Nativa:** Schemas de validação e tipos TypeScript são consumidos de forma transparente por toda a aplicação sem pacotes intermediários.
 
 ### Negativas (Riscos Aceitos):
-* **Curva de Aprendizado para Desenvolvedores Tradicionais:** Exige que novos colaboradores compreendam a fronteira entre Server Components e Client Components (`'use client'`), em vez de pensarem em termos clássicos de "requisição HTTP client-to-server".
 
+* **Curva de Aprendizado para Desenvolvedores Tradicionais:** Exige que novos colaboradores compreendam a fronteira entre Server Components e Client Components (`'use client'`), em vez de pensarem em termos clássicos de "requisição HTTP client-to-server".

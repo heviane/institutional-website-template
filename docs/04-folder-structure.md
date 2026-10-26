@@ -32,7 +32,7 @@ institutional-website-template/
 │   └── singletons/                  # Conteúdos de páginas fixas (Home, Sobre)
 │
 ├── docs/                            # Documentação técnica e governança do projeto
-│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0013)
+│   ├── adr/                         # Architectural Decision Records (ADRs 0001 a 0014)
 │   ├── 01-architecture-overview.md  # Visão geral de requisitos e decisões
 │   ├── 02-environment-setup.md      # Guia de setup local e padrões de código
 │   ├── 03-project-roadmap.md        # Roadmap e fases de desenvolvimento
@@ -40,7 +40,11 @@ institutional-website-template/
 │   ├── 05-keystatic-content-model.md# Modelagem de schemas e coleções do CMS
 │   ├── 06-brand-theming-guide.md    # Guia prático de personalização de marcas
 │   ├── 07-client-onboarding-checklist.md # Checklist de entrega e Go-Live
-│   └── 08-architecture-review-phase1.md # Revisão arquitetural e encerramento da Fase 1
+│   ├── 08-architecture-review-phase1.md # Revisão arquitetural e encerramento da Fase 1
+│   ├── 09-troubleshooting-and-runbook.md # Runbook de incidentes e resolução de problemas
+│   ├── 10-data-flow-and-privacy-map.md # Arquitetura de fluxo de dados e conformidade LGPD
+│   ├── 11-template-fork-maintenance.md # Playbook de manutenção e atualização de forks
+│   └── 12-performance-and-third-parties.md # Guia de performance e scripts de terceiros
 │
 ├── public/                          # Arquivos estáticos servidos diretamente
 │   ├── images/                      # Imagens estáticas e mídias institucionais

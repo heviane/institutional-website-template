@@ -66,7 +66,7 @@ SEMPRE que novas especificações forem criadas, editadas ou calibradas no diret
    * Verificar se nenhum requisito novo ou flexibilizado na spec contradiz decisões arquiteturais aprovadas em `docs/adr/`.
    * Se a spec introduzir uma mudança arquitetural deliberada (ex.: novos modos de deploy, relaxamento de variáveis mandatórias, adição de bibliotecas core), a IA **NÃO PODE** apenas alterar a spec de forma isolada; ela DEVE criar um novo ADR formal (ex.: `ADR 0012`), emendar os ADRs impactados e atualizar o índice `docs/adr/README.md`.
 2. **Sincronização com as Especificações de Domínio (`docs/`):**
-   * Verificar se as especificações transversais (`docs/01` a `docs/08`) necessitam de atualização de contrato (ex.: variáveis em `02-environment-setup.md`, novos marcos em `03-project-roadmap.md`, novos passos em `07-client-onboarding-checklist.md`).
+   * Verificar se as especificações transversais (`docs/01` a `docs/12`) necessitam de atualização de contrato (ex.: variáveis em `02-environment-setup.md`, novos marcos em `03-project-roadmap.md`, novos passos em `07-client-onboarding-checklist.md`).
 3. **Sincronização com Documentos Raiz:**
    * Garantir que a documentação na raiz do projeto (`README.md`, `CHANGELOG.md`, `SECURITY.md`, `.env.example`) reflita com fidelidade as alterações de contrato.
 4. **Validação Programática Imediata:**
@@ -110,7 +110,11 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 | **Modelo de Dados & Collections do CMS** | [`docs/05-keystatic-content-model.md`](docs/05-keystatic-content-model.md) |
 | **Design System, UI & Temas (Tailwind v4)** | [`docs/06-brand-theming-guide.md`](docs/06-brand-theming-guide.md) |
 | **Onboarding de Clientes, Envs & Custos** | [`docs/07-client-onboarding-checklist.md`](docs/07-client-onboarding-checklist.md) |
-| **Decisões de Arquitetura (0001 a 0013)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
+| **Troubleshooting & Runbook de Incidentes** | [`docs/09-troubleshooting-and-runbook.md`](docs/09-troubleshooting-and-runbook.md) |
+| **Arquitetura de Dados & LGPD Blueprint** | [`docs/10-data-flow-and-privacy-map.md`](docs/10-data-flow-and-privacy-map.md) |
+| **Playbook de Manutenção de Forks** | [`docs/11-template-fork-maintenance.md`](docs/11-template-fork-maintenance.md) |
+| **Performance & Scripts de Terceiros** | [`docs/12-performance-and-third-parties.md`](docs/12-performance-and-third-parties.md) |
+| **Decisões de Arquitetura (0001 a 0014)** | [`docs/adr/README.md`](docs/adr/README.md) (Índice de ADRs) |
 | **Especificações de Funcionalidades (Fase 2)** | Diretório [`specs/`](specs/) (`spec.md`, `plan.md`, `tasks.md`) |
 
 ---
