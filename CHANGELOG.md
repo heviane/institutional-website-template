@@ -15,9 +15,17 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - [x] **Feature 002: Design System, Layout Base & Componentes Essenciais** (Concluída — Spec: [`specs/002-design-system-and-layout/`](specs/002-design-system-and-layout/))
 - [x] **Feature 003: Validação de Ambiente & Formulário Transacional** (Concluída — Spec: [`specs/003-environment-and-contact-form/`](specs/003-environment-and-contact-form/))
 - [x] **Feature 004: Gestão de Conteúdo (Keystatic CMS)** (Concluída — Spec: [`specs/004-keystatic-cms/`](specs/004-keystatic-cms/))
-- [ ] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Próxima / Em Especificação)
+- [x] **Feature 005: SEO Técnico Avançado & Homologação MVP** (Concluída — Spec: [specs/005-advanced-seo-and-mvp/](specs/005-advanced-seo-and-mvp/))
 
 ### Adicionado (Unreleased)
+
+- **Feature 005 (SEO Técnico Avançado & Homologação MVP — Conclusão da Fase 2):**
+  - Implementação nativa de `robots.txt` dinâmico (`src/app/robots.ts`) permitindo indexação de rotas públicas e bloqueando estritamente `/keystatic/` e `/api/keystatic/`, com referência ao sitemap canônico e host.
+  - Implementação de `sitemap.xml` dinâmico (`src/app/sitemap.ts`) integrando rotas estáticas institucionais (`/`, `/politica-de-privacidade`, `/termos-de-uso`) e artigos publicados do blog via Reader API do Keystatic (`getPublishedPosts()`), excluindo rascunhos.
+  - Enriquecimento da Metadata API em `src/app/layout.tsx`: inclusão de URL canônica relativa (`alternates.canonical`), diretivas de rastreamento para robôs (`robots`), metadados de ícones (`icons`) e cards para redes sociais.
+  - Criação do componente `<JsonLd />` (`src/components/shared/seo/json-ld.tsx`) gerando schemas válidos de `Organization` e `WebSite` no padrão Schema.org.
+  - Suíte completa de testes automatizados de SEO em `tests/seo-metadata.test.tsx` (7 testes) e mock de `next/font/google` no `tests/setup.ts`, totalizando 18 suítes e 119 testes 100% aprovados.
+  - Homologação técnica e documental dos 8 critérios da Seção 2.2 do Roadmap, atingindo 100% do escopo planejado para o MVP da Fase 2.
 
 - **Feature 004 (Gestão de Conteúdo Baseada em Git via Keystatic CMS):**
   - Configuração centralizada e tipada do Keystatic CMS (`keystatic.config.ts`) com suporte a Dual Mode (`local` no desenvolvimento/testes e `cloud` em produção).

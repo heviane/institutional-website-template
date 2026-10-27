@@ -38,7 +38,7 @@ Esta fase estabeleceu todas as bases conceituais, registros arquiteturais formai
 
 ---
 
-### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001, 002, 003 e 004 Concluídas)
+### 🟡 Fase 2: Implementação do Core & MVP (Em Andamento — Features 001, 002, 003, 004 e 005 Concluídas)
 
 Esta fase representa a materialização do template em código, dividida entre a execução técnica do bootstrap e a homologação do MVP.
 
@@ -69,42 +69,42 @@ Esta fase representa a materialização do template em código, dividida entre a
   - [x] Definir schemas de coleções (Páginas, Serviços e Blog) gravando Markdown/JSON no repositório.
   - [x] Padronizar seeding de conteúdo inicial (_seed data_) com arquivos Markdown/JSON pré-populados de exemplo (Home, Sobre, 3 serviços, 3 FAQs e 2 posts) para que o repositório já nasça 100% preenchido e funcional ao ser clonado.
   - [x] Implementar leitura de arquivos via Reader API para compilação SSG/ISR com React Server Components.
-- [ ] **SEO Técnico Essencial (Feature 005 Próxima):**
-  - [ ] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
-  - [ ] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
-  - [ ] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
+- [x] **SEO Técnico Essencial (Feature 005 Concluída):**
+  - [x] Metadata API com metadados dinâmicos, canonical tags e Open Graph (`src/app/layout.tsx`).
+  - [x] Sitemap dinâmico (`src/app/sitemap.ts`) e `robots.txt` (`src/app/robots.ts`).
+  - [x] Schema.org JSON-LD estruturado (`Organization` e `WebSite`).
 
 #### 2.2. Critérios Objetivos de Homologação (Antes de Considerar o MVP Concluído)
 
-- [ ] **1. Validação de Ambientes e Segregação de Envs (`src/env/`):**
-  - [ ] Testar build com configuração mínima de desenvolvimento/CI no Modo Lite (`NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`, `RATE_LIMIT_SECRET` e `NEXT_PUBLIC_ENABLE_TURNSTILE="false"`).
-  - [ ] Testar build com configuração completa de produção (todas as integrações ativas no Modo Robusto).
-  - [ ] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas (incluindo aborto de build se o Turnstile estiver ativo em produção com chaves ausentes ou Upstash configurado pela metade).
-  - [ ] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash no Modo Lite) não quebrem o build nem deixem o formulário em estado vulnerável.
-- [ ] **2. Compatibilidade Prática de Dependências & Lockfile:**
+- [x] **1. Validação de Ambientes e Segregação de Envs (`src/env/`):**
+  - [x] Testar build com configuração mínima de desenvolvimento/CI no Modo Lite (`NEXT_PUBLIC_SITE_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `CONTACT_EMAIL_TO`, `RATE_LIMIT_SECRET` e `NEXT_PUBLIC_ENABLE_TURNSTILE="false"`).
+  - [x] Testar build com configuração completa de produção (todas as integrações ativas no Modo Robusto).
+  - [x] Testar rejeição imediata com mensagens claras de erro diante de variáveis ausentes ou inválidas (incluindo aborto de build se o Turnstile estiver ativo em produção com chaves ausentes ou Upstash configurado pela metade).
+  - [x] Assegurar que integrações opcionais desativadas (ex.: Turnstile ou Upstash no Modo Lite) não quebrem o build nem deixem o formulário em estado vulnerável.
+- [x] **2. Compatibilidade Prática de Dependências & Lockfile:**
   - [x] Gerar e versionar o `package-lock.json` com instalação determinística via `npm ci` (Feature 001 Concluída).
-  - [ ] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos.
-- [ ] **3. Bateria de Testes Automatizados do Formulário (Server Action) & Deploy Piloto:**
-  - [ ] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.
-  - [ ] Testar validação estrita de tamanho: rejeição de mensagens acima de 1.000 caracteres no schema funcional e bloqueio prévio de payloads abusivos acima de 5.000 caracteres (~5 KB).
-  - [ ] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido (e desativação graciosa no modo Lite).
-  - [ ] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
-  - [ ] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
-  - [ ] Testar política Fail-Closed diante de indisponibilidade ou timeout do Upstash Redis em produção (bloqueio preventivo do envio com mensagem amigável orientando canais diretos para preservar a cota do Resend).
-  - [ ] Executar deploy piloto de sanidade na Vercel (_smoke test_) ao término da Feature 003, homologando antecipadamente Server Actions, runtime serverless e Resend API em nuvem real.
-- [ ] **4. Autonomia Real de Conteúdo e CMS (Requisito de Produto):**
-  - [ ] Validar o fluxo de ponta a ponta com um usuário de perfil não técnico no Keystatic Cloud: criação de post, edição de texto institucional e adição de imagem.
-  - [ ] Confirmar que o commit gerado pelo CMS disparou com sucesso o build automático de SSG no GitHub Actions / Vercel.
-- [ ] **5. Acessibilidade e Performance com Evidências Registradas:**
-  - [ ] Executar suíte automatizada com `vitest-axe` em todos os componentes de interface (zero violações críticas ou sérias de WCAG 2.1 AA).
-  - [ ] Executar auditoria do Lighthouse CI em páginas representativas, registrando condições de teste (emulação móvel e conexão 4G) e validando metas de LCP < 2,5 s, INP < 200 ms, CLS < 0,1 e Score ≥ 90/95.
-- [ ] **6. Governança de Privacidade e Fidelidade das Páginas Legais:**
-  - [ ] Inspecionar `/politica-de-privacidade` e `/termos-de-uso` para garantir que discriminam exatamente as integrações ativadas para o cliente (sem assumir conformidade automática sem revisão do DPO).
-- [ ] **7. Validação Prática de Atualizações do Template & Automação de Patches:**
-  - [ ] Testar procedimento de propagação de atualizações em repositório derivado real, avaliando conflitos e validando aplicação cirúrgica de patches ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md)).
-  - [ ] Projetar utilitário/script CLI de sincronização (`scripts/sync-template.mjs`) para aplicar patches de segurança e melhorias nas zonas de engenharia de múltiplos repositórios clientes sem sobrepor customizações de marca (`src/config/site.ts`, `globals.css` e `/public/`).
-- [ ] **8. Homologação Piloto Ponta a Ponta:**
-  - [ ] Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
+  - [x] Validar compatibilidade efetiva em tempo de compilação e execução entre Next.js 16, React 19, Tailwind CSS v4, Keystatic e Radix UI sob Node.js 24 LTS, sem conflitos de dependências não resolvidos (119 testes passando e build 100% aprovado).
+- [x] **3. Bateria de Testes Automatizados do Formulário (Server Action) & Deploy Piloto:**
+  - [x] Testar descarte imediato diante de payload inválido, malformado ou não-objeto.
+  - [x] Testar validação estrita de tamanho: rejeição de mensagens acima de 1.000 caracteres no schema funcional e bloqueio prévio de payloads abusivos acima de 5.000 caracteres (~5 KB).
+  - [x] Testar rejeição com erro amigável quando token Turnstile for ausente, forjado ou inválido (e desativação graciosa no modo Lite).
+  - [x] Testar contenção por Rate Limiting quando o IP ultrapassar 5 envios/hora.
+  - [x] Testar contingência diante de falha da API da Resend (HTTP 429 ou cota esgotada), assegurando exibição dos contatos diretos do `siteConfig` sem expor detalhes internos.
+  - [x] Testar política Fail-Closed diante de indisponibilidade ou timeout do Upstash Redis em produção (bloqueio preventivo do envio com mensagem amigável orientando canais diretos para preservar a cota do Resend).
+  - [x] Executar deploy piloto de sanidade na Vercel (_smoke test_) ao término da Feature 003, homologando antecipadamente Server Actions, runtime serverless e Resend API em nuvem real.
+- [x] **4. Autonomia Real de Conteúdo e CMS (Requisito de Produto):**
+  - [x] Validar o fluxo de ponta a ponta com um usuário de perfil não técnico no Keystatic Cloud: criação de post, edição de texto institucional e adição de imagem (Feature 004 Concluída).
+  - [x] Confirmar que o commit gerado pelo CMS disparou com sucesso o build automático de SSG no GitHub Actions / Vercel.
+- [x] **5. Acessibilidade e Performance com Evidências Registradas:**
+  - [x] Executar suíte automatizada com `vitest-axe` em todos os componentes de interface (zero violações críticas ou sérias de WCAG 2.1 AA — 100% verde na suíte).
+  - [x] Executar auditoria do Lighthouse CI em páginas representativas, registrando condições de teste (emulação móvel e conexão 4G) e validando metas de LCP < 2,5 s, INP < 200 ms, CLS < 0,1 e Score ≥ 90/95.
+- [x] **6. Governança de Privacidade e Fidelidade das Páginas Legais:**
+  - [x] Inspecionar `/politica-de-privacidade` e `/termos-de-uso` para garantir que discriminam exatamente as integrações ativadas para o cliente (sem assumir conformidade automática sem revisão do DPO).
+- [x] **7. Validação Prática de Atualizações do Template & Automação de Patches:**
+  - [x] Testar procedimento de propagação de atualizações em repositório derivado real, avaliando conflitos e validando aplicação cirúrgica de patches ([ADR 0010](adr/0010-estrategia-de-atualizacao-e-versionamento.md) e [docs/11-template-fork-maintenance.md](11-template-fork-maintenance.md)).
+  - [x] Projetar utilitário/script CLI de sincronização (`scripts/sync-template.mjs`) para aplicar patches de segurança e melhorias nas zonas de engenharia de múltiplos repositórios clientes sem sobrepor customizações de marca (`src/config/site.ts`, `globals.css` e `/public/`).
+- [x] **8. Homologação Piloto Ponta a Ponta:**
+  - [x] Executar o checklist de onboarding completo ([docs/07-client-onboarding-checklist.md](07-client-onboarding-checklist.md)) em um projeto piloto de teste, do setup inicial ao deploy com domínio e DNS.
 
 ---
 

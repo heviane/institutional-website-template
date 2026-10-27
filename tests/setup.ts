@@ -20,6 +20,13 @@ vi.mock("next/link", () => {
   };
 });
 
+// Mock Next.js font loader to avoid runtime errors in jsdom/Vitest
+vi.mock("next/font/google", () => ({
+  Inter: () => ({
+    variable: "--font-sans",
+  }),
+}));
+
 if (typeof window !== "undefined") {
   // Polyfill canvas getContext in jsdom to avoid axe-core warnings
   HTMLCanvasElement.prototype.getContext = () => null;

@@ -59,7 +59,8 @@ institutional-website-template/
 │   ├── 001-project-bootstrap/       # Artefatos da Feature 001 (spec.md, plan.md, tasks.md)
 │   ├── 002-design-system-and-layout/# Artefatos da Feature 002 (spec.md, plan.md, tasks.md)
 │   ├── 003-environment-and-contact-form/ # Artefatos da Feature 003 (spec.md, plan.md, tasks.md)
-│   └── 004-keystatic-cms/           # Artefatos da Feature 004 (spec.md, plan.md, tasks.md)
+│   ├── 004-keystatic-cms/           # Artefatos da Feature 004 (spec.md, plan.md, tasks.md)
+│   └── 005-advanced-seo-and-mvp/    # Artefatos da Feature 005 (spec.md, plan.md, tasks.md)
 │
 ├── scripts/                         # Scripts utilitários de automação e auditoria
 │   └── audit-docs.mjs               # Validador de integridade documental e Anti-Doc Rot
@@ -85,7 +86,8 @@ institutional-website-template/
 │   │   ├── globals.css              # Estilos globais e tema Tailwind v4 (@theme)
 │   │   ├── layout.tsx               # Layout raiz com fontes, metadados e scripts
 │   │   ├── page.tsx                 # Página Inicial (Home Page institucional)
-│   │   └── robots.ts                # Regras de indexação para robôs de busca (Metadata API)
+│   │   ├── robots.ts                # Regras de indexação para robôs de busca (Metadata API)
+│   │   └── sitemap.ts               # Mapa dinâmico de URLs para motores de busca (Metadata API)
 │   │
 │   ├── components/                  # Componentes React reutilizáveis
 │   │   ├── shared/                  # Componentes compostos de layout
@@ -98,8 +100,10 @@ institutional-website-template/
 │   │   │   │   └── hero.tsx         # RSC: Hero agnóstico de template com HeroProps
 │   │   │   ├── contact-form/        # Formulário de contato acessível
 │   │   │   │   └── contact-form.tsx # 'use client': Formulário reativo com RHF, Zod e Turnstile
-│   │   │   └── floating-whatsapp/   # Botão flutuante de atendimento WhatsApp
-│   │   │       └── floating-whatsapp.tsx # Botão FAB flutuante acessível (56x56px)
+│   │   │   ├── floating-whatsapp/   # Botão flutuante de atendimento WhatsApp
+│   │   │   │   └── floating-whatsapp.tsx # Botão FAB flutuante acessível (56x56px)
+│   │   │   └── seo/                 # Componentes semânticos e dados estruturados
+│   │   │       └── json-ld.tsx      # RSC: Schema.org estruturado (Organization e WebSite)
 │   │   └── ui/                      # Primitivos atômicos do Shadcn/ui (Radix UI)
 │   │       ├── button.tsx
 │   │       ├── card.tsx
@@ -143,6 +147,7 @@ institutional-website-template/
 │   ├── legal-pages.test.tsx         # Teste de fidelidade e acessibilidade das páginas legais
 │   ├── rate-limit.test.ts           # Teste de rate limit atômico por Lua script e hash de IP
 │   ├── sanity.test.ts               # Teste de sanidade do ambiente de testes
+│   ├── seo-metadata.test.tsx        # Validação de rotas de SEO (robots, sitemap, JSON-LD e metadata)
 │   ├── setup.ts                     # Configuração de matchers do vitest-axe
 │   ├── site-config.test.ts          # Validação do contrato do objeto de marca siteConfig
 │   └── utils.test.ts                # Testes unitários de funções utilitárias (cn, links de contato)

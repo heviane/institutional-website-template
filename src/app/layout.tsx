@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { FloatingWhatsApp } from "@/components/shared/floating-whatsapp/floating-whatsapp";
+import { JsonLd } from "@/components/shared/seo/json-ld";
 import "./globals.css";
 
 const fontSans = Inter({
@@ -18,6 +19,25 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  alternates: {
+    canonical: "./",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
@@ -56,6 +76,7 @@ export default function RootLayout({
         >
           Pular para o conteúdo principal
         </a>
+        <JsonLd />
         {children}
         <FloatingWhatsApp />
       </body>
