@@ -248,3 +248,44 @@ Ao implementar qualquer funcionalidade na Fase 2:
 3. **Critério de Entrega Bloqueante:** Nenhuma tarefa, PR ou sugestão de código gerado por IA pode ser considerada concluída se qualquer um dos comandos acima falhar (tolerância zero para erros de auditoria documental, falhas de lint, tipos no TypeScript, testes quebrados no Vitest ou erros no build de produção).
 4. **Mantenha o CI Determinístico:** Qualquer alteração no `package.json` deve ser imediatamente acompanhada da atualização e versionamento do `package-lock.json`.
 5. **Auditoria Obrigatória de Pull Requests Abertos:** Ao concluir uma feature, consulte sempre o status de Pull Requests abertos no repositório remoto (`gh pr list`). Avalie a segurança e o impacto de cada PR pendente (especialmente atualizações de dependências automatizadas), mantendo o ecossistema limpo e sem gargalos operacionais acumulados.
+
+---
+
+## 📝 8. Convenção de Commits (Conventional Commits)
+
+Todas as mensagens de commit sugeridas ou criadas pelo agente devem seguir a especificação formal do **Conventional Commits**:
+
+```text
+<tipo>(<escopo>): <descrição curta no imperativo em inglês>
+
+[corpo opcional explicando o motivo da mudança]
+
+[rodapé opcional com referência a issues, ex: Closes #123]
+```
+
+### Tipos Permitidos:
+
+- `feat`: Nova funcionalidade para o usuário final ou novo componente visual.
+- `fix`: Correção de bug em componentes, ações ou estilos.
+- `refactor`: Refatoração de código sem alteração de comportamento externo.
+- `test`: Adição ou ajuste de testes automatizados (Vitest, Playwright, Axe).
+- `docs`: Alterações exclusivamente em documentação, specs ou ADRs.
+- `chore`: Atualização de dependências, linters, scripts de build ou configurações.
+- `perf`: Otimizações de renderização, Core Web Vitals ou bundle size.
+
+### Escopos Canônicos Recomendados:
+
+- `components`: Componentes visuais UI/UX (React).
+- `pages`: Rotas e páginas estruturais da aplicação Next.js.
+- `actions`: Server Actions e lógica de backend efêmera.
+- `styles`: Tokens Tailwind CSS, estilos globais e temas.
+- `docs`: Documentação técnica, especificações de roadmap e ADRs.
+- `ci`: Workflows do GitHub Actions e quality gates de CI.
+- `deps`: Atualização de pacotes e lockfiles.
+
+### Regras Mandatórias de Atomicidade e Idioma:
+
+1. **Commit Atômico & Responsabilidade Única (Single-Purpose Commits):** Cada commit DEVE conter estritamente um único propósito lógico. É proibido criar "commits combo" misturando refatoração com documentação, ou novas features com atualização de dependências.
+2. **Reversibilidade Limpa (Clean Revert):** Todo commit deve ser isolado e autocontido, permitindo `git revert <hash>` sem introduzir efeitos colaterais em arquivos não correlacionados.
+3. **Garantia de Pipeline Verde Contínuo (Always Green / Bisect-Safe):** Nenhum commit intermediário pode deixar o repositório quebrado. A cada commit individual, todos os testes (Vitest), tipos (TypeScript) e linters devem passar com 100% verde.
+4. **Idioma Canônico & Modo Imperativo:** Todas as mensagens de commit DEVEM ser escritas em **inglês**, utilizando verbos no modo imperativo (`add`, `fix`, `sync`, `enforce`, `bump`, `polish`, `remove`), assegurando conformidade com padrões internacionais de engenharia e ferramentas de release automatizado.
