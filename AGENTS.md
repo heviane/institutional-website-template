@@ -115,7 +115,27 @@ Toda checklist `tasks.md` de qualquer feature DEVE conter compulsoriamente como 
 
 ---
 
-## 🗺️ 2. Mapa de Especificações (Onde encontrar a verdade)
+## 🛡️ 2. Regras de Ouro Universais (Invioláveis)
+
+1. **Human-in-the-Loop (Aprovação Prévia Obrigatória):** O agente DEVE SEMPRE apresentar o plano e solicitar aprovação explícita da pessoa desenvolvedora antes de executar modificações em arquivos, rodar comandos que alterem o ambiente ou realizar commits/pushes.
+2. **Anti-Lazy Code (Implementação Completa):** Nunca omita código ou documentação com reticências ou comentários de atalho (`// ... restante da função ...`). Entregue conteúdo completo, funcional e pronto para execução.
+3. **Modificação Cirúrgica (Minimal Diff):** Faça edições pontuais e focadas. Não reescreva arquivos inteiros apenas para ajustar trechos específicos e preserve a formatação e convenções existentes.
+4. **Conclusão Baseada em Evidências:** Valide sua entrega executando a suíte de testes (`npm test`), tipagem (`npm run typecheck`) e build (`npm run build`) antes de considerar o trabalho finalizado. Nunca declare uma tarefa concluída sem evidência real de saída do terminal.
+5. **Parcimônia de Dependências & Segurança:** Não instale dependências ou bibliotecas de terceiros sem aprovação prévia, sem provar que o recurso nativo não atende e sem checar compatibilidade com o runtime Node.js 24 LTS.
+6. **Segurança Primeiro (Zero Secrets):** Nunca exponha credenciais, chaves de API, segredos ou dados pessoais sensíveis em bundles, logs ou commits.
+7. **Documentação Viva no Ciclo do Commit:** Ao concluir uma funcionalidade ou correção, mantenha as especificações (`specs/`), contratos de API e documentação perfeitamente sincronizados no mesmo ciclo de commit.
+8. **Preservação Defensiva de Ativos:** Nunca sobrescreva ou delete arquivos de configuração, inventários ou scripts sem consentimento explícito.
+9. **Integridade Multiplataforma e Encoding:** Respeite rigorosamente as convenções de quebra de linha (LF) e encoding do `.editorconfig`. Scripts PowerShell (`.ps1`) com acentos ou emojis DEVEM ser salvos com UTF-8 BOM (`0xEF, 0xBB, 0xBF`) para compatibilidade nativa com o Windows PowerShell 5.1.
+10. **Gatilho de Documentação em Novos Diretórios (Heurística de README):** Ao criar qualquer novo diretório significativo (módulos, templates, suítes de testes ou diretórios de governança), o agente DEVE SEMPRE avaliar a necessidade de criar um `README.md` explicativo. Evite pastas mudas no repositório.
+11. **Dossiê Vivo e Monotemático de Auditoria (Single-Topic Living Dossier):** Ao conduzir revisões, auditorias multi-modelo ou melhorias de governança, o agente DEVE manter cada dossiê estritamente **monotemático e atômico**, cobrindo um único assunto ou repositório por arquivo. Crie o plano em `reviews/active/[SEQ]-[DATA]-[ALVO]-[TEMA]-plano-mestre.md` no minuto zero, mantendo-o vivo até a conclusão em `reviews/archive/` com atualização do índice histórico.
+12. **Isolamento Estrito em Testes de Scaffolding (Sandbox Hygiene):** Testes automatizados ou manuais de automações ou geradores NUNCA devem ser disparados a partir da raiz de um repositório ativo. Devem ser executados exclusivamente dentro de um diretório temporário isolado (`$env:TEMP` ou `/tmp`), com autolimpeza compulsória (`finally`/`AfterAll`).
+13. **Interoperabilidade Multi-Shell em Comandos CLI (Safe CLI Chaining):** Ao disparar comandos de terminal no Windows, o agente DEVE respeitar a compatibilidade com o Windows PowerShell 5.1 e PowerShell 7+, NUNCA utilizando o operador `&&` (inválido no PS 5.1 nativo). Utilize `; if ($?) { ... }` para encadeamento condicional seguro.
+14. **Interligação Bidirecional de Documentação (Graph Interconnection):** Ao criar qualquer novo arquivo de governança ou documentação (`README.md`, `SPEC.md`, `ADR.md`), o agente DEVE mapear os artefatos adjacentes na árvore documental e adicionar links cruzados bidirecionais.
+15. **Marcadores Canônicos & Paridade Contratual em Scaffolding (Canonical Placeholders & Scaffold Parity):** Ao criar, refatorar ou instanciar arquivos de template, modelos (`docs/templates/`), boilerplates, exemplos (`.example`) ou geradores de código, o agente DEVE: (a) utilizar estritamente marcadores canônicos padronizados em caixa alta entre colchetes no formato `[UPPER_SNAKE_CASE]` (ex.: `[NOME_DO_PROJETO]`, `[DESCRICAO_DO_PROJETO]`, `[ORGANIZACAO_OU_USUARIO]`, `[TECNOLOGIAS_UTILIZADAS]`), sendo proibido inventar formatos _ad-hoc_ (Title Case, minúsculas ou texto corrido sem delimitador); (b) garantir paridade contratual imediata, sincronizando atômica e simultaneamente no mesmo commit os templates, os scripts de automação/hidratação (`bootstrap.ps1`, `bootstrap.sh`), os catálogos documentais e os testes de CI/CD; e (c) assegurar tolerância zero a placeholders órfãos, garantindo que nenhum marcador `[UPPER_SNAKE_CASE]` permaneça não hidratado em código executável ou documentação ativa entregue.
+
+---
+
+## 🗺️ 3. Mapa de Especificações (Onde encontrar a verdade)
 
 Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação correspondente na tabela abaixo:
 
@@ -137,7 +157,7 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 
 ---
 
-## 🔒 3. Invariantes Técnicos e Versões Inegociáveis
+## 🔒 4. Invariantes Técnicos e Versões Inegociáveis
 
 - **Node.js Runtime:** `24.x LTS (Active LTS)` — versão travada no [`.nvmrc`](.nvmrc) e no CI. Não gere sintaxes incompatíveis.
 - **Framework:** `Next.js 16 (App Router / Active LTS)` — NUNCA gere arquivos ou arquitetura baseada no Pages Router (`pages/`).
@@ -151,7 +171,7 @@ Antes de executar qualquer tarefa, a IA **DEVE** consultar a especificação cor
 
 ---
 
-## 📖 4. Dicionário Canônico de Nomenclatura (Ubiquitous Language)
+## 📖 5. Dicionário Canônico de Nomenclatura (Ubiquitous Language)
 
 Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriamente** estes identificadores canônicos:
 
@@ -173,18 +193,18 @@ Para evitar desvios e conflitos de código, a IA deve utilizar **obrigatoriament
 
 ---
 
-## 🎨 5. Padrões de Codificação e Estilo de Código (Code Style & Conventions)
+## 🎨 6. Padrões de Codificação e Estilo de Código (Code Style & Conventions)
 
 Para assegurar consistência cirúrgica entre diferentes assistentes de IA e desenvolvedores humanos, o repositório adota os seguintes padrões mandatórios:
 
-### 🌐 5.1. Fronteira de Idioma (Language Boundary)
+### 🌐 6.1. Fronteira de Idioma (Language Boundary)
 
 - **Código 100% em Inglês:** Variáveis, funções, componentes, métodos, tipos, interfaces, comentários de código (`//`, `/* */`), JSDoc, nomes de arquivos e mensagens de commit (Conventional Commits) devem ser **exclusivamente em inglês**.
   - ✅ `const clientIp = ...`, `function sendContactEmail()`, `// Validate honeypot field`
   - ❌ `const ipCliente = ...`, `function enviarEmailContato()`, `// Valida o campo honeypot`
 - **Português (pt-BR) Restrito ao Domínio do Usuário Final:** Textos visíveis na interface, mensagens de validação e feedback do Zod (`"O nome deve conter pelo menos 2 caracteres."`), e-mails enviados a clientes brasileiros, páginas legais (`(legal)/politica-de-privacidade`) e rótulos de campos no painel do Keystatic (`label: "Título da Postagem"`).
 
-### 🏷️ 5.2. Nomenclatura no TypeScript & React
+### 🏷️ 6.2. Nomenclatura no TypeScript & React
 
 - **Arquivos e Pastas:** SEMPRE em `kebab-case` (`contact-form.tsx`, `rate-limit.ts`, `site.ts`), seguindo o padrão oficial do Shadcn/ui e Next.js App Router.
 - **Componentes React:** Declaração em `PascalCase` com exportação nomeada explícita (`export function ContactForm() { ... }`).
@@ -200,7 +220,7 @@ Para assegurar consistência cirúrgica entre diferentes assistentes de IA e des
   - `export type ContactFormData = z.infer<typeof contactFormSchema>;`
 - **Constantes e Enums:** `UPPER_SNAKE_CASE` para valores literais imutáveis (`MAX_PAYLOAD_SIZE`, `DEFAULT_TTL_SECONDS`) e `camelCase` para objetos de configuração (`siteConfig`).
 
-### 🛡️ 5.3. Qualidade de Código & Guardrails para IA
+### 🛡️ 6.3. Qualidade de Código & Guardrails para IA
 
 1. **Tipagem Estrita e Retornos Explícitos:** Proibido o uso de `any`. Utilize `unknown` para payloads de entrada não confiáveis e refine com Zod. Todas as funções exportadas e Server Actions devem declarar explicitamente seus tipos de retorno (ex.: `Promise<ActionResponse>`).
 2. **Separação de Tipos (`import type`):** Importações que contenham apenas tipos TypeScript devem utilizar obrigatoriamente a sintaxe `import type { ... } from "..."` para garantir compilação limpa e tree-shaking eficiente.
@@ -210,7 +230,7 @@ Para assegurar consistência cirúrgica entre diferentes assistentes de IA e des
 
 ---
 
-## 🚫 6. Restrições Negativas (O que a IA NUNCA deve fazer)
+## 🚫 7. Restrições Negativas (O que a IA NUNCA deve fazer)
 
 1. **NUNCA introduzir bancos de dados relacionais (SQL) ou NoSQL persistentes no MVP:** A arquitetura do template é intencionalmente efêmera (_Zero-Database Architecture_), com encaminhamento direto de mensagens para a caixa de e-mail do cliente via Resend API ([ADR 0007](docs/adr/0007-conformidade-lgpd-e-privacidade.md)).
 2. **NUNCA criar rotas REST manuais em `src/app/api/contact/route.ts` para formulários:** Utilize exclusivamente Server Actions com `'use server'` ([ADR 0003](docs/adr/0003-estrategia-de-formularios.md)).
@@ -227,7 +247,7 @@ Para assegurar consistência cirúrgica entre diferentes assistentes de IA e des
 
 ---
 
-## 🚦 7. Ciclo de Qualidade e Critérios de Aceitação da IA
+## 🚦 8. Ciclo de Qualidade e Critérios de Aceitação da IA
 
 Ao implementar qualquer funcionalidade na Fase 2:
 
@@ -251,7 +271,7 @@ Ao implementar qualquer funcionalidade na Fase 2:
 
 ---
 
-## 📝 8. Convenção de Commits (Conventional Commits)
+## 📝 9. Convenção de Commits (Conventional Commits)
 
 Todas as mensagens de commit sugeridas ou criadas pelo agente devem seguir a especificação formal do **Conventional Commits**:
 
