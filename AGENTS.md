@@ -310,3 +310,14 @@ Todas as mensagens de commit sugeridas ou criadas pelo agente devem seguir a esp
 3. **Garantia de Pipeline Verde Contínuo (Always Green / Bisect-Safe):** Nenhum commit intermediário pode deixar o repositório quebrado. A cada commit individual, todos os testes (Vitest), tipos (TypeScript) e linters devem passar com 100% verde.
 4. **Idioma Canônico & Modo Imperativo:** Todas as mensagens de commit DEVEM ser escritas em **inglês**, utilizando verbos no modo imperativo (`add`, `fix`, `sync`, `enforce`, `bump`, `polish`, `remove`), assegurando conformidade com padrões internacionais de engenharia e ferramentas de release automatizado.
 5. **Rastreabilidade de IA & Co-Autoria (Git Co-Authorship):** Todo commit sugerido ou gerado com o auxílio de um agente de IA DEVE incluir no rodapé da mensagem o trailer canônico do Git: `Co-authored-by: Google Antigravity <antigravity[bot]@google.com>` (ou do respectivo modelo/agente), assegurando transparência, proveniência de código e visibilidade nativa de co-autoria no GitHub.
+
+---
+
+## ✅ 10. Checklist Pós-Implementação (Definition of Done)
+
+Antes de considerar qualquer feature ou correção finalizada, o agente DEVE seguir e evidenciar o [Protocolo de 4 Fases (`docs/post-implementation-checklist.md`)](https://github.com/heviane/project-starter-kit/blob/main/docs/post-implementation-checklist.md):
+
+1. **Fase 1 (Quality Gates):** Testes unitários e de acessibilidade 100% verdes (`npm test`), checagem de tipos sem erros (`npm run typecheck`), build de produção limpo (`npm run build`), *Anti-Test Tampering* e *Zero Secrets*.
+2. **Fase 2 (Documentação Viva):** Sincronizar a tríade de governança (`CHANGELOG.md`, `README.md`, `docs/03-project-roadmap.md`) via `npm run audit:docs`, atualizar `tasks.md`, eliminar código morto (*Zero Zombie Code*) e aplicar *Anti-Doc Rot*.
+3. **Fase 3 (Governança & PRs):** Auditar obrigatoriamente Pull Requests abertos (`gh pr list`) e manter sincronização com o GitHub Project 14.
+4. **Fase 4 (Entrega Git):** Validação prévia com a pessoa desenvolvedora (*Human-in-the-Loop*), commits atômicos em Conventional Commits (em inglês) e trailer compulsório `Co-authored-by`.
